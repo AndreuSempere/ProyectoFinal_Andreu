@@ -8,6 +8,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart'
 
 import 'package:flutter_bank_app/core/usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'login_event.dart';
 import 'login_state.dart';
@@ -33,6 +34,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginButtonPressed>((event, emit) async {
       emit(LoginState.loading());
       final result = await signInUserUseCase(event.email, event.password);
+      if (result.isRight()) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('user_email', event.email);
+      }
       result.fold(
         (failure) => emit(LoginState.failure("Fallo al realizar el login")),
         (user) => emit(LoginState.success(event.email)),

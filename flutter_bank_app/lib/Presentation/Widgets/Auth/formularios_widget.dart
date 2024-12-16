@@ -26,9 +26,9 @@ Future<Object?> customSigninDialog(BuildContext context,
       return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is AuthError) {
-            // ScaffoldMessenger.of(context).showSnackBar(
-            //   SnackBar(content: Text(state.message)),
-            // );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
           }
         },
         child: Center(

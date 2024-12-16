@@ -4,7 +4,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:rive/rive.dart'; // Comentado porque no se utiliza en esta versión
+// import 'package:rive/rive.dart'; // Comentado porque no se utiliza todavia
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -18,15 +18,15 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // bool isShowLoading = false; // Comentado: no se utiliza
-  // bool isShowConfetti = false; // Comentado: no se utiliza
+  // bool isShowLoading = false;
+  // bool isShowConfetti = false;
 
-  // late SMITrigger check; // Comentado: no se utiliza
-  // late SMITrigger error; // Comentado: no se utiliza
-  // late SMITrigger reset; // Comentado: no se utiliza
-  // late SMITrigger confetti; // Comentado: no se utiliza
+  // late SMITrigger check;
+  // late SMITrigger error;
+  // late SMITrigger reset;
+  // late SMITrigger confetti;
 
-  // Método para inicializar el controlador de Rive. Comentado porque no se usa en esta versión
+  // Método para inicializar el controlador de Rive.
   // StateMachineController getRiveController(Artboard artboard) {
   //   final controller =
   //       StateMachineController.fromArtboard(artboard, "State Machine 1");
@@ -119,7 +119,7 @@ class _SignInFormState extends State<SignInForm> {
             ],
           ),
         ),
-        // Animaciones comentadas: se habilitarán más tarde
+        // Animaciones comentadas:
         // if (isShowLoading)
         //   CustomPositioned(
         //     child: RiveAnimation.asset(

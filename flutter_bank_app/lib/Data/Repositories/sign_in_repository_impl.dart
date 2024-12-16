@@ -16,8 +16,6 @@ class SignInRepositoryImpl implements LoginRepository {
   Future<Either<Failure, void>> signIn(String email, String password) async {
     try {
       await dataSource.signIn(email, password);
-
-      // Guardar el usuario en SharedPreferences
       await sharedPreferences.setString(_userKey, email);
 
       return const Right(null);
@@ -32,8 +30,6 @@ class SignInRepositoryImpl implements LoginRepository {
   Future<Either<Failure, void>> signUp(String email, String password) async {
     try {
       await dataSource.signUp(email, password);
-
-      // Guardar el usuario en SharedPreferences
       await sharedPreferences.setString(_userKey, email);
 
       return const Right(null);
@@ -47,7 +43,6 @@ class SignInRepositoryImpl implements LoginRepository {
   @override
   Future<Either<Failure, String>> isLoggedIn() async {
     try {
-      // Recuperar el usuario de SharedPreferences
       String? user = sharedPreferences.getString(_userKey);
 
       return Right(user ?? "NO_USER");
@@ -60,8 +55,6 @@ class SignInRepositoryImpl implements LoginRepository {
   Future<Either<Failure, void>> logout() async {
     try {
       await dataSource.logout();
-
-      // Eliminar el usuario de SharedPreferences
       await sharedPreferences.remove(_userKey);
 
       return const Right(null);
