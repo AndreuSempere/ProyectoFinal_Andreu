@@ -2,27 +2,33 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart';
 import 'package:flutter_bank_app/Data/Repositories/sign_in_repository_impl.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
-import 'package:flutter_bank_app/Domain/Usecases/get_current_user_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/reset_password_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/sign_in_user_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/sign_out_user_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/sign_up_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/get_current_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/new_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_out_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt sl = GetIt.instance;
 
-void configureDependencies() {
-  // Instancia de Firebase Auth
+Future<void> configureDependencies() async {
+  // SharedPreferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+
+  // Firebase Auth
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
-  // FirebaseAuthDataSource
+  //  FirebaseAuthDataSource
   sl.registerLazySingleton<FirebaseAuthDataSource>(
       () => FirebaseAuthDataSource(auth: sl<FirebaseAuth>()));
 
-  // Repository
-  sl.registerLazySingleton<LoginRepository>(
-      () => SignInRepositoryImpl(sl<FirebaseAuthDataSource>()));
+  //  Repository
+  sl.registerLazySingleton<LoginRepository>(() => SignInRepositoryImpl(
+      sl<FirebaseAuthDataSource>(), sl<SharedPreferences>()));
 
   // Casos de uso
   sl.registerLazySingleton<SigninUserUseCase>(() => SigninUserUseCase(sl()));
@@ -32,6 +38,7 @@ void configureDependencies() {
       () => GetCurrentUserUseCase(sl()));
   sl.registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(sl()));
+  sl.registerLazySingleton<NewUserUseCase>(() => NewUserUseCase(sl()));
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
@@ -40,5 +47,6 @@ void configureDependencies() {
       signUpUserUseCase: sl<SignupUserUseCase>(),
       signOutUserUseCase: sl<SignoutUserUseCase>(),
       getCurrentUserUseCase: sl<GetCurrentUserUseCase>(),
-      resetPasswordUseCase: sl<ResetPasswordUseCase>()));
+      resetPasswordUseCase: sl<ResetPasswordUseCase>(),
+      newuserUseCase: sl<NewUserUseCase>()));
 }

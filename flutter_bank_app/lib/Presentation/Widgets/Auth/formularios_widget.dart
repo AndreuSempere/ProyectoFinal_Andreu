@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Auth/Forgot%20password/form_forgot_password_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Auth/Login/sign_in_form.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Auth/Registrer/sign_up_form.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,9 +26,9 @@ Future<Object?> customSigninDialog(BuildContext context,
       return BlocListener<LoginBloc, LoginState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            // ScaffoldMessenger.of(context).showSnackBar(
+            //   SnackBar(content: Text(state.message)),
+            // );
           }
         },
         child: Center(
@@ -60,8 +61,11 @@ Future<Object?> customSigninDialog(BuildContext context,
                       ),
                       const SignInForm(),
                       ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _showResetPasswordDialog(context);
+                          },
                           child: const Text("¿Has Olvidado la contraseña?")),
+                      const SizedBox(height: 10),
                       const Row(
                         children: [
                           Expanded(
@@ -152,5 +156,14 @@ void _showSignUpDialog(BuildContext context) {
         child: const InitialPage(),
       ),
     ),
+  );
+}
+
+void _showResetPasswordDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return const PasswordResetDialog();
+    },
   );
 }

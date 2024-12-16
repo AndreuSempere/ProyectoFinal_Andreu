@@ -37,3 +37,15 @@ class ResetPasswordEvent extends LoginEvent {
   @override
   List<Object?> get props => [email];
 }
+
+class NewUserEvent extends LoginEvent {
+  final String name;
+  final String surname;
+  final String email;
+  final String password;
+  final String dni;
+  final String age;
+
+  NewUserEvent(
+      this.name, this.surname, this.email, this.password, this.dni, this.age);
+}

@@ -1,11 +1,17 @@
 class UserEntity {
-  final String id;
+  final String? name;
+  final String? surname;
   final String email;
-  final String? displayName;
+  final String? password;
+  final String? dni;
+  final String? age;
 
   UserEntity({
-    required this.id,
+    this.name,
+    this.surname,
     required this.email,
-    this.displayName,
+    this.password,
+    this.dni,
+    this.age,
   });
 }

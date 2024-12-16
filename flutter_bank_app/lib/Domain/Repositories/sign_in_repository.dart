@@ -7,4 +7,6 @@ abstract class LoginRepository {
   Future<Either<Failure, void>> logout();
   Future<Either<Failure, String>> isLoggedIn();
   Future<Either<Failure, void>> resetPassword(String email);
+  Future<Either<String, void>> newUser(String name, String surname,
+      String email, String password, String dni, String age);
 }

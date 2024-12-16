@@ -39,17 +39,11 @@ class _SignInFormState extends State<SignInForm> {
       final email = _emailController.text;
       final password = _passwordController.text;
 
-      // Dispara el evento de inicio de sesión al bloc
       context.read<LoginBloc>().add(
             LoginButtonPressed(email: email, password: password),
           );
-      // Navega a la página de inicio
       context.go('/home');
-      // Cierra el diálogo actual
       Navigator.pop(context);
-    } else {
-      // Aquí podrías añadir lógica adicional para manejar errores
-      // Por ejemplo: mostrar un mensaje o habilitar un trigger
     }
   }
 
@@ -157,7 +151,6 @@ class _SignInFormState extends State<SignInForm> {
   }
 }
 
-// Componente CustomPositioned: no modificado
 class CustomPositioned extends StatelessWidget {
   const CustomPositioned({super.key, required this.child, this.size = 100});
   final Widget child;

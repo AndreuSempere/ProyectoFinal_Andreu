@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '77459484449',
     projectId: 'bank-app-722aa',
     authDomain: 'bank-app-722aa.firebaseapp.com',
+    databaseURL: 'https://bank-app-722aa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bank-app-722aa.firebasestorage.app',
   );
 
@@ -54,6 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:77459484449:android:3f37f1f2028f204a821860',
     messagingSenderId: '77459484449',
     projectId: 'bank-app-722aa',
+    databaseURL: 'https://bank-app-722aa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bank-app-722aa.firebasestorage.app',
   );
 
@@ -62,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:77459484449:ios:b2898355d51b536a821860',
     messagingSenderId: '77459484449',
     projectId: 'bank-app-722aa',
+    databaseURL: 'https://bank-app-722aa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bank-app-722aa.firebasestorage.app',
     iosBundleId: 'com.example.flutterBankApp',
   );
@@ -71,6 +74,7 @@ class DefaultFirebaseOptions {
     appId: '1:77459484449:ios:b2898355d51b536a821860',
     messagingSenderId: '77459484449',
     projectId: 'bank-app-722aa',
+    databaseURL: 'https://bank-app-722aa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bank-app-722aa.firebasestorage.app',
     iosBundleId: 'com.example.flutterBankApp',
   );
@@ -81,6 +85,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '77459484449',
     projectId: 'bank-app-722aa',
     authDomain: 'bank-app-722aa.firebaseapp.com',
+    databaseURL: 'https://bank-app-722aa-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'bank-app-722aa.firebasestorage.app',
   );
 

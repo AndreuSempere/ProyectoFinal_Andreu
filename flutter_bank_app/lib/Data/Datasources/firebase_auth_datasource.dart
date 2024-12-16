@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/core/failure.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseAuthDataSource {
   final FirebaseAuth auth;
+  FirebaseFirestore database = FirebaseFirestore.instance;
 
   FirebaseAuthDataSource({required this.auth});
 
@@ -54,6 +57,24 @@ class FirebaseAuthDataSource {
       }
       throw AuthFailure(
           message: 'Error al enviar el correo de restablecimiento.');
+    }
+  }
+
+  Future<void> newUser(String name, String surname, String email,
+      String password, String dni, String age) async {
+    try {
+      final databaseRef = FirebaseDatabase.instance.ref('users');
+      final newUserRef = databaseRef.push();
+      await newUserRef.set({
+        'name': name,
+        'surname': surname,
+        'email': email,
+        'password': password,
+        'dni': dni,
+        'age': age,
+      });
+    } catch (e) {
+      throw Exception("Error al crear el usuario: $e");
     }
   }
 }

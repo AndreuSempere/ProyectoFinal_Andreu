@@ -5,12 +5,22 @@ import 'package:flutter_bank_app/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  try {
+    await dotenv.load(fileName: ".env");
+    debugPrint('.env cargado correctamente');
+  } catch (e) {
+    debugPrint('Error al cargar el archivo .env: $e');
+  }
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   configureDependencies();
   runApp(const MyApp());
 }
@@ -25,9 +35,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<LoginBloc>(),
         ),
-        // BlocProvider(
-        //   create: (_) => sl<TweetBloc>(),
-        // ),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,

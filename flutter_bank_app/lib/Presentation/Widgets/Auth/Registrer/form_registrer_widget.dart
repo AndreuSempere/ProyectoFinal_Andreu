@@ -17,6 +17,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
   final TextEditingController _surnameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _dniController = TextEditingController();
+  final TextEditingController _ageController = TextEditingController();
 
   @override
   void dispose() {
@@ -24,19 +26,28 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
     _surnameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _dniController.dispose();
+    _ageController.dispose();
     super.dispose();
   }
 
-  void _submitForm(BuildContext context) {
+  void _submitForm(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       final String name = _nameController.text;
       final String surname = _surnameController.text;
       final String email = _emailController.text;
       final String password = _passwordController.text;
+      final String dni = _dniController.text;
+      final String age = _ageController.text;
+
+      context.read<LoginBloc>().add(RegisterButtonPressed(
+            email: email,
+            password: password,
+          ));
 
       context
           .read<LoginBloc>()
-          .add(RegisterButtonPressed(email: email, password: password));
+          .add(NewUserEvent(name, surname, email, password, dni, age));
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -46,7 +57,8 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor, completa todos los campos.')),
+        const SnackBar(
+            content: Text('Error al registrar usuario. Inténtalo de nuevo.')),
       );
     }
   }
@@ -74,21 +86,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       key: _formKey,
       child: Column(
         children: [
-          Center(
-            child: Container(
-              width: 500,
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue, width: 1),
-                borderRadius: BorderRadius.circular(3),
-              ),
-              child: const Text(
-                'Registrar nuevo usuario',
-                style: TextStyle(color: Colors.blue, fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
           _buildFormRow(
             "Nombre:",
             TextFormField(
@@ -153,6 +150,51 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               validator: (value) {
                 if (value == null || value.isEmpty || value.length < 6) {
                   return 'La contraseña debe tener al menos 6 caracteres';
+                }
+                return null;
+              },
+            ),
+          ),
+          _buildFormRow(
+            "Edad:",
+            TextFormField(
+              controller: _ageController,
+              decoration: const InputDecoration(
+                hintText: 'Introduce tu edad',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              ),
+              keyboardType: TextInputType.number,
+              obscureText: false,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'La edad no puede estar vacía';
+                }
+                final age = int.tryParse(value);
+                if (age == null) {
+                  return 'Por favor, ingresa un número válido';
+                }
+                if (age < 18) {
+                  return 'La edad debe ser mayor o igual a 18';
+                }
+
+                return null;
+              },
+            ),
+          ),
+          _buildFormRow(
+            "DNI:",
+            TextFormField(
+              controller: _dniController,
+              decoration: const InputDecoration(
+                hintText: 'Introduce tu DNI',
+                border: OutlineInputBorder(),
+                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              ),
+              obscureText: false,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Rellenar el DNI es obligatorio';
                 }
                 return null;
               },
