@@ -1,0 +1,3 @@
+[submodule "bankify_app"]
+	path = bankify_app
+	url = git@github.com:AndreuSempere/ProyectoFinal_Andreu.git

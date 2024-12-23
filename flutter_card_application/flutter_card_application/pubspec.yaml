@@ -1,0 +1,27 @@
+name: cardwallet_app
+description: A new Flutter project.
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.17.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.5
+  rxdart: ^0.27.0
+  carousel_slider: ^4.2.0
+  flutter_swiper_null_safety: ^1.0.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/visa_logo.png
+    - assets/creditcardchipsilver.png
+    - assets/card_band.jpg
+    - assets/card_back.jpg
+    - data/initialData.json

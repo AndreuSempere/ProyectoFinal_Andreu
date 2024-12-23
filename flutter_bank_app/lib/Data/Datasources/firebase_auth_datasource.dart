@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/core/failure.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class FirebaseAuthDataSource {
   final FirebaseAuth auth;
@@ -63,9 +62,8 @@ class FirebaseAuthDataSource {
   Future<void> newUser(String name, String surname, String email,
       String password, String dni, String age) async {
     try {
-      final databaseRef = FirebaseDatabase.instance.ref('users');
-      final newUserRef = databaseRef.push();
-      await newUserRef.set({
+      final databaseRef = FirebaseFirestore.instance.collection('users');
+      databaseRef.add({
         'name': name,
         'surname': surname,
         'email': email,

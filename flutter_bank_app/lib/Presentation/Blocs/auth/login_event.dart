@@ -1,5 +1,14 @@
 import 'package:equatable/equatable.dart';
 
+class FetchUserDataEvent extends LoginEvent {
+  final String email;
+
+  FetchUserDataEvent({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+}
+
 abstract class LoginEvent extends Equatable {
   @override
   List<Object?> get props => [];

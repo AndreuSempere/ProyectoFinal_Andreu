@@ -4,7 +4,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-// import 'package:rive/rive.dart'; // Comentado porque no se utiliza todavia
+import 'package:rive/rive.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -18,33 +18,52 @@ class _SignInFormState extends State<SignInForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-  // bool isShowLoading = false;
-  // bool isShowConfetti = false;
+  bool isShowLoading = false;
+  bool isShowConfetti = false;
 
-  // late SMITrigger check;
-  // late SMITrigger error;
-  // late SMITrigger reset;
-  // late SMITrigger confetti;
+  late SMITrigger check;
+  late SMITrigger error;
+  late SMITrigger reset;
+  late SMITrigger confetti;
 
-  // Método para inicializar el controlador de Rive.
-  // StateMachineController getRiveController(Artboard artboard) {
-  //   final controller =
-  //       StateMachineController.fromArtboard(artboard, "State Machine 1");
-  //   if (controller != null) artboard.addController(controller);
-  //   return controller!;
-  // }
+  StateMachineController getRiveController(Artboard artboard) {
+    final controller =
+        StateMachineController.fromArtboard(artboard, "State Machine 1");
+    if (controller != null) artboard.addController(controller);
+    return controller!;
+  }
 
   void signIn(BuildContext context) {
-    if (_formKey.currentState!.validate()) {
-      final email = _emailController.text;
-      final password = _passwordController.text;
+    setState(() {
+      isShowLoading = true;
+      isShowConfetti = true;
+    });
+    Future.delayed(const Duration(seconds: 1), () {
+      if (_formKey.currentState!.validate()) {
+        final email = _emailController.text;
+        final password = _passwordController.text;
 
-      context.read<LoginBloc>().add(
-            LoginButtonPressed(email: email, password: password),
-          );
-      context.go('/home');
-      Navigator.pop(context);
-    }
+        context.read<LoginBloc>().add(
+              LoginButtonPressed(email: email, password: password),
+            );
+
+        check.fire();
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            isShowLoading = false;
+          });
+          confetti.fire();
+          context.go('/home'); // Mueve esto aquí
+        });
+      } else {
+        error.fire();
+        Future.delayed(const Duration(seconds: 2), () {
+          setState(() {
+            isShowLoading = false;
+          });
+        });
+      }
+    });
   }
 
   @override
@@ -116,36 +135,37 @@ class _SignInFormState extends State<SignInForm> {
                   icon: const Icon(Icons.arrow_forward),
                 ),
               ),
+              isShowLoading
+                  ? CustomPositioned(
+                      child: RiveAnimation.asset(
+                      "assets/RiveAssets/check.riv",
+                      onInit: (artboard) {
+                        StateMachineController controller =
+                            getRiveController(artboard);
+                        check = controller.findSMI("Check") as SMITrigger;
+                        error = controller.findSMI("Error") as SMITrigger;
+                        reset = controller.findSMI("Reset") as SMITrigger;
+                      },
+                    ))
+                  : const SizedBox(),
+              isShowConfetti
+                  ? CustomPositioned(
+                      child: Transform.scale(
+                      scale: 6,
+                      child: RiveAnimation.asset(
+                        "assets/RiveAssets/confetti.riv",
+                        onInit: (artboard) {
+                          StateMachineController controller =
+                              getRiveController(artboard);
+                          confetti = controller.findSMI("Trigger explosion")
+                              as SMITrigger;
+                        },
+                      ),
+                    ))
+                  : const SizedBox(),
             ],
           ),
         ),
-        // Animaciones comentadas:
-        // if (isShowLoading)
-        //   CustomPositioned(
-        //     child: RiveAnimation.asset(
-        //       "assets/RiveAssets/check.riv",
-        //       onInit: (artboard) {
-        //         final controller = getRiveController(artboard);
-        //         check = controller.findSMI("Check") as SMITrigger;
-        //         error = controller.findSMI("Error") as SMITrigger;
-        //         reset = controller.findSMI("Reset") as SMITrigger;
-        //       },
-        //     ),
-        //   ),
-        // if (isShowConfetti)
-        //   CustomPositioned(
-        //     child: Transform.scale(
-        //       scale: 6,
-        //       child: RiveAnimation.asset(
-        //         "assets/RiveAssets/confetti.riv",
-        //         onInit: (artboard) {
-        //           final controller = getRiveController(artboard);
-        //           confetti =
-        //               controller.findSMI("Trigger explosion") as SMITrigger;
-        //         },
-        //       ),
-        //     ),
-        //   ),
       ],
     );
   }
