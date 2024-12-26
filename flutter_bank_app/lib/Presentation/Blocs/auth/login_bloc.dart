@@ -1,5 +1,5 @@
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
-import 'package:flutter_bank_app/Domain/Usecases/Auth/get_current_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/fetch_user_data_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/new_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
@@ -18,7 +18,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final SigninUserUseCase signInUserUseCase;
   final SignoutUserUseCase signOutUserUseCase;
   final SignupUserUseCase signUpUserUseCase;
-  final GetCurrentUserUseCase getCurrentUserUseCase;
+  final FetchUserDataUseCase getCurrentUserUseCase;
   final ResetPasswordUseCase resetPasswordUseCase;
   final NewUserUseCase newuserUseCase;
 
@@ -52,13 +52,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           (user) => emit(LoginState.success(event.email)));
     });
 
-    on<CheckAuthentication>((event, emit) async {
-      final result = await getCurrentUserUseCase(NoParams());
+    on<FetchUserDataEvent>((event, emit) async {
+      final result = await getCurrentUserUseCase(event.email);
       result.fold(
-        (failure) =>
-            emit(LoginState.failure("Fallo al verificar la autenticación")),
-        (username) => emit(LoginState.success(username!)),
-      );
+          (failure) => emit(
+              LoginState.failure("Fallo al obtener los datos del usuario")),
+          (user) => emit(state.copyWith(isLoading: false, user: user)));
     });
 
     on<LogoutButtonPressed>((event, emit) async {

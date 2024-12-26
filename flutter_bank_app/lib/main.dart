@@ -11,7 +11,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   try {
-    await dotenv.load(fileName: ".env");
+    await dotenv.load(fileName: "assets/.env");
     debugPrint('.env cargado correctamente');
   } catch (e) {
     debugPrint('Error al cargar el archivo .env: $e');

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,6 +39,7 @@ class HomePage extends StatelessWidget {
               return const Center(child: Text('Error al cargar el usuario'));
             } else {
               final email = snapshot.data ?? 'Usuario desconocido';
+              context.read<LoginBloc>().add(FetchUserDataEvent(email: email));
               return Center(
                 child: Text(
                   'Bienvenido, $email',

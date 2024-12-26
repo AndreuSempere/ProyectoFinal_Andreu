@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart';
 import 'package:flutter_bank_app/Data/Repositories/sign_in_repository_impl.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
-import 'package:flutter_bank_app/Domain/Usecases/Auth/get_current_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/fetch_user_data_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/new_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
@@ -34,8 +34,8 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<SigninUserUseCase>(() => SigninUserUseCase(sl()));
   sl.registerLazySingleton<SignupUserUseCase>(() => SignupUserUseCase(sl()));
   sl.registerLazySingleton<SignoutUserUseCase>(() => SignoutUserUseCase(sl()));
-  sl.registerLazySingleton<GetCurrentUserUseCase>(
-      () => GetCurrentUserUseCase(sl()));
+  sl.registerLazySingleton<FetchUserDataUseCase>(
+      () => FetchUserDataUseCase(sl()));
   sl.registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(sl()));
   sl.registerLazySingleton<NewUserUseCase>(() => NewUserUseCase(sl()));
@@ -46,7 +46,7 @@ Future<void> configureDependencies() async {
       signInUserUseCase: sl<SigninUserUseCase>(),
       signUpUserUseCase: sl<SignupUserUseCase>(),
       signOutUserUseCase: sl<SignoutUserUseCase>(),
-      getCurrentUserUseCase: sl<GetCurrentUserUseCase>(),
+      getCurrentUserUseCase: sl<FetchUserDataUseCase>(),
       resetPasswordUseCase: sl<ResetPasswordUseCase>(),
       newuserUseCase: sl<NewUserUseCase>()));
 }

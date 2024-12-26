@@ -72,98 +72,103 @@ class _SignInFormState extends State<SignInForm> {
       children: [
         Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Email",
-                style: TextStyle(color: Colors.black54),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16),
-                child: TextFormField(
-                  controller: _emailController,
-                  validator: (value) =>
-                      value!.isEmpty ? "El campo es obligatorio" : null,
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: SvgPicture.asset("assets/icons/email.svg"),
-                    ),
-                  ),
+          child: SingleChildScrollView(
+            // Agregar un SingleChildScrollView
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Email",
+                  style: TextStyle(color: Colors.black54),
                 ),
-              ),
-              const Text(
-                "Password",
-                style: TextStyle(color: Colors.black54),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 16),
-                child: TextFormField(
-                  controller: _passwordController,
-                  validator: (value) =>
-                      value!.isEmpty ? "El campo es obligatorio" : null,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: SvgPicture.asset("assets/icons/password.svg"),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, bottom: 24),
-                child: ElevatedButton.icon(
-                  onPressed: () => signIn(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFF77D8E),
-                    minimumSize: const Size(double.infinity, 56),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(25),
-                        bottomRight: Radius.circular(25),
-                        bottomLeft: Radius.circular(25),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 16),
+                  child: TextFormField(
+                    controller: _emailController,
+                    validator: (value) =>
+                        value!.isEmpty ? "El campo es obligatorio" : null,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SvgPicture.asset("assets/icons/email.svg"),
                       ),
                     ),
                   ),
-                  label: const Text(
-                    "Sign In",
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  icon: const Icon(Icons.arrow_forward),
                 ),
-              ),
-              isShowLoading
-                  ? CustomPositioned(
-                      child: RiveAnimation.asset(
-                      "assets/RiveAssets/check.riv",
-                      onInit: (artboard) {
-                        StateMachineController controller =
-                            getRiveController(artboard);
-                        check = controller.findSMI("Check") as SMITrigger;
-                        error = controller.findSMI("Error") as SMITrigger;
-                        reset = controller.findSMI("Reset") as SMITrigger;
-                      },
-                    ))
-                  : const SizedBox(),
-              isShowConfetti
-                  ? CustomPositioned(
-                      child: Transform.scale(
-                      scale: 6,
-                      child: RiveAnimation.asset(
-                        "assets/RiveAssets/confetti.riv",
-                        onInit: (artboard) {
-                          StateMachineController controller =
-                              getRiveController(artboard);
-                          confetti = controller.findSMI("Trigger explosion")
-                              as SMITrigger;
-                        },
+                const Text(
+                  "Password",
+                  style: TextStyle(color: Colors.black54),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 16),
+                  child: TextFormField(
+                    controller: _passwordController,
+                    validator: (value) =>
+                        value!.isEmpty ? "El campo es obligatorio" : null,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      prefixIcon: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: SvgPicture.asset("assets/icons/password.svg"),
                       ),
-                    ))
-                  : const SizedBox(),
-            ],
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 24),
+                  child: ElevatedButton.icon(
+                    onPressed: () => signIn(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFF77D8E),
+                      minimumSize: const Size(double.infinity, 56),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          topRight: Radius.circular(25),
+                          bottomRight: Radius.circular(25),
+                          bottomLeft: Radius.circular(25),
+                        ),
+                      ),
+                    ),
+                    label: const Text(
+                      "Sign In",
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    ),
+                    icon: const Icon(Icons.arrow_forward),
+                  ),
+                ),
+                isShowLoading
+                    ? CustomPositioned(
+                        child: RiveAnimation.asset(
+                          "assets/RiveAssets/check.riv",
+                          onInit: (artboard) {
+                            StateMachineController controller =
+                                getRiveController(artboard);
+                            check = controller.findSMI("Check") as SMITrigger;
+                            error = controller.findSMI("Error") as SMITrigger;
+                            reset = controller.findSMI("Reset") as SMITrigger;
+                          },
+                        ),
+                      )
+                    : const SizedBox(),
+                isShowConfetti
+                    ? CustomPositioned(
+                        child: Transform.scale(
+                          scale: 6,
+                          child: RiveAnimation.asset(
+                            "assets/RiveAssets/confetti.riv",
+                            onInit: (artboard) {
+                              StateMachineController controller =
+                                  getRiveController(artboard);
+                              confetti = controller.findSMI("Trigger explosion")
+                                  as SMITrigger;
+                            },
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
+              ],
+            ),
           ),
         ),
       ],
@@ -179,12 +184,14 @@ class CustomPositioned extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
-      child: Column(
-        children: [
-          const Spacer(),
-          SizedBox(height: size, width: size, child: child),
-          const Spacer(flex: 2),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Spacer(),
+            SizedBox(height: size, width: size, child: child),
+            const Spacer(flex: 2),
+          ],
+        ),
       ),
     );
   }

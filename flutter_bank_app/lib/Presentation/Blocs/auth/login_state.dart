@@ -1,22 +1,29 @@
-class LoginState {
-  final bool isLoading;
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
+
+class LoginState extends Equatable {
   final String? email;
+  final bool isLoading;
+  final UserEntity? user;
   final String? errorMessage;
 
   const LoginState({
     this.isLoading = false,
     this.email,
+    this.user,
     this.errorMessage,
   });
 
   LoginState copyWith({
     bool? isLoading,
     String? email,
+    UserEntity? user,
     String? errorMessage,
   }) {
     return LoginState(
       isLoading: isLoading ?? this.isLoading,
       email: email ?? this.email,
+      user: user ?? this.user,
       errorMessage: errorMessage ?? this.errorMessage,
     );
   }
@@ -30,14 +37,15 @@ class LoginState {
   factory LoginState.failure(String errorMessage) =>
       LoginState(errorMessage: errorMessage);
 
-  // @override
-  // List<Object?> get props => [isLoading, email, errorMessage];
+  @override
+  List<Object?> get props => [user, isLoading, errorMessage];
 }
 
 class AuthError extends LoginState {
   final String message;
 
-  AuthError({required this.message});
+  const AuthError({required this.message});
 
+  @override
   List<Object?> get props => [message];
 }

@@ -28,6 +28,8 @@ dependencies:
   rxdart: ^0.27.0
   carousel_slider: ^4.2.0
   flutter_swiper_null_safety: ^1.0.2
+  image_picker: ^0.8.7+4
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.2
@@ -49,6 +51,7 @@ flutter:
     - assets/credit_card/creditcardchipsilver.png
     - assets/credit_card/card_band.jpg
     - assets/credit_card/card_back.jpg
+    - assets/.env
 
   #   - images/a_dot_ham.jpeg
   fonts:

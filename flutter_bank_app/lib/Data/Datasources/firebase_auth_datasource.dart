@@ -75,4 +75,20 @@ class FirebaseAuthDataSource {
       throw Exception("Error al crear el usuario: $e");
     }
   }
+
+  Future<Map<String, dynamic>> getUserInfo(String email) async {
+    try {
+      final snapshot = await database
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      if (snapshot.docs.isNotEmpty) {
+        return snapshot.docs.first.data();
+      } else {
+        throw Exception("No user found with this email.");
+      }
+    } catch (e) {
+      throw Exception("Error fetching user data: $e");
+    }
+  }
 }
