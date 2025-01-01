@@ -55,3 +55,13 @@ class FetchUserDataEvent extends LoginEvent {
 
   FetchUserDataEvent({required this.email});
 }
+
+class UpdateUserEvent extends LoginEvent {
+  final String name;
+  final String surname;
+  final String email;
+  final String dni;
+  final String age;
+
+  UpdateUserEvent(this.name, this.surname, this.email, this.dni, this.age);
+}

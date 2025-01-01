@@ -30,6 +30,7 @@ dependencies:
   flutter_swiper_null_safety: ^1.0.2
   image_picker: ^0.8.7+4
   path_provider: ^2.1.5
+  file_picker: ^8.1.7
 
 dev_dependencies:
   flutter_launcher_icons: ^0.14.2
@@ -40,7 +41,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
   assets:
     - assets/avaters/
     - assets/Backgrounds/
@@ -52,6 +52,7 @@ flutter:
     - assets/credit_card/card_band.jpg
     - assets/credit_card/card_back.jpg
     - assets/.env
+    - data/initialData.json
 
   #   - images/a_dot_ham.jpeg
   fonts:

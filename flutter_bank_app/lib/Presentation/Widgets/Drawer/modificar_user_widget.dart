@@ -1,99 +1,143 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_twitter_copy/presentation/blocs/Auth/auth_bloc.dart';
-// import 'package:flutter_twitter_copy/presentation/blocs/Auth/auth_event.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-// class ThemeDialog extends StatefulWidget {
-//   const ThemeDialog({super.key});
+class EditarUser extends StatefulWidget {
+  const EditarUser({super.key});
 
-//   @override
-//   DialogoState createState() => DialogoState();
-// }
+  @override
+  DialogoState createState() => DialogoState();
+}
 
-// class DialogoState extends State<ThemeDialog> {
-//   final _nameController = TextEditingController();
-//   final _avatarController = TextEditingController();
-//   final _formKey = GlobalKey<FormState>();
+class DialogoState extends State<EditarUser> {
+  final _nameController = TextEditingController();
+  final _surnameController = TextEditingController();
+  final _edadController = TextEditingController();
+  final _dniController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
-//   @override
-//   void initState() {
-//     super.initState();
-//     final myLoginState = context.read<AuthBloc>().state;
-//     if (myLoginState.user != null) {
-//       _nameController.text = myLoginState.user!.username;
-//       _avatarController.text = myLoginState.user!.avatar;
-//     }
-//   }
+  @override
+  void initState() {
+    super.initState();
+    final myLoginState = context.read<LoginBloc>().state;
+    if (myLoginState.user != null) {
+      _nameController.text = myLoginState.user!.name;
+      _surnameController.text = myLoginState.user!.surname;
+      _edadController.text = myLoginState.user!.age!;
+      _dniController.text = myLoginState.user!.dni!;
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return AlertDialog(
-//       title: const Text('Editar Usuario'),
-//       content: Form(
-//         key: _formKey,
-//         child: Column(
-//           mainAxisSize: MainAxisSize.min,
-//           children: [
-//             TextFormField(
-//               controller: _nameController,
-//               decoration: const InputDecoration(labelText: 'Nombre Usuario'),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Introduce un nombre de usuario';
-//                 }
-//                 return null;
-//               },
-//             ),
-//             TextFormField(
-//               controller: _avatarController,
-//               decoration: const InputDecoration(labelText: 'URL del Avatar'),
-//               validator: (value) {
-//                 if (value == null || value.isEmpty) {
-//                   return 'Introduce una URL de avatar';
-//                 }
-//                 return null;
-//               },
-//             ),
-//           ],
-//         ),
-//       ),
-//       actions: [
-//         TextButton(
-//           onPressed: () => Navigator.of(context).pop(),
-//           child: const Text('Cancelar'),
-//         ),
-//         ElevatedButton(
-//           onPressed: () {
-//             if (_formKey.currentState!.validate()) {
-//               _formKey.currentState!.save();
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: const Text(
+        'Editar Información Usuario',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+      ),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildTextField(
+                controller: _nameController,
+                label: 'Nombre Usuario',
+                icon: Icons.person,
+                validatorMsg: 'Introduce un nuevo nombre de usuario',
+              ),
+              _buildTextField(
+                controller: _surnameController,
+                label: 'Apellidos',
+                icon: Icons.person_outline,
+                validatorMsg: 'Introduce nuevos apellidos',
+              ),
+              _buildTextField(
+                controller: _edadController,
+                label: 'Edad',
+                icon: Icons.calendar_today,
+                keyboardType: TextInputType.number,
+                validatorMsg: 'Introduce una nueva edad',
+              ),
+              _buildTextField(
+                controller: _dniController,
+                label: 'DNI',
+                icon: Icons.badge,
+                validatorMsg: 'Introduce un nuevo DNI',
+              ),
+              const SizedBox(height: 16)
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
 
-//               final myLoginState = context.read<AuthBloc>().state;
-//               final userid = myLoginState.user!.id;
-//               final username = _nameController.text;
-//               final avatar = _avatarController.text;
+              final String name = _nameController.text;
+              final String surname = _surnameController.text;
+              final String dni = _dniController.text;
+              final String age = _edadController.text;
 
-//               // Enviar el evento al Bloc
-//               context.read<AuthBloc>().add(
-//                     UpdateUserInfoUseCase(
-//                       userId: userid,
-//                       username: username,
-//                       avatar: avatar,
-//                     ),
-//                   );
+              final myLoginState = context.read<LoginBloc>().state;
+              final String email = myLoginState.user!.email;
 
-//               Navigator.of(context).pop(); // Cerrar el diálogo
-//             }
-//           },
-//           child: const Text('Guardar'),
-//         ),
-//       ],
-//     );
-//   }
+              context
+                  .read<LoginBloc>()
+                  .add(UpdateUserEvent(name, surname, email, dni, age));
 
-//   @override
-//   void dispose() {
-//     _nameController.dispose();
-//     _avatarController.dispose();
-//     super.dispose();
-//   }
-// }
+              Navigator.of(context).pop();
+            }
+          },
+          child: const Text('Guardar'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    String? validatorMsg,
+    TextInputType keyboardType = TextInputType.text,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: TextFormField(
+        controller: controller,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return validatorMsg;
+          }
+          return null;
+        },
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _surnameController.dispose();
+    _edadController.dispose();
+    _dniController.dispose();
+    super.dispose();
+  }
+}

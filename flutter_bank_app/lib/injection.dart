@@ -8,6 +8,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dar
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_out_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/update_user_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,6 +40,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(sl()));
   sl.registerLazySingleton<NewUserUseCase>(() => NewUserUseCase(sl()));
+  sl.registerLazySingleton<UpdateUserUsecase>(() => UpdateUserUsecase(sl()));
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
@@ -48,5 +50,6 @@ Future<void> configureDependencies() async {
       signOutUserUseCase: sl<SignoutUserUseCase>(),
       getCurrentUserUseCase: sl<FetchUserDataUseCase>(),
       resetPasswordUseCase: sl<ResetPasswordUseCase>(),
-      newuserUseCase: sl<NewUserUseCase>()));
+      newuserUseCase: sl<NewUserUseCase>(),
+      updateuserUseCase: sl<UpdateUserUsecase>()));
 }

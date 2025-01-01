@@ -5,6 +5,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dar
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_out_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/update_user_usecase.dart';
 
 import 'package:flutter_bank_app/core/usecase.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final FetchUserDataUseCase getCurrentUserUseCase;
   final ResetPasswordUseCase resetPasswordUseCase;
   final NewUserUseCase newuserUseCase;
+  final UpdateUserUsecase updateuserUseCase;
 
   LoginBloc(
       {required this.loginRepository,
@@ -29,7 +31,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       required this.signUpUserUseCase,
       required this.getCurrentUserUseCase,
       required this.resetPasswordUseCase,
-      required this.newuserUseCase})
+      required this.newuserUseCase,
+      required this.updateuserUseCase})
       : super(LoginState.initial()) {
     on<LoginButtonPressed>((event, emit) async {
       emit(LoginState.loading());
@@ -98,6 +101,33 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit(state.copyWith(
           isLoading: false,
           errorMessage: 'Error al crear el usuario: $error',
+        ));
+      }
+    });
+
+    on<UpdateUserEvent>((event, emit) async {
+      emit(state.copyWith(isLoading: true));
+      try {
+        final result = await updateuserUseCase(
+            event.name, event.surname, event.email, event.dni, event.age);
+
+        result.fold(
+          (errorMessage) {
+            emit(state.copyWith(
+              isLoading: false,
+              errorMessage: errorMessage,
+            ));
+          },
+          (_) {
+            emit(state.copyWith(
+              isLoading: false,
+            ));
+          },
+        );
+      } catch (error) {
+        emit(state.copyWith(
+          isLoading: false,
+          errorMessage: 'Error al actualizar el usuario: $error',
         ));
       }
     });

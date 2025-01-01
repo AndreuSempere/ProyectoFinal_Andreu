@@ -47,13 +47,21 @@ class _SignInFormState extends State<SignInForm> {
               LoginButtonPressed(email: email, password: password),
             );
 
+        // Escuchar el estado del LoginBloc
+        context.read<LoginBloc>().stream.listen((state) {
+          if (state.email != null) {
+            confetti.fire();
+            context.go('/home');
+          } else if (state.errorMessage != null) {
+            error.fire();
+          }
+        });
+
         check.fire();
         Future.delayed(const Duration(seconds: 2), () {
           setState(() {
             isShowLoading = false;
           });
-          confetti.fire();
-          context.go('/home'); // Mueve esto aquí
         });
       } else {
         error.fire();
@@ -73,7 +81,6 @@ class _SignInFormState extends State<SignInForm> {
         Form(
           key: _formKey,
           child: SingleChildScrollView(
-            // Agregar un SingleChildScrollView
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

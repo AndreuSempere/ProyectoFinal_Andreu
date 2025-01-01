@@ -27,7 +27,6 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Center(child: Text('Bankify')),
-          actions: const [],
         ),
         endDrawer: const DrawerWidget(),
         body: FutureBuilder<String?>(

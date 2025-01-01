@@ -106,4 +106,15 @@ class SignInRepositoryImpl implements LoginRepository {
       return Left(AuthFailure());
     }
   }
+
+  @override
+  Future<Either<String, void>> updateUser(
+      String name, String surname, String email, String dni, String age) async {
+    try {
+      await dataSource.updateUser(name, surname, email, dni, age);
+      return const Right(null);
+    } catch (e) {
+      return Left('Fallo al crear el tweet: $e');
+    }
+  }
 }

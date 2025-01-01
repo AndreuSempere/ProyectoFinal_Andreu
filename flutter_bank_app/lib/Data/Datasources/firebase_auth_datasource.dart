@@ -91,4 +91,29 @@ class FirebaseAuthDataSource {
       throw Exception("Error fetching user data: $e");
     }
   }
+
+  Future<void> updateUser(
+      String name, String surname, String email, String dni, String age) async {
+    try {
+      final collectionRef = FirebaseFirestore.instance.collection('users');
+      final querySnapshot =
+          await collectionRef.where('email', isEqualTo: email).get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs.first.id;
+        final docRef = collectionRef.doc(docId);
+        await docRef.update({
+          'name': name,
+          'surname': surname,
+          'dni': dni,
+          'age': age,
+        });
+      } else {
+        throw Exception(
+            "No se encontró un usuario con el email proporcionado.");
+      }
+    } catch (e) {
+      throw Exception("Error al actualizar el usuario: $e");
+    }
+  }
 }

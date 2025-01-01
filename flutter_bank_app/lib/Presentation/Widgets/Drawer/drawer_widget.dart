@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/modificar_user_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Logaout/alerta_logaout_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -106,21 +107,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   accountName: Text(state.user!.name),
                   accountEmail: Text(state.user!.email),
                 ),
-                const ListTile(
-                  leading: Icon(
+                ListTile(
+                  leading: const Icon(
                     Icons.person,
                     color: Color(0xFFF2F2F2),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Editar perfil',
                     style: TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
                   ),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: Color(0xFFF2F2F2),
                   ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const EditarUser();
+                      },
+                    );
+                  },
                 ),
                 const ListTile(
                   leading: Icon(
@@ -138,22 +147,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     color: Color(0xFFF2F2F2),
                   ),
                 ),
-                const ListTile(
-                  leading: Icon(
-                    Icons.payment,
-                    color: Color(0xFFF2F2F2),
-                  ),
-                  title: Text(
-                    'Configurar tarjetas',
-                    style: TextStyle(
+                ListTile(
+                    leading: const Icon(
+                      Icons.payment,
                       color: Color(0xFFF2F2F2),
                     ),
-                  ),
-                  trailing: Icon(
-                    Icons.chevron_right,
-                    color: Color(0xFFF2F2F2),
-                  ),
-                ),
+                    title: const Text(
+                      'Configurar tarjetas',
+                      style: TextStyle(
+                        color: Color(0xFFF2F2F2),
+                      ),
+                    ),
+                    trailing: const Icon(
+                      Icons.chevron_right,
+                      color: Color(0xFFF2F2F2),
+                    ),
+                    onTap: () async {
+                      context.go('/add_card');
+                    }),
                 const ListTile(
                   leading: Icon(
                     Icons.notifications,

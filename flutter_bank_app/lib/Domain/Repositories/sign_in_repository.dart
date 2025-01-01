@@ -11,4 +11,6 @@ abstract class LoginRepository {
   Future<Either<Failure, UserEntity>> getUserInfo(String email);
   Future<Either<String, void>> newUser(String name, String surname,
       String email, String password, String dni, String age);
+  Future<Either<String, void>> updateUser(
+      String name, String surname, String email, String dni, String age);
 }
