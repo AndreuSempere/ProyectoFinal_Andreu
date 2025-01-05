@@ -73,7 +73,7 @@ class CardType extends StatelessWidget {
           var blocProviderCardCreate = BlocProvider<CardBloc>(
             key: const Key('some_unique_key'), // Use a Key for identification
             bloc: CardBloc(),
-            child: CardCreate(),
+            child: const CardCreate(),
           );
 
           blocProviderCardCreate.bloc.selectCardType(buttonText);

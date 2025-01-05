@@ -56,11 +56,22 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<FetchUserDataEvent>((event, emit) async {
-      final result = await getCurrentUserUseCase(event.email);
-      result.fold(
-          (failure) => emit(
-              LoginState.failure("Fallo al obtener los datos del usuario")),
-          (user) => emit(state.copyWith(isLoading: false, user: user)));
+      emit(state.copyWith(isLoading: true));
+
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        final email =
+            prefs.getString('user_email') ?? 'unknown_user@example.com';
+
+        final result = await getCurrentUserUseCase(email);
+        result.fold(
+            (failure) => emit(
+                LoginState.failure("Fallo al obtener los datos del usuario")),
+            (user) => emit(state.copyWith(isLoading: false, user: user)));
+      } catch (e) {
+        emit(LoginState.failure(
+            'Error al acceder a las preferencias compartidas.'));
+      }
     });
 
     on<LogoutButtonPressed>((event, emit) async {

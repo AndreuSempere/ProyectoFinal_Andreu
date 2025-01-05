@@ -5,6 +5,7 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  NotFoundException,
   Param,
   Post,
   Put,
@@ -12,11 +13,10 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
-@Controller('Users')
+
+@Controller('users')
 export class UsersController {
-  constructor(
-    private readonly usersService: UsersService,
-  ) {}
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   getAllUser(@Query('xml') xml?: string) {
@@ -26,65 +26,114 @@ export class UsersController {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          error: err,
+          error: err.message || 'Internal Server Error',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
-        {
-          cause: err,
-        },
       );
     }
   }
+
   @Get(':id')
-  getUser(@Param('id') id: string, @Query('xml') xml?: string) {
-    const userId = parseInt(id);
+  async getUser(@Param('id') id: string, @Query('xml') xml?: string) {
+    const userId = parseInt(id, 10);
     if (isNaN(userId)) {
       throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
     }
-    return this.usersService.getUser(userId, xml);
+    const user = await this.usersService.getUser(userId, xml);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
+  }
+
+  @Get('user/:email')
+  async findUserByEmail(@Param('email') email: string) {
+    if (!email) {
+      throw new HttpException('Email is required', HttpStatus.BAD_REQUEST);
+    }
+    const user = await this.usersService.getUserByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    return user;
   }
 
   @Post()
-  createUser(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.createUser(createUserDto);
-  }
-
-  @Put(':id')
-  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    const userId = parseInt(id);
-    if (isNaN(userId)) {
-      throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
-    }
-    return this.usersService.updateUser({
-      ...updateUserDto,
-      id_user: userId,
-    });
-  }
-
-  @Delete(':id')
-  deleteUser(@Param('id') id: string) {
-    const userId = parseInt(id);
-    if (isNaN(userId)) {
-      throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
-    }
-    return this.usersService.deleteUser(userId);
-  }
-  @Post('login')
-  async login(
-    @Body('email') email: string,
-    @Body('password') password: string,
-  ) {
-    if (!email || !password) {
+  async createUser(@Body() createUserDto: CreateUserDto) {
+    try {
+      return await this.usersService.createUser(createUserDto);
+    } catch (err) {
       throw new HttpException(
-        'El nombre de usuario y la contraseña son obligatorios',
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: err.message || 'Failed to create user',
+        },
         HttpStatus.BAD_REQUEST,
       );
     }
+  }
 
-    const user = await this.usersService.validateUser(email, password);
-    if (!user) {
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+      throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
+    }
+    try {
+      return await this.usersService.updateUser({
+        ...updateUserDto,
+        id_user: userId,
+      });
+    } catch (err) {
       throw new HttpException(
-        'Credenciales inválidas',
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: err.message || 'User not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  @Delete(':id')
+  async deleteUser(@Param('id') id: string) {
+    const userId = parseInt(id, 10);
+    if (isNaN(userId)) {
+      throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
+    }
+    try {
+      return await this.usersService.deleteUser(userId);
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: err.message || 'User not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+  }
+
+  @Post('login')
+  async login(@Body('email') email: string, @Body('password') password: string) {
+    if (!email || !password) {
+      throw new HttpException(
+        'Email and password are required',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    try {
+      const user = await this.usersService.validateUser(email, password);
+      if (!user) {
+        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      }
+      return user;
+    } catch (err) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: err.message || 'Unauthorized',
+        },
         HttpStatus.UNAUTHORIZED,
       );
     }

@@ -4,6 +4,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/modificar_user_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/privacidad_drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Logaout/alerta_logaout_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -89,11 +90,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
             return Column(
               children: [
                 UserAccountsDrawerHeader(
-                  decoration: const BoxDecoration(color: Color(0xFF5B0DA8)),
+                  decoration: const BoxDecoration(
+                      color: Color.fromARGB(255, 58, 57, 59)),
                   currentAccountPicture: GestureDetector(
                     onTap: _pickImage,
                     child: CircleAvatar(
-                      backgroundColor: const Color(0xFF4B0B8B),
+                      backgroundColor: const Color.fromARGB(255, 195, 112, 177),
                       backgroundImage:
                           _imageFile != null ? FileImage(_imageFile!) : null,
                       child: _imageFile == null
@@ -131,21 +133,29 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     );
                   },
                 ),
-                const ListTile(
-                  leading: Icon(
+                ListTile(
+                  leading: const Icon(
                     Icons.security,
                     color: Color(0xFFF2F2F2),
                   ),
-                  title: Text(
+                  title: const Text(
                     'Privacidad',
                     style: TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
                   ),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: Color(0xFFF2F2F2),
                   ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const PrivacidadDrawer();
+                      },
+                    );
+                  },
                 ),
                 ListTile(
                     leading: const Icon(

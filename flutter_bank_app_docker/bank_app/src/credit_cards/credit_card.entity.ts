@@ -1,4 +1,4 @@
-import { Accounts } from 'src/accounts/accounts.entity';
+import { Accounts } from '../accounts/accounts.entity';
 import {
   Entity,
   Column,
@@ -12,7 +12,7 @@ export class Credit_Card {
   @PrimaryGeneratedColumn()
   id_tarjeta: number;
 
-  @Column({ unique: true })
+  @Column({  type: 'bigint', unique: true })
   numero_tarjeta: number;
 
   @Column()

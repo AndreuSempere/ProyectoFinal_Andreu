@@ -8,6 +8,8 @@ import { Accounts } from './accounts/accounts.entity';
 import { Account_typeSeeder } from './db/seeding/seeds/account_type.seeds';
 import { AccountSeeder } from './db/seeding/seeds/accountSeed';
 import { Accounts_type } from './account_type/account_type.entity';
+import { Credit_Card } from './credit_cards/credit_card.entity';
+import { Credit_CardSeeder } from './db/seeding/seeds/credit_card.seeds';
 config();
 
 const options: DataSourceOptions & SeederOptions = {
@@ -21,12 +23,14 @@ const options: DataSourceOptions & SeederOptions = {
   entities: [
     User,
     Accounts,
-    Accounts_type
+    Accounts_type,
+    Credit_Card
   ],
   seeds: [
     UserSeeder,
     Account_typeSeeder,
-    AccountSeeder
+    AccountSeeder,
+    Credit_CardSeeder,
   ],
 };
 

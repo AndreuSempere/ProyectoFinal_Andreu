@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 
@@ -62,8 +65,9 @@ class FirebaseAuthDataSource {
   Future<void> newUser(String name, String surname, String email,
       String password, String dni, String age) async {
     try {
+      // Insertar en Firebase
       final databaseRef = FirebaseFirestore.instance.collection('users');
-      databaseRef.add({
+      await databaseRef.add({
         'name': name,
         'surname': surname,
         'email': email,
@@ -71,24 +75,41 @@ class FirebaseAuthDataSource {
         'dni': dni,
         'age': age,
       });
+
+      // Insertar en backend local
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/Users'),
+        headers: {'Content-Type': 'application/json'},
+        body: '''
+        {
+          "name": "$name",
+          "surname": "$surname",
+          "email": "$email",
+          "password": "$password",
+          "dni": "$dni",
+          "age": "$age"
+        }
+        ''',
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception(
+            'Error al crear usuario en el backend: ${response.body}');
+      }
     } catch (e) {
       throw Exception("Error al crear el usuario: $e");
     }
   }
 
-  Future<Map<String, dynamic>> getUserInfo(String email) async {
-    try {
-      final snapshot = await database
-          .collection('users')
-          .where('email', isEqualTo: email)
-          .get();
-      if (snapshot.docs.isNotEmpty) {
-        return snapshot.docs.first.data();
-      } else {
-        throw Exception("No user found with this email.");
-      }
-    } catch (e) {
-      throw Exception("Error fetching user data: $e");
+  Future<UserModel> getUserInfo(String email) async {
+    final response =
+        await http.get(Uri.parse('http://localhost:8080/users/user/$email'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> userJson = json.decode(response.body);
+      return UserModel.fromJson(userJson);
+    } else {
+      throw Exception('Error al cargar la cuenta del usuario');
     }
   }
 

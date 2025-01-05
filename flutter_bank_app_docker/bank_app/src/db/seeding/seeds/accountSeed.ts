@@ -30,7 +30,6 @@ export class AccountSeeder implements Seeder {
         return {
           numero_cuenta: item.numero_cuenta,
           saldo: item.saldo,
-          moneda: item.moneda,
           estado: item.estado,
           accounts_type: accountType,
           id_user: user,

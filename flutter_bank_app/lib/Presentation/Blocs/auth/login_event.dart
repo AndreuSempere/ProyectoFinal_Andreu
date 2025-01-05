@@ -50,11 +50,7 @@ class NewUserEvent extends LoginEvent {
       this.name, this.surname, this.email, this.password, this.dni, this.age);
 }
 
-class FetchUserDataEvent extends LoginEvent {
-  final String email;
-
-  FetchUserDataEvent({required this.email});
-}
+class FetchUserDataEvent extends LoginEvent {}
 
 class UpdateUserEvent extends LoginEvent {
   final String name;

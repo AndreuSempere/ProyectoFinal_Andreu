@@ -40,21 +40,31 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       final String dni = _dniController.text;
       final String age = _ageController.text;
 
-      context.read<LoginBloc>().add(RegisterButtonPressed(
-            email: email,
-            password: password,
-          ));
+      try {
+        // Await the registration process
+        context.read<LoginBloc>().add(RegisterButtonPressed(
+              email: email,
+              password: password,
+            ));
 
-      context
-          .read<LoginBloc>()
-          .add(NewUserEvent(name, surname, email, password, dni, age));
+        // If registration is successful, proceed to create the new user
+        context
+            .read<LoginBloc>()
+            .add(NewUserEvent(name, surname, email, password, dni, age));
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text('Usuario $name $surname registrado correctamente.')),
-      );
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content:
+                  Text('Usuario $name $surname registrado correctamente.')),
+        );
 
-      Navigator.pop(context);
+        Navigator.pop(context);
+      } catch (e) {
+        // Handle the exception and show the error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(

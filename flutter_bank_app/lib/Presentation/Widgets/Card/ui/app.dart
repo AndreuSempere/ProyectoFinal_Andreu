@@ -32,7 +32,7 @@ class App extends StatelessWidget {
               },
             )
           ]),
-      body: CardList(),
+      body: const CardList(),
     );
   }
 }

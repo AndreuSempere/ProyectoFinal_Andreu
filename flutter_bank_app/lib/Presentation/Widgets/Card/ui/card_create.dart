@@ -22,7 +22,7 @@ class CardCreate extends StatefulWidget {
 class _CardCreate extends State<CardCreate> {
   final GlobalKey<FlipCardState> animatedStateKey = GlobalKey<FlipCardState>();
 
-  FocusNode _focusNode = new FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {

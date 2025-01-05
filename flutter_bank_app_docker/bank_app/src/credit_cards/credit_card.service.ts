@@ -4,6 +4,7 @@ import { Not, Repository } from 'typeorm';
 import { UtilsService } from '../utils/utils.service';
 import { CreateCreditCardDto, UpdateCreditCardDto } from './credit_card.dto';
 import { Credit_Card } from './credit_card.entity';
+import { Accounts } from '../accounts/accounts.entity';
 
 @Injectable()
 export class Credit_CardService {
@@ -11,6 +12,8 @@ export class Credit_CardService {
     private readonly utilsService: UtilsService,
     @InjectRepository(Credit_Card)
     private readonly creditCardRepository: Repository<Credit_Card>,
+    @InjectRepository(Accounts) 
+    private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
   async getCreditCard(id: number, xml?: string): Promise<any> {
@@ -58,6 +61,18 @@ export class Credit_CardService {
     if (existingCard) {
       throw new HttpException(
         'El número de tarjeta ya existe',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    // Check if the account exists
+    const accountExists = await this.accountsRepository.findOne({
+      where: { id_cuenta: createCreditCardDto.id_cuenta },
+    });
+
+    if (!accountExists) {
+      throw new HttpException(
+        'La cuenta no existe',
         HttpStatus.BAD_REQUEST,
       );
     }

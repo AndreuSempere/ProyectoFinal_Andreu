@@ -6,12 +6,13 @@ import {
   Length,
   Min,
   Max,
+  IsNotEmpty,
 } from 'class-validator';
 
 export class CreateCreditCardDto {
   @IsInt()
-  @Min(1000000000000000) // 16 digits minimum
-  @Max(9999999999999999) // 16 digits maximum
+  @Min(1000000000000000) 
+  @Max(9999999999999999)
   numero_tarjeta: number;
 
   @IsString()
@@ -29,6 +30,7 @@ export class CreateCreditCardDto {
   estado: string;
 
   @IsInt()
+  @IsNotEmpty()
   id_cuenta: number;
 }
 

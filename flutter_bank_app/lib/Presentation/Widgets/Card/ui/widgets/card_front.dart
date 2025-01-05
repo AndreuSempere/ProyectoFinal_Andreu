@@ -149,7 +149,7 @@ class CardFront extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   _cardLogo,
-                  CardChip(),
+                  const CardChip(),
                   _cardNumber,
                   _cardLastNumber,
                   _cardValidThru,

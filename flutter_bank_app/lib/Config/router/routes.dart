@@ -13,7 +13,7 @@ final GoRouter router = GoRouter(
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(path: '/home', builder: (context, state) => const HomePage()),
-      GoRoute(path: '/add_card', builder: (context, state) => App()),
+      GoRoute(path: '/add_card', builder: (context, state) => const App()),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<LoginRepository>().isLoggedIn();

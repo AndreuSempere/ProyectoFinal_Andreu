@@ -31,7 +31,7 @@ export class AccountsService {
 
   async getAccountAll(xml?: string): Promise<any> {
     const result = await this.accountsRepository.find({
-      relations: ['accounts_type', 'user'],
+      relations: ['accounts_type', 'id_user'],
     });
     if (xml === 'true') {
       const jsonFormatted = JSON.stringify({

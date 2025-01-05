@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart';
-import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
@@ -36,8 +35,6 @@ class SignInRepositoryImpl implements LoginRepository {
 
       return const Right(null);
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
       return Left(AuthFailure());
     }
   }
@@ -89,18 +86,8 @@ class SignInRepositoryImpl implements LoginRepository {
   @override
   Future<Either<Failure, UserEntity>> getUserInfo(String email) async {
     try {
-      final response = await dataSource.getUserInfo(email);
-
-      final mappedResponse = {
-        "email": response["email"],
-        "name": response["name"],
-        "surname": response["surname"],
-        "dni": response["dni"],
-        "age": response["age"],
-      };
-
-      final user = UserModel.fromJson(mappedResponse);
-      final userEntity = user.toEntity();
+      final userModel = await dataSource.getUserInfo(email);
+      final userEntity = userModel.toEntity();
       return Right(userEntity);
     } catch (e) {
       return Left(AuthFailure());

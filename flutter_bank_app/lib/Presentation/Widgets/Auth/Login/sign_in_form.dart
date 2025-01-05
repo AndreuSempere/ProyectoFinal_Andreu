@@ -47,7 +47,6 @@ class _SignInFormState extends State<SignInForm> {
               LoginButtonPressed(email: email, password: password),
             );
 
-        // Escuchar el estado del LoginBloc
         context.read<LoginBloc>().stream.listen((state) {
           if (state.email != null) {
             confetti.fire();

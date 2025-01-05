@@ -9,6 +9,8 @@ import { AccountsModule } from './accounts/accounts.module';
 import { AccountTypeModule } from './account_type/account_type.module';
 import { Accounts } from './accounts/accounts.entity';
 import { Accounts_type } from './account_type/account_type.entity';
+import { Credit_Card } from './credit_cards/credit_card.entity';
+import { Credit_CardModule } from './credit_cards/credit_card.module';
 
 
 @Module({
@@ -16,6 +18,7 @@ import { Accounts_type } from './account_type/account_type.entity';
     UsersModule,
     AccountsModule,
     AccountTypeModule,
+    Credit_CardModule,
     UtilsModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -29,7 +32,8 @@ import { Accounts_type } from './account_type/account_type.entity';
         entities: [
           User,
           Accounts,
-          Accounts_type
+          Accounts_type,
+          Credit_Card
         ],
         synchronize: true,
       }),

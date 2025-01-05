@@ -11,13 +11,12 @@ import {
 export class CreateAccoutDto {
   @IsOptional()
   @IsInt()
+  @Min(1) 
+  @Max(9999999999999999)
   numero_cuenta?: number;
-
+  
   @IsInt()
   saldo: number;
-
-  @IsString()
-  moneda: string;
 
   @IsString()
   estado: string;
@@ -42,10 +41,6 @@ export class UpdateAccountDto {
   @IsOptional()
   @IsInt()
   saldo: number;
-
-  @IsOptional()
-  @IsString()
-  moneda: string;
 
   @IsOptional()
   @IsString()

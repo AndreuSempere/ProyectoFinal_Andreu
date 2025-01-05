@@ -4,7 +4,6 @@ import {
   Column,
   PrimaryGeneratedColumn,
   OneToMany,
-  JoinColumn,
 } from 'typeorm';
 
 @Entity()
@@ -24,14 +23,11 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ default: 0 })
-  role: number;
+  @Column({ unique: true })
+  dni: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  tokenExpiration: Date;
-
-  @Column({ nullable: true })
-  token: string;
+  @Column()
+  age: number;
 
   @OneToMany(() => Accounts, (accounts) => accounts.id_user)
   accounts: Accounts[];

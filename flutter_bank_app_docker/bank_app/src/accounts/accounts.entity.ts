@@ -1,4 +1,4 @@
-import { Credit_Card } from 'src/credit_cards/credit_card.entity';
+import { Credit_Card } from '../credit_cards/credit_card.entity';
 import { Accounts_type } from '../account_type/account_type.entity';
 import { User } from '../users/users.entity';
 import {
@@ -15,15 +15,13 @@ export class Accounts {
   @PrimaryGeneratedColumn()
   id_cuenta: number;
 
-  @Column()
+  @Column({ type: 'bigint' })
   numero_cuenta: number;
-
+  
   @Column({ unique: true })
   saldo: number;
 
-  @Column({ default: 'EUR' })
-  moneda: string;
-
+  @Column()
   estado: string;
 
   @Column({ type: 'timestamp', nullable: true })

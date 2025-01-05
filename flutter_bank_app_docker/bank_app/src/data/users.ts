@@ -1,10 +1,10 @@
 export default [
   {
-    name: 'Admin',
-    surname: 'Administrator',
-    password: 'admin',
-    email: 'admin@admin.com',
-    dni: '12345678',
-    edad: 30,
+    name: 'Andreu',
+    surname: 'Sempere Mico',
+    password: '123456',
+    email: 'andreusm1707@gmail.com',
+    dni: '49266970G',
+    age: 23,
   }
 ];

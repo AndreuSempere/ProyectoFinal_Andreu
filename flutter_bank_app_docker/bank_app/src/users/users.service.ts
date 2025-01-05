@@ -69,4 +69,12 @@ export class UsersService {
     }
     return null;
   }
+
+  async getUserByEmail(email: string) {
+    return this.usersRepository
+      .createQueryBuilder('u')
+      .where('u.email LIKE :email', { email })
+      .getOne();
+  }
+  
 }
