@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CrearCuentaWidget extends StatefulWidget {
@@ -84,12 +85,18 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
               final int tipoCuenta =
                   int.tryParse(_selectedAccountType ?? '1') ?? 1;
 
+              final myLoginState = context.read<LoginBloc>().state;
+              final userid = myLoginState.user?.idUser;
+              if (userid == null) {
+                return;
+              }
+
               final newAccount = Account(
                 numeroCuenta: _generateAccountNumber(),
                 saldo: double.parse(_saldoController.text),
                 estado: 'Activo',
                 accountType: tipoCuenta,
-                idUser: 1,
+                idUser: userid,
               );
 
               context.read<AccountBloc>().add(

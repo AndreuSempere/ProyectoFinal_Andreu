@@ -4,7 +4,7 @@ import 'package:flutter_bank_app/core/failure.dart';
 import 'package:flutter_bank_app/core/usecase.dart';
 
 class SignoutUserUseCase implements UseCase<void, NoParams> {
-  final LoginRepository repository;
+  final SignInRepository repository;
   SignoutUserUseCase(this.repository);
 
   @override

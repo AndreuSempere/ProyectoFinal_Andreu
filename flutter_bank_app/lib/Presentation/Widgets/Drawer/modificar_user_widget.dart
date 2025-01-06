@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/plantilla_form_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class EditarUser extends StatefulWidget {
@@ -44,26 +45,26 @@ class DialogoState extends State<EditarUser> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              _buildTextField(
+              PlantillaTextField(
                 controller: _nameController,
                 label: 'Nombre Usuario',
                 icon: Icons.person,
                 validatorMsg: 'Introduce un nuevo nombre de usuario',
               ),
-              _buildTextField(
+              PlantillaTextField(
                 controller: _surnameController,
                 label: 'Apellidos',
                 icon: Icons.person_outline,
                 validatorMsg: 'Introduce nuevos apellidos',
               ),
-              _buildTextField(
+              PlantillaTextField(
                 controller: _edadController,
                 label: 'Edad',
                 icon: Icons.calendar_today,
                 keyboardType: TextInputType.number,
                 validatorMsg: 'Introduce una nueva edad',
               ),
-              _buildTextField(
+              PlantillaTextField(
                 controller: _dniController,
                 label: 'DNI',
                 icon: Icons.badge,
@@ -102,33 +103,6 @@ class DialogoState extends State<EditarUser> {
           child: const Text('Guardar'),
         ),
       ],
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    required IconData icon,
-    String? validatorMsg,
-    TextInputType keyboardType = TextInputType.text,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: TextFormField(
-        controller: controller,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          labelText: label,
-          prefixIcon: Icon(icon),
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
-        ),
-        validator: (value) {
-          if (value == null || value.isEmpty) {
-            return validatorMsg;
-          }
-          return null;
-        },
-      ),
     );
   }
 

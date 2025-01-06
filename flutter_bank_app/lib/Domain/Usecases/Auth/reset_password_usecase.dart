@@ -3,7 +3,7 @@ import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 
 class ResetPasswordUseCase {
-  final LoginRepository repository;
+  final SignInRepository repository;
 
   ResetPasswordUseCase(this.repository);
 

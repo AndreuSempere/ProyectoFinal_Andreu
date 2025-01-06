@@ -33,7 +33,7 @@ class UserModel {
       name: json['name'] as String,
       surname: json['surname'] as String,
       dni: json['dni'] as String?,
-      age: json['age'] as int?, // Cambiado a int
+      age: json['age'] as int?,
     );
   }
 
@@ -50,6 +50,7 @@ class UserModel {
 
   UserEntity toEntity() {
     return UserEntity(
+      idUser: userid,
       name: name,
       surname: surname,
       email: email,

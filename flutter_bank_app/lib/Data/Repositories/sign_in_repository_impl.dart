@@ -5,7 +5,7 @@ import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SignInRepositoryImpl implements LoginRepository {
+class SignInRepositoryImpl implements SignInRepository {
   final FirebaseAuthDataSource dataSource;
   final SharedPreferences sharedPreferences;
 

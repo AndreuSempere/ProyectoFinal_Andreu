@@ -1,6 +1,6 @@
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/HomeScreen/home_screen.dart';
-import 'package:flutter_bank_app/Presentation/Screens/Login/pantalla_principal_screen.dart';
+import 'package:flutter_bank_app/Presentation/Screens/Login/login_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Card/ui/app.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:go_router/go_router.dart';
@@ -16,7 +16,7 @@ final GoRouter router = GoRouter(
       GoRoute(path: '/add_card', builder: (context, state) => const App()),
     ],
     redirect: (context, state) async {
-      final isLoggedIn = await sl<LoginRepository>().isLoggedIn();
+      final isLoggedIn = await sl<SignInRepository>().isLoggedIn();
       return isLoggedIn.fold((_) => '/login', (loggedIn) {
         if (loggedIn == "NO_USER" &&
             !state.matchedLocation.contains("/login")) {

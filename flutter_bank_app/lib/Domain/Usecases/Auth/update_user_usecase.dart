@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 
 class UpdateUserUsecase {
-  final LoginRepository repository;
+  final SignInRepository repository;
 
   UpdateUserUsecase(this.repository);
 

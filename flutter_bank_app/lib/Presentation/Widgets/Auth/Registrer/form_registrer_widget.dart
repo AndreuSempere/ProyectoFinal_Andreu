@@ -41,13 +41,11 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       final String age = _ageController.text;
 
       try {
-        // Await the registration process
         context.read<LoginBloc>().add(RegisterButtonPressed(
               email: email,
               password: password,
             ));
 
-        // If registration is successful, proceed to create the new user
         context
             .read<LoginBloc>()
             .add(NewUserEvent(name, surname, email, password, dni, age));
@@ -60,7 +58,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
         Navigator.pop(context);
       } catch (e) {
-        // Handle the exception and show the error message
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString())),
         );
@@ -205,6 +202,10 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Rellenar el DNI es obligatorio';
+                }
+                final dniRegExp = RegExp(r'^\d{8}[A-Z]$');
+                if (!dniRegExp.hasMatch(value)) {
+                  return 'Formato de DNI no válido';
                 }
                 return null;
               },

@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 
-abstract class LoginRepository {
+abstract class SignInRepository {
   Future<Either<Failure, void>> signIn(String email, String password);
   Future<Either<Failure, void>> signUp(String email, String password);
   Future<Either<Failure, void>> logout();

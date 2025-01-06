@@ -1,13 +1,14 @@
 import { Credit_Card } from '../credit_cards/credit_card.entity';
 import { Accounts_type } from '../account_type/account_type.entity';
 import { User } from '../users/users.entity';
+import { Transaction } from '../transactions/transactions.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
-  OneToMany,
+  OneToMany
 } from 'typeorm';
 
 @Entity()
@@ -43,5 +44,8 @@ export class Accounts {
 
   @OneToMany(() => Credit_Card, (credit_card) => credit_card.accounts)
   credit_card: Credit_Card[];
+
+  @OneToMany(() => Transaction, (transactions) => transactions.account)
+  transactions: Transaction[];
 
 }

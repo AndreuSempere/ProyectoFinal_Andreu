@@ -5,7 +5,7 @@ import 'package:flutter_bank_app/core/failure.dart';
 import 'package:flutter_bank_app/core/usecase.dart';
 
 class FetchUserDataUseCase extends UseCase<UserEntity, String> {
-  final LoginRepository repository;
+  final SignInRepository repository;
 
   FetchUserDataUseCase(this.repository);
 

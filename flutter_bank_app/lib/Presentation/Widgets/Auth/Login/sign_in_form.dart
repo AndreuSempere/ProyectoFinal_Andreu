@@ -10,21 +10,13 @@ class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
 
   @override
-  State<SignInForm> createState() => _SignInFormState();
+  State<SignInForm> createState() => SignInRepository();
 }
 
-class _SignInFormState extends State<SignInForm> {
+class SignInRepository extends State<SignInForm> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  bool isShowLoading = false;
-  bool isShowConfetti = false;
-
-  late SMITrigger check;
-  late SMITrigger error;
-  late SMITrigger reset;
-  late SMITrigger confetti;
 
   StateMachineController getRiveController(Artboard artboard) {
     final controller =
@@ -34,10 +26,7 @@ class _SignInFormState extends State<SignInForm> {
   }
 
   void signIn(BuildContext context) {
-    setState(() {
-      isShowLoading = true;
-      isShowConfetti = true;
-    });
+    setState(() {});
     Future.delayed(const Duration(seconds: 1), () {
       if (_formKey.currentState!.validate()) {
         final email = _emailController.text;
@@ -49,25 +38,16 @@ class _SignInFormState extends State<SignInForm> {
 
         context.read<LoginBloc>().stream.listen((state) {
           if (state.email != null) {
-            confetti.fire();
             context.go('/home');
-          } else if (state.errorMessage != null) {
-            error.fire();
-          }
+          } else if (state.errorMessage != null) {}
         });
 
-        check.fire();
         Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
+          setState(() {});
         });
       } else {
-        error.fire();
         Future.delayed(const Duration(seconds: 2), () {
-          setState(() {
-            isShowLoading = false;
-          });
+          setState(() {});
         });
       }
     });
@@ -143,62 +123,11 @@ class _SignInFormState extends State<SignInForm> {
                     icon: const Icon(Icons.arrow_forward),
                   ),
                 ),
-                isShowLoading
-                    ? CustomPositioned(
-                        child: RiveAnimation.asset(
-                          "assets/RiveAssets/check.riv",
-                          onInit: (artboard) {
-                            StateMachineController controller =
-                                getRiveController(artboard);
-                            check = controller.findSMI("Check") as SMITrigger;
-                            error = controller.findSMI("Error") as SMITrigger;
-                            reset = controller.findSMI("Reset") as SMITrigger;
-                          },
-                        ),
-                      )
-                    : const SizedBox(),
-                isShowConfetti
-                    ? CustomPositioned(
-                        child: Transform.scale(
-                          scale: 6,
-                          child: RiveAnimation.asset(
-                            "assets/RiveAssets/confetti.riv",
-                            onInit: (artboard) {
-                              StateMachineController controller =
-                                  getRiveController(artboard);
-                              confetti = controller.findSMI("Trigger explosion")
-                                  as SMITrigger;
-                            },
-                          ),
-                        ),
-                      )
-                    : const SizedBox(),
               ],
             ),
           ),
         ),
       ],
-    );
-  }
-}
-
-class CustomPositioned extends StatelessWidget {
-  const CustomPositioned({super.key, required this.child, this.size = 100});
-  final Widget child;
-  final double size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned.fill(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            const Spacer(),
-            SizedBox(height: size, width: size, child: child),
-            const Spacer(flex: 2),
-          ],
-        ),
-      ),
     );
   }
 }

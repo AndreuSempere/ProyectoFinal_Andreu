@@ -41,7 +41,7 @@ Future<void> configureDependencies() async {
       () => AccountRemoteDataSourceImpl(sl()));
 
   // Repository
-  sl.registerLazySingleton<LoginRepository>(() => SignInRepositoryImpl(
+  sl.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl(
       sl<FirebaseAuthDataSource>(), sl<SharedPreferences>()));
 
   sl.registerLazySingleton<AccountsRepository>(
@@ -64,7 +64,7 @@ Future<void> configureDependencies() async {
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
-      loginRepository: sl<LoginRepository>(),
+      signInRepository: sl<SignInRepository>(),
       signInUserUseCase: sl<SigninUserUseCase>(),
       signUpUserUseCase: sl<SignupUserUseCase>(),
       signOutUserUseCase: sl<SignoutUserUseCase>(),

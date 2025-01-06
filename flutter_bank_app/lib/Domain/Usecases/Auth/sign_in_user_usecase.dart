@@ -3,7 +3,7 @@ import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 
 class SigninUserUseCase {
-  final LoginRepository repository;
+  final SignInRepository repository;
 
   SigninUserUseCase(this.repository);
 

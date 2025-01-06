@@ -15,7 +15,7 @@ import 'login_event.dart';
 import 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  final LoginRepository loginRepository;
+  final SignInRepository signInRepository;
   final SigninUserUseCase signInUserUseCase;
   final SignoutUserUseCase signOutUserUseCase;
   final SignupUserUseCase signUpUserUseCase;
@@ -25,7 +25,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UpdateUserUsecase updateuserUseCase;
 
   LoginBloc(
-      {required this.loginRepository,
+      {required this.signInRepository,
       required this.signInUserUseCase,
       required this.signOutUserUseCase,
       required this.signUpUserUseCase,
