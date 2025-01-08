@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 
 class UserModel {
-  final int? userid;
+  final int? id_user;
   final String email;
   final String name;
   final String surname;
@@ -10,7 +10,7 @@ class UserModel {
   final int? age;
 
   UserModel({
-    this.userid,
+    this.id_user,
     required this.email,
     required this.name,
     required this.surname,
@@ -28,7 +28,7 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      userid: json['id_user'] as int?,
+      id_user: json['id_user'] as int?,
       email: json['email'] as String,
       name: json['name'] as String,
       surname: json['surname'] as String,
@@ -39,7 +39,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id_user': userid,
+      'id_user': id_user,
       'email': email,
       'name': name,
       'surname': surname,
@@ -50,7 +50,7 @@ class UserModel {
 
   UserEntity toEntity() {
     return UserEntity(
-      idUser: userid,
+      idUser: id_user,
       name: name,
       surname: surname,
       email: email,

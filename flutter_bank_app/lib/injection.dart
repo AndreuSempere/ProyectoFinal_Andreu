@@ -9,6 +9,7 @@ import 'package:flutter_bank_app/Domain/Repositories/accounts_repository.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Domain/Repositories/transactions_repository.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/create_account_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Accounts/delete_account_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/get_accounts_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/fetch_user_data_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/new_user_usecase.dart';
@@ -69,11 +70,14 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<GetAccountUseCase>(() => GetAccountUseCase(sl()));
   sl.registerLazySingleton<CreateAccountUseCase>(
       () => CreateAccountUseCase(sl()));
+  sl.registerLazySingleton<DeleteAccountUsecase>(
+      () => DeleteAccountUsecase(sl()));
+
+  sl.registerLazySingleton<GetTransactionsUseCase>(
+      () => GetTransactionsUseCase(sl()));
 
   sl.registerLazySingleton<CreateTransactionUseCase>(
       () => CreateTransactionUseCase(sl()));
-  sl.registerLazySingleton<GetTransactionsUseCase>(
-      () => GetTransactionsUseCase(sl()));
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
@@ -89,6 +93,7 @@ Future<void> configureDependencies() async {
   sl.registerFactory<AccountBloc>(() => AccountBloc(
         createAccountUsecase: sl<CreateAccountUseCase>(),
         getAccountsUsecase: sl<GetAccountUseCase>(),
+        deleteAccountsUsecase: sl<DeleteAccountUsecase>(),
       ));
 
   sl.registerFactory<TransactionBloc>(() => TransactionBloc(

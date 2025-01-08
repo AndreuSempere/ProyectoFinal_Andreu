@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class AccountRemoteDataSource {
   Future<List<AccountModel>> getAllAccounts();
   Future<bool> createdAccount(AccountModel account);
+  Future<void> deleteAccount(int id);
 }
 
 class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
@@ -37,6 +38,18 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
     } else {
       throw Exception(
           'Error al crear una account en el backend: ${response.body}');
+    }
+  }
+
+  @override
+  Future<void> deleteAccount(int id) async {
+    final response = await client.delete(
+      Uri.parse('http://localhost:8080/accounts/$id'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Error al borrar la account');
     }
   }
 }

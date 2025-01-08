@@ -32,6 +32,8 @@ export class Credit_Card {
     (accounts) => accounts.credit_card,
     {
       nullable: false,
+      onDelete: 'CASCADE',
+
     },
   )
   @JoinColumn({ name: 'id_cuenta' })

@@ -95,10 +95,10 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<String, void>> updateUser(
-      String name, String surname, String email, String dni, String age) async {
+  Future<Either<String, void>> updateUser(int idUser, String name,
+      String surname, String email, String dni, String age) async {
     try {
-      await dataSource.updateUser(name, surname, email, dni, age);
+      await dataSource.updateUser(idUser, name, surname, email, dni, age);
       return const Right(null);
     } catch (e) {
       return Left('Fallo al crear el tweet: $e');

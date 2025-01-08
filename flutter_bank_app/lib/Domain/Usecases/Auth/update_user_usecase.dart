@@ -6,8 +6,8 @@ class UpdateUserUsecase {
 
   UpdateUserUsecase(this.repository);
 
-  Future<Either<String, void>> call(
-      String name, String surname, String email, String dni, String age) async {
-    return await repository.updateUser(name, surname, email, dni, age);
+  Future<Either<String, void>> call(int idUser, String name, String surname,
+      String email, String dni, String age) async {
+    return await repository.updateUser(idUser, name, surname, email, dni, age);
   }
 }

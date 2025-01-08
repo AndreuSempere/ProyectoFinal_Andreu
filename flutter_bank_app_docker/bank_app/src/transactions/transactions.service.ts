@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Accounts } from '../accounts/accounts.entity';
@@ -35,7 +35,6 @@ export class TransactionsService {
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
-    // Encontrar la cuenta a partir del accountId
     const account = await this.accountsRepository.findOne({
       where: { id_cuenta: createTransactionDto.accountId },
     });
@@ -44,7 +43,6 @@ export class TransactionsService {
       throw new Error('Cuenta no encontrada');
     }
 
-    // Obtenemos el saldo actual de la cuenta
     let newBalance = account.saldo;
 
     if (createTransactionDto.tipo === 'ingreso') {
@@ -71,4 +69,12 @@ export class TransactionsService {
 
     return { message: 'Transacción procesada con éxito' };
   }
+
+    async deleteTransaction(id: number): Promise<{ message: string }> {
+      const result = await this.transactionsRepository.delete(id);
+      if (result.affected === 0) {
+        throw new HttpException('Transaction no encontrado', HttpStatus.NOT_FOUND);
+      }
+      return { message: 'Transaction eliminado' };
+    }
 }

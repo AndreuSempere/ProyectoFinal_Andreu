@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/actions_account_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/filtrer_transactions_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/transactions_list_widget.dart';
 
@@ -34,6 +35,25 @@ class TransactionInfoPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.blueAccent,
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: const Icon(
+                    Icons.settings,
+                    size: 32,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return ActionsAccountWidget(accountId: accountId);
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
             const SizedBox(height: 20),
             const Divider(color: Colors.blueAccent),

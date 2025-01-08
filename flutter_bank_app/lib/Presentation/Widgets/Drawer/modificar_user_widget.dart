@@ -92,10 +92,10 @@ class DialogoState extends State<EditarUser> {
 
               final myLoginState = context.read<LoginBloc>().state;
               final String email = myLoginState.user!.email;
+              final int? idUser = myLoginState.user!.idUser;
 
-              context
-                  .read<LoginBloc>()
-                  .add(UpdateUserEvent(name, surname, email, dni, age));
+              context.read<LoginBloc>().add(
+                  UpdateUserEvent(idUser!, name, surname, email, dni, age));
 
               Navigator.of(context).pop();
             }

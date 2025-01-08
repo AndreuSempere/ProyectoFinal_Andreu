@@ -53,11 +53,13 @@ class NewUserEvent extends LoginEvent {
 class FetchUserDataEvent extends LoginEvent {}
 
 class UpdateUserEvent extends LoginEvent {
+  final int idUser;
   final String name;
   final String surname;
   final String email;
   final String dni;
   final String age;
 
-  UpdateUserEvent(this.name, this.surname, this.email, this.dni, this.age);
+  UpdateUserEvent(
+      this.idUser, this.name, this.surname, this.email, this.dni, this.age);
 }

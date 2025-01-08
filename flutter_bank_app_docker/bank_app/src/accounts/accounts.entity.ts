@@ -19,34 +19,35 @@ export class Accounts {
 
   @Column({ type: 'bigint' })
   numero_cuenta: number;
-  
+
   @Column({ unique: true })
   saldo: number;
 
   @Column()
   estado: string;
 
-  @CreateDateColumn({ type: 'timestamp'})
+  @CreateDateColumn({ type: 'timestamp' })
   fecha_creacion: Date;
 
-  @ManyToOne(
-    () => Accounts_type,
-    (accounts_type) => accounts_type.accounts,
-    {
-      nullable: false,
-    },
-  )
+  @ManyToOne(() => Accounts_type, (accounts_type) => accounts_type.accounts, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'id_type' })
   accounts_type: Accounts_type;
 
-  @ManyToOne(() => User, (id_user) => id_user.accounts)
+  @ManyToOne(() => User, (user) => user.accounts)
   @JoinColumn({ name: 'id_user' })
   id_user: User;
 
-  @OneToMany(() => Credit_Card, (credit_card) => credit_card.accounts)
+  @OneToMany(() => Credit_Card, (credit_card) => credit_card.accounts, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   credit_card: Credit_Card[];
 
-  @OneToMany(() => Transaction, (transactions) => transactions.account)
+  @OneToMany(() => Transaction, (transaction) => transaction.account, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
   transactions: Transaction[];
-
 }

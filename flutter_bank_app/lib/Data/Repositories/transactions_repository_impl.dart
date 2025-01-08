@@ -24,7 +24,6 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       Transaction transaction) async {
     try {
       final transactionModel = TransactionModel(
-        id_transaction: transaction.id_transaction,
         cantidad: transaction.cantidad,
         tipo: transaction.tipo,
         descripcion: transaction.descripcion,
@@ -33,7 +32,6 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
       await remoteDataSource.createdTransactions(transactionModel);
       final createdTransaction = Transaction(
-        id_transaction: transaction.id_transaction,
         cantidad: transaction.cantidad,
         tipo: transaction.tipo,
         descripcion: transaction.descripcion,

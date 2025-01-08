@@ -24,31 +24,31 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
             transactions: [])),
         (transactions) {
           final filteredTransactions = transactions.where((transaction) {
-            bool matches = true;
+            bool coincide = true;
 
             if (event.filters['descripcion'] != null &&
                 event.filters['descripcion'].isNotEmpty) {
-              matches = matches &&
+              coincide = coincide &&
                   transaction.descripcion == event.filters['descripcion'];
             }
 
             if (event.filters['tipo'] != null &&
                 event.filters['tipo'].isNotEmpty) {
-              matches = matches && transaction.tipo == event.filters['tipo'];
+              coincide = coincide && transaction.tipo == event.filters['tipo'];
             }
 
             if (event.filters['fecha'] != null &&
                 event.filters['fecha'].isNotEmpty) {
-              matches = matches &&
+              coincide = coincide &&
                   transaction.created_at!.startsWith(event.filters['fecha']);
             }
 
             if (event.filters['cantidad'] != null) {
-              matches =
-                  matches && transaction.cantidad == event.filters['cantidad'];
+              coincide =
+                  coincide && transaction.cantidad == event.filters['cantidad'];
             }
 
-            return matches;
+            return coincide;
           }).toList();
 
           emit(state.copyWith(

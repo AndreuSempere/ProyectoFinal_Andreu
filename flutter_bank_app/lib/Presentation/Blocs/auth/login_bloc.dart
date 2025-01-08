@@ -119,8 +119,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<UpdateUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
       try {
-        final result = await updateuserUseCase(
-            event.name, event.surname, event.email, event.dni, event.age);
+        final result = await updateuserUseCase(event.idUser, event.name,
+            event.surname, event.email, event.dni, event.age);
 
         result.fold(
           (errorMessage) {
@@ -133,6 +133,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             emit(state.copyWith(
               isLoading: false,
             ));
+            datosUser();
           },
         );
       } catch (error) {
@@ -142,5 +143,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         ));
       }
     });
+  }
+
+  void datosUser() {
+    add(FetchUserDataEvent());
   }
 }

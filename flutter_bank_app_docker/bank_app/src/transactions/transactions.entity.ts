@@ -6,7 +6,9 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id_transaction: number;
 
-  @ManyToOne(() => Accounts, (account) => account.transactions)
+  @ManyToOne(() => Accounts, (account) => account.transactions, {
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'accountId' })
   account: Accounts;
 

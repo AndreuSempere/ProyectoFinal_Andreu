@@ -46,4 +46,14 @@ class AccountRepositoryImpl implements AccountsRepository {
       return Left('Fallo al crear el tweet: $e');
     }
   }
+
+  @override
+  Future<Either<Exception, void>> deleteAccount(int id) async {
+    try {
+      await remoteDataSource.deleteAccount(id);
+      return const Right(null);
+    } catch (e) {
+      return Left(Exception('Error al borrar la account'));
+    }
+  }
 }
