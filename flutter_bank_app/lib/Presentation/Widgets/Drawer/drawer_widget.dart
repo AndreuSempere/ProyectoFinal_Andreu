@@ -111,6 +111,25 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 ),
                 ListTile(
                   leading: const Icon(
+                    Icons.home,
+                    color: Color(0xFFF2F2F2),
+                  ),
+                  title: const Text(
+                    'Home',
+                    style: TextStyle(
+                      color: Color(0xFFF2F2F2),
+                    ),
+                  ),
+                  trailing: const Icon(
+                    Icons.chevron_right,
+                    color: Color(0xFFF2F2F2),
+                  ),
+                  onTap: () {
+                    context.go('/home');
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(
                     Icons.person,
                     color: Color(0xFFF2F2F2),
                   ),

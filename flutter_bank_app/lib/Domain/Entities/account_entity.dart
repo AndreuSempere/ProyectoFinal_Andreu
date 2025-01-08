@@ -3,7 +3,7 @@ class Account {
   final String? numeroCuenta;
   final double? saldo;
   final String? estado;
-  final DateTime? createdAt;
+  final String? createdAt;
   final int accountType;
   final int idUser;
 

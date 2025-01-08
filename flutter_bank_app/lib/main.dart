@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Config/router/routes.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<AccountBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<TransactionBloc>(),
         ),
       ],
       child: MaterialApp.router(

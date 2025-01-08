@@ -1,10 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { Accounts } from '../accounts/accounts.entity';
 
 @Entity()
 export class Transaction {
   @PrimaryGeneratedColumn()
-  id: number;
+  id_transaction: number;
 
   @ManyToOne(() => Accounts, (account) => account.transactions)
   @JoinColumn({ name: 'accountId' })
@@ -18,4 +18,7 @@ export class Transaction {
 
   @Column({ nullable: true })
   descripcion: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  created_at: Date;
 }

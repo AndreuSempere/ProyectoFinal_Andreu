@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart';
 import '../ui/widgets/card_list.dart';
 import '../ui/card_type.dart';
 
@@ -19,10 +20,6 @@ class App extends StatelessWidget {
                 color: Colors.black,
                 fontWeight: FontWeight.w600),
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.menu, color: Colors.black),
-            onPressed: () {},
-          ),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add, color: Colors.black),
@@ -32,6 +29,7 @@ class App extends StatelessWidget {
               },
             )
           ]),
+      drawer: const DrawerWidget(),
       body: const CardList(),
     );
   }

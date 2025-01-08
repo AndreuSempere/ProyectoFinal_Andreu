@@ -1,6 +1,6 @@
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
-import 'package:flutter_bank_app/Presentation/Screens/HomeScreen/home_screen.dart';
-import 'package:flutter_bank_app/Presentation/Screens/Login/login_screen.dart';
+import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
+import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Card/ui/app.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:go_router/go_router.dart';

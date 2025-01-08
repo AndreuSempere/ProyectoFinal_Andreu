@@ -8,7 +8,8 @@ import {
   PrimaryGeneratedColumn,
   JoinColumn,
   ManyToOne,
-  OneToMany
+  OneToMany,
+  CreateDateColumn
 } from 'typeorm';
 
 @Entity()
@@ -25,7 +26,7 @@ export class Accounts {
   @Column()
   estado: string;
 
-  @Column({ type: 'timestamp', nullable: true })
+  @CreateDateColumn({ type: 'timestamp'})
   fecha_creacion: Date;
 
   @ManyToOne(

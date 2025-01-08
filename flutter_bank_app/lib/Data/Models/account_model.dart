@@ -1,16 +1,17 @@
 import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
+import 'package:intl/intl.dart';
 
 class AccountModel {
   final int? idCuenta;
   final String? numero_cuenta;
   final double? saldo;
   final String? estado;
-  final DateTime? fecCreacion;
+  final String? fecCreacion;
   final int accounts_type;
   final int id_user;
 
   AccountModel({
-    required this.idCuenta,
+    this.idCuenta,
     required this.numero_cuenta,
     this.saldo,
     this.estado,
@@ -20,12 +21,22 @@ class AccountModel {
   });
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
+    String? formattedDate;
+    if (json['fecha_creacion'] != null) {
+      try {
+        final parsedDate = DateTime.parse(json['fecha_creacion']);
+        formattedDate = DateFormat('dd/MM/yyyy').format(parsedDate);
+      } catch (e) {
+        formattedDate = null;
+      }
+    }
+
     return AccountModel(
       idCuenta: json['id_cuenta'],
       numero_cuenta: json['numero_cuenta'],
       saldo: json['saldo'],
       estado: json['estado'],
-      fecCreacion: json['fecha_creacion'],
+      fecCreacion: formattedDate,
       accounts_type: json['accounts_type']?['id_type'],
       id_user: json['id_user']?['id_user'],
     );

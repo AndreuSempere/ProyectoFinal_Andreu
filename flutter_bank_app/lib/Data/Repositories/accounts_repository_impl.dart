@@ -27,7 +27,6 @@ class AccountRepositoryImpl implements AccountsRepository {
         numero_cuenta: account.numeroCuenta,
         saldo: account.saldo,
         estado: account.estado,
-        fecCreacion: account.createdAt,
         accounts_type: account.accountType,
         id_user: account.idUser,
       );
@@ -38,7 +37,6 @@ class AccountRepositoryImpl implements AccountsRepository {
         numeroCuenta: account.numeroCuenta,
         saldo: account.saldo,
         estado: account.estado,
-        createdAt: account.createdAt,
         accountType: account.accountType,
         idUser: account.idUser,
       );

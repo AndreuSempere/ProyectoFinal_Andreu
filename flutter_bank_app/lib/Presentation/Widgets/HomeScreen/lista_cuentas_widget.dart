@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountListWidget extends StatelessWidget {
@@ -89,6 +90,15 @@ class AccountListWidget extends StatelessWidget {
                             ),
                           ],
                         ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TransactionInfoPage(
+                                  accountId: account.idCuenta!),
+                            ),
+                          );
+                        },
                       ),
                     );
                   },

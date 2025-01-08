@@ -4,6 +4,8 @@ import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart'
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/crear_cuenta_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/lista_cuentas_widget.dart';
@@ -16,6 +18,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<LoginBloc>().add(FetchUserDataEvent());
     context.read<AccountBloc>().add(GetAllAccount());
+    context.read<TransactionBloc>().add(GetAllTransactions());
 
     return Scaffold(
       appBar: AppBar(

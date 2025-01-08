@@ -14,6 +14,24 @@ export class TransactionsService {
     private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
+  async getTransaction(id?: number): Promise<any> {
+    const result = await this.transactionsRepository.findOneBy({
+      id_transaction: id,
+    });
+
+    return result;
+  }
+
+  async getTransactionAll(): Promise<any> {
+    const result = await this.transactionsRepository.find({
+      relations: ['account'],
+    });
+ 
+    return result;
+  }
+
+
+
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
