@@ -1,6 +1,5 @@
 // user.dto.ts
 import {
-  IsEmail,
   IsString,
   IsOptional,
   IsInt,
@@ -40,22 +39,22 @@ export class UpdateAccountDto {
 
   @IsOptional()
   @IsInt()
-  saldo: number;
+  saldo?: number;
 
   @IsOptional()
   @IsString()
-  estado: string;
+  estado?: string;
 
   @IsOptional()
   @IsString()
   @Length(1, 9)
-  fecha_creacion: string;
+  fecha_creacion?: string;
 
   @IsOptional()
   @IsInt()
-  accounts_type: number;
+  accounts_type?: number;
 
   @IsOptional()
   @IsInt()
-  id_user: number;
+  id_user?: number;
 }

@@ -17,10 +17,10 @@ export class Accounts {
   @PrimaryGeneratedColumn()
   id_cuenta: number;
 
-  @Column({ type: 'bigint' })
+  @Column({ type: 'bigint', unique: true })
   numero_cuenta: number;
 
-  @Column({ unique: true })
+  @Column()
   saldo: number;
 
   @Column()

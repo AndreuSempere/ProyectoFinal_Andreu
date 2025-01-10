@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
+import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/plantilla_add_money_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class AddMoneyPage extends StatelessWidget {
   final int accountId;
@@ -104,7 +104,11 @@ class AddMoneyPage extends StatelessWidget {
                             .read<TransactionBloc>()
                             .add(CreateTransactions(newTransaction));
 
-                        context.go('/home');
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const HomePage()),
+                        );
                       }
                     },
                     child: const Text('Guardar'),

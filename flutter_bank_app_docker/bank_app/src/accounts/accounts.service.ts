@@ -60,7 +60,7 @@ export class AccountsService {
   async updateAccount(id: number, updateAccountsDto: UpdateAccountDto) {
     const accounts = await this.accountsRepository.findOne({
       where: { id_cuenta: id },
-      relations: ['accounts_type', 'user'],
+      relations: ['accounts_type', 'id_user']
     });
 
     if (!accounts) {

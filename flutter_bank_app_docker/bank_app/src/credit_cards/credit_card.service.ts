@@ -64,8 +64,6 @@ export class Credit_CardService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
-    // Check if the account exists
     const accountExists = await this.accountsRepository.findOne({
       where: { id_cuenta: createCreditCardDto.id_cuenta },
     });

@@ -2,9 +2,12 @@ import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './transactions.dto';
 
-@Controller('transactions')
+@Controller('transaction')
 export class TransactionsController {
-  constructor(private readonly transactionsService: TransactionsService) {}
+   private transactionsService: TransactionsService;
+    constructor(transactionsService: TransactionsService) {
+      this.transactionsService = transactionsService;
+    }
 
     @Get()
     getAccountAll() {

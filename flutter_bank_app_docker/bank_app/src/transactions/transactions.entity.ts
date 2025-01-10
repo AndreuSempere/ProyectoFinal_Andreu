@@ -6,12 +6,6 @@ export class Transaction {
   @PrimaryGeneratedColumn()
   id_transaction: number;
 
-  @ManyToOne(() => Accounts, (account) => account.transactions, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'accountId' })
-  account: Accounts;
-
   @Column()
   cantidad: number;
 
@@ -23,4 +17,10 @@ export class Transaction {
 
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
+
+  @ManyToOne(() => Accounts, (account) => account.transactions, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'accountId' })
+  account: Accounts;
 }

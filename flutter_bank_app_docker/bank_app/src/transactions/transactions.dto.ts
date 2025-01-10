@@ -1,9 +1,6 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateTransactionDto {
-  @IsNumber()
-  @IsNotEmpty()
-  accountId: number;
 
   @IsNumber()
   @IsNotEmpty()
@@ -16,4 +13,7 @@ export class CreateTransactionDto {
   @IsOptional()
   @IsString()
   descripcion?: string;
+
+  @IsInt()
+  accountId: number;
 }

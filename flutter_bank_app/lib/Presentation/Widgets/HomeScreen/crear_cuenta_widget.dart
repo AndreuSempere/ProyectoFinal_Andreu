@@ -14,7 +14,6 @@ class CrearCuentaWidget extends StatefulWidget {
 }
 
 class _CrearCuentaState extends State<CrearCuentaWidget> {
-  final _saldoController = TextEditingController();
   final _tipoCuentaController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _selectedAccountType;
@@ -56,21 +55,6 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                 return null;
               },
             ),
-            TextFormField(
-              controller: _saldoController,
-              decoration: const InputDecoration(labelText: 'Saldo Inicial'),
-              keyboardType: TextInputType.number,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Introduce un saldo inicial';
-                }
-                final saldo = double.tryParse(value);
-                if (saldo == null || saldo < 0) {
-                  return 'Introduce un saldo válido y positivo';
-                }
-                return null;
-              },
-            ),
           ],
         ),
       ),
@@ -84,6 +68,7 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
             if (_formKey.currentState!.validate()) {
               final int tipoCuenta =
                   int.tryParse(_selectedAccountType ?? '1') ?? 1;
+              const saldoInicial = 0.0;
 
               final myLoginState = context.read<LoginBloc>().state;
               final userid = myLoginState.user?.idUser;
@@ -93,7 +78,7 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
 
               final newAccount = Account(
                 numeroCuenta: _generateAccountNumber(),
-                saldo: double.parse(_saldoController.text),
+                saldo: saldoInicial,
                 estado: 'Activo',
                 accountType: tipoCuenta,
                 idUser: userid,
@@ -127,7 +112,6 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
 
   @override
   void dispose() {
-    _saldoController.dispose();
     _tipoCuentaController.dispose();
     super.dispose();
   }
