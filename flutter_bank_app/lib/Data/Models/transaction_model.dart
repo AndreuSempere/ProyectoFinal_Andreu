@@ -41,7 +41,7 @@ class TransactionModel {
       'cantidad': cantidad,
       'tipo': tipo,
       'descripcion': descripcion,
-      'account': account,
+      'accountId': account,
     };
   }
 

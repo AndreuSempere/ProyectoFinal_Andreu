@@ -3,18 +3,25 @@ import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_blo
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FilterDialog extends StatelessWidget {
+class FilterDialog extends StatefulWidget {
   const FilterDialog({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final Map<String, dynamic> filters = {
-      'descripcion': null,
-      'tipo': null,
-      'fecha': null,
-      'cantidad': null,
-    };
+  State<FilterDialog> createState() => _FilterDialogState();
+}
 
+class _FilterDialogState extends State<FilterDialog> {
+  final Map<String, dynamic> filters = {
+    'descripcion': null,
+    'tipo': null,
+    'created_at': null,
+    'cantidad': null,
+  };
+
+  String? selectedDate;
+
+  @override
+  Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text('Filtrar Transacciones'),
       content: SingleChildScrollView(
@@ -39,19 +46,28 @@ class FilterDialog extends StatelessWidget {
               },
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Fecha'),
+              decoration: const InputDecoration(
+                labelText: 'Fecha',
+                hintText: 'dd/mm/aa',
+                suffixIcon: Icon(Icons.calendar_today),
+              ),
               readOnly: true,
+              controller: TextEditingController(text: selectedDate),
               onTap: () async {
                 FocusScope.of(context).requestFocus(FocusNode());
                 final date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
+                  firstDate: DateTime(2025),
+                  lastDate: DateTime(2026),
                 );
                 if (date != null) {
-                  filters['fecha'] =
-                      '${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}';
+                  final formattedDate =
+                      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${(date.year % 100).toString().padLeft(2, '0')}';
+                  setState(() {
+                    selectedDate = formattedDate;
+                    filters['created_at'] = formattedDate;
+                  });
                 }
               },
             ),
