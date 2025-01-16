@@ -9,6 +9,8 @@ class AccountModel {
   final String? fecCreacion;
   final int accounts_type;
   final int id_user;
+  final String description;
+  final String? icon;
 
   AccountModel({
     this.idCuenta,
@@ -18,6 +20,8 @@ class AccountModel {
     this.fecCreacion,
     required this.accounts_type,
     required this.id_user,
+    required this.description,
+    this.icon,
   });
 
   factory AccountModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +43,8 @@ class AccountModel {
       fecCreacion: formattedDate,
       accounts_type: json['accounts_type']?['id_type'],
       id_user: json['id_user']?['id_user'],
+      description: json['description'],
+      icon: json['icon'],
     );
   }
 
@@ -51,6 +57,8 @@ class AccountModel {
       'fecCreacion': fecCreacion,
       'accounts_type': accounts_type,
       'id_user': id_user,
+      'description': description,
+      'icon': icon,
     };
   }
 
@@ -62,6 +70,8 @@ class AccountModel {
       createdAt: fecCreacion,
       accountType: accounts_type,
       idUser: id_user,
+      description: description,
+      icon: icon,
     );
   }
 }

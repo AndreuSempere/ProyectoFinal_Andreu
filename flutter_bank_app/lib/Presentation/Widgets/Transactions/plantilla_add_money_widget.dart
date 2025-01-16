@@ -6,6 +6,7 @@ class PlantillaAddTextField extends StatelessWidget {
   final IconData icon;
   final String? validatorMsg;
   final TextInputType keyboardType;
+  final String? Function(String?)? validator;
 
   const PlantillaAddTextField({
     Key? key,
@@ -14,7 +15,7 @@ class PlantillaAddTextField extends StatelessWidget {
     required this.icon,
     this.validatorMsg,
     this.keyboardType = TextInputType.text,
-    required String? Function(dynamic value) validator,
+    this.validator,
   }) : super(key: key);
 
   @override
@@ -30,8 +31,12 @@ class PlantillaAddTextField extends StatelessWidget {
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
         ),
         validator: (value) {
+          if (validator != null) {
+            return validator!(
+                value); // Usa el validador personalizado si existe
+          }
           if (value == null || value.isEmpty) {
-            return validatorMsg;
+            return validatorMsg; // Usa el mensaje predeterminado
           }
           return null;
         },

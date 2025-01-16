@@ -4,6 +4,7 @@ import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_bank_app/core/unit.dart';
 
 class SignInRepositoryImpl implements SignInRepository {
   final FirebaseAuthDataSource dataSource;
@@ -12,28 +13,25 @@ class SignInRepositoryImpl implements SignInRepository {
   SignInRepositoryImpl(this.dataSource, this.sharedPreferences);
 
   static const String _userKey = 'user_email';
-
   @override
-  Future<Either<Failure, void>> signIn(String email, String password) async {
+  Future<Either<Failure, Msg>> signIn(String email, String password) async {
     try {
       await dataSource.signIn(email, password);
       await sharedPreferences.setString(_userKey, email);
 
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
       return Left(AuthFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> signUp(String email, String password) async {
+  Future<Either<Failure, Msg>> signUp(String email, String password) async {
     try {
       await dataSource.signUp(email, password);
       await sharedPreferences.setString(_userKey, email);
 
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
       return Left(AuthFailure());
     }
@@ -51,35 +49,35 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<Failure, void>> logout() async {
+  Future<Either<Failure, Msg>> logout() async {
     try {
       await dataSource.logout();
       await sharedPreferences.remove(_userKey);
 
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
       return Left(AuthFailure());
     }
   }
 
   @override
-  Future<Either<Failure, void>> resetPassword(String email) async {
+  Future<Either<Failure, Msg>> resetPassword(String email) async {
     try {
       await dataSource.resetPassword(email);
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
       return Left(AuthFailure());
     }
   }
 
   @override
-  Future<Either<String, void>> newUser(String name, String surname,
-      String email, String password, String dni, String age) async {
+  Future<Either<String, Msg>> newUser(String name, String surname, String email,
+      String password, String dni, String age) async {
     try {
       await dataSource.newUser(name, surname, email, password, dni, age);
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
-      return Left('Fallo al crear el tweet: $e');
+      return Left('Fallo al crear la cuenta: $e');
     }
   }
 
@@ -95,13 +93,13 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<String, void>> updateUser(int idUser, String name,
+  Future<Either<String, Msg>> updateUser(int idUser, String name,
       String surname, String email, String dni, String age) async {
     try {
       await dataSource.updateUser(idUser, name, surname, email, dni, age);
-      return const Right(null);
+      return const Right(Msg());
     } catch (e) {
-      return Left('Fallo al crear el tweet: $e');
+      return Left('Fallo al crear la cuenta: $e');
     }
   }
 }

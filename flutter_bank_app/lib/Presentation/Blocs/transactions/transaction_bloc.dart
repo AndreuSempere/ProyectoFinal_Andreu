@@ -37,10 +37,10 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
               coincide = coincide && transaction.tipo == event.filters['tipo'];
             }
 
-            if (event.filters['fecha'] != null &&
-                event.filters['fecha'].isNotEmpty) {
+            if (event.filters['created_at'] != null &&
+                event.filters['created_at'].isNotEmpty) {
               coincide = coincide &&
-                  transaction.created_at!.startsWith(event.filters['fecha']);
+                  transaction.created_at == event.filters['created_at'];
             }
 
             if (event.filters['cantidad'] != null) {

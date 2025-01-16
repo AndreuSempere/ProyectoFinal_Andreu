@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpFormWidget extends StatefulWidget {
-  const SignUpFormWidget({Key? key}) : super(key: key);
+  const SignUpFormWidget({super.key});
 
   @override
   State<SignUpFormWidget> createState() => _SignUpFormWidgetState();
@@ -40,26 +42,32 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       final String dni = _dniController.text;
       final String age = _ageController.text;
 
-      try {
-        context.read<LoginBloc>().add(RegisterButtonPressed(
-              email: email,
-              password: password,
-            ));
+      context.read<LoginBloc>().add(RegisterButtonPressed(
+            email: email,
+            password: password,
+          ));
 
-        context
-            .read<LoginBloc>()
-            .add(NewUserEvent(name, surname, email, password, dni, age));
+      context
+          .read<LoginBloc>()
+          .add(NewUserEvent(name, surname, email, password, dni, age));
 
+      await Future.delayed(const Duration(seconds: 1));
+
+      final state = context.read<LoginBloc>().state;
+
+      if (state.isSuccess) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-              content:
-                  Text('Usuario $name $surname registrado correctamente.')),
+              content: Text(state.message ??
+                  AppLocalizations.of(context)!
+                      .usuarioRegistradoCorrectamente)),
         );
-
         Navigator.pop(context);
-      } catch (e) {
+      } else if (state.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString())),
+          SnackBar(
+              content: Text(state.message ??
+                  AppLocalizations.of(context)!.errorRegistrarUsuario)),
         );
       }
     } else {
@@ -94,134 +102,123 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       child: Column(
         children: [
           _buildFormRow(
-            "Nombre:",
+            AppLocalizations.of(context)!.nameUpdUser,
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu nombre',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.introduceTuNombre,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'El nombre es obligatorio';
+                  return AppLocalizations.of(context)!.elNombreEsObligatorio;
                 }
                 return null;
               },
             ),
           ),
           _buildFormRow(
-            "Apellido:",
+            AppLocalizations.of(context)!.surnameUpdUser,
             TextFormField(
               controller: _surnameController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu apellido',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.introduceTuApellido,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'El apellido es obligatorio';
+                  return AppLocalizations.of(context)!.elApellidoEsObligatorio;
                 }
                 return null;
               },
             ),
           ),
           _buildFormRow(
-            "Email:",
+            AppLocalizations.of(context)!.email,
             TextFormField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu email',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.introduceTuEmail,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               validator: (value) {
                 if (value == null || value.isEmpty || !value.contains("@")) {
-                  return 'Introduce un email válido';
+                  return AppLocalizations.of(context)!.introduceUnEmailValido;
                 }
                 return null;
               },
             ),
           ),
           _buildFormRow(
-            "Contraseña:",
+            AppLocalizations.of(context)!.password,
             TextFormField(
               controller: _passwordController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu contraseña',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.introduceTuPassword,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               obscureText: true,
               validator: (value) {
                 if (value == null || value.isEmpty || value.length < 6) {
-                  return 'La contraseña debe tener al menos 6 caracteres';
+                  return AppLocalizations.of(context)!
+                      .laPasswordDebeTenerAlMenos6Caracteres;
                 }
                 return null;
               },
             ),
           ),
           _buildFormRow(
-            "Edad:",
+            AppLocalizations.of(context)!.ageUpdUser,
             TextFormField(
               controller: _ageController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu edad',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.introduceTuEdad,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               keyboardType: TextInputType.number,
               obscureText: false,
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'La edad no puede estar vacía';
+                  return AppLocalizations.of(context)!.laEdadNoPuedeEstarVacia;
                 }
                 final age = int.tryParse(value);
                 if (age == null) {
-                  return 'Por favor, ingresa un número válido';
+                  return AppLocalizations.of(context)!
+                      .porFavorIngresaUnNumeroValido;
                 }
                 if (age < 18) {
-                  return 'La edad debe ser mayor o igual a 18';
+                  return AppLocalizations.of(context)!
+                      .laEdadDebeSerMayorOIgualA18;
                 }
 
                 return null;
               },
             ),
           ),
-          _buildFormRow(
-            "DNI:",
-            TextFormField(
-              controller: _dniController,
-              decoration: const InputDecoration(
-                hintText: 'Introduce tu DNI',
-                border: OutlineInputBorder(),
-                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-              ),
-              obscureText: false,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Rellenar el DNI es obligatorio';
-                }
-                final dniRegExp = RegExp(r'^\d{8}[A-Z]$');
-                if (!dniRegExp.hasMatch(value)) {
-                  return 'Formato de DNI no válido';
-                }
-                return null;
-              },
-            ),
+          SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () => HomePage(),
+            child: Text("Subir DNI"),
           ),
+          SizedBox(height: 14),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               ElevatedButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancelar'),
+                child: Text(AppLocalizations.of(context)!.buttoncancel),
               ),
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () => _submitForm(context),
-                child: const Text('Guardar'),
+                child: Text(
+                  AppLocalizations.of(context)!.buttonguardar,
+                ),
               ),
             ],
           ),

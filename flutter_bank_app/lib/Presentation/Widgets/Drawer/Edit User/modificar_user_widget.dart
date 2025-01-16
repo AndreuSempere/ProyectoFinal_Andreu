@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/plantilla_form_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Edit%20User/plantilla_form_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditarUser extends StatefulWidget {
   const EditarUser({super.key});
@@ -34,10 +35,10 @@ class DialogoState extends State<EditarUser> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text(
-        'Editar Información Usuario',
+      title: Text(
+        AppLocalizations.of(context)!.titleUpdUser,
         textAlign: TextAlign.center,
-        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
       ),
       content: SingleChildScrollView(
         child: Form(
@@ -47,38 +48,52 @@ class DialogoState extends State<EditarUser> {
             children: [
               PlantillaTextField(
                 controller: _nameController,
-                label: 'Nombre Usuario',
+                label: AppLocalizations.of(context)!.nameUpdUser,
                 icon: Icons.person,
                 validatorMsg: 'Introduce un nuevo nombre de usuario',
               ),
               PlantillaTextField(
                 controller: _surnameController,
-                label: 'Apellidos',
+                label: AppLocalizations.of(context)!.surnameUpdUser,
                 icon: Icons.person_outline,
                 validatorMsg: 'Introduce nuevos apellidos',
               ),
               PlantillaTextField(
                 controller: _edadController,
-                label: 'Edad',
+                label: AppLocalizations.of(context)!.ageUpdUser,
                 icon: Icons.calendar_today,
                 keyboardType: TextInputType.number,
                 validatorMsg: 'Introduce una nueva edad',
+                customValidator: (value) {
+                  if (int.tryParse(value!) == null ||
+                      int.parse(value) <= 0 ||
+                      int.parse(value) < 18) {
+                    return 'Introduce una edad válida';
+                  }
+                  return null;
+                },
               ),
               PlantillaTextField(
                 controller: _dniController,
                 label: 'DNI',
                 icon: Icons.badge,
                 validatorMsg: 'Introduce un nuevo DNI',
+                customValidator: (value) {
+                  if (!RegExp(r'^\d{8}[A-Za-z]$').hasMatch(value!)) {
+                    return 'Introduce un DNI válido (8 números y 1 letra)';
+                  }
+                  return null;
+                },
               ),
-              const SizedBox(height: 16)
+              const SizedBox(height: 8)
             ],
           ),
         ),
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context)!.buttoncancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -100,7 +115,9 @@ class DialogoState extends State<EditarUser> {
               Navigator.of(context).pop();
             }
           },
-          child: const Text('Guardar'),
+          child: Text(
+            AppLocalizations.of(context)!.buttonguardar,
+          ),
         ),
       ],
     );

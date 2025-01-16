@@ -40,7 +40,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
       return Right(createdTransaction);
     } catch (e) {
-      return Left('Fallo al crear el tweet: $e');
+      return Left('Fallo al crear la transaction: $e');
     }
   }
 }

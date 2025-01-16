@@ -1,0 +1,338 @@
+{
+  "titleHomeScreen": "Hola {nombreUsuario}! aquí tienes tu listado de cuentas",
+  "@titleHomeScreen": {
+    "description": "Mensaje de bienvenida para la pantalla principal, incluye el nombre del usuario.",
+    "placeholders": {
+      "nombreUsuario": {
+        "type": "String",
+        "example": "Juan"
+      }
+    }
+  },
+  "changeLanguage": "Cambiar idioma",
+  "@changeLanguage": {
+    "description": "Boton para cambiar el idioma de la aplicación."
+  },
+  "creaCuenta": "Crea una cuenta",
+  "@creaCuenta": {
+    "description": "Boton para crea una Cuenta."
+  },
+  "activarHuellaID": "Activar Face ID / Huella",
+  "@activarHuellaID": {
+    "description": "Boton para activar Face ID / Huella."
+  },
+  "editarPerfil": "Editar perfil",
+  "@editarPerfil": {
+    "description": "Boton para Editar perfil."
+  },
+  "privacidad": "Privacidad",
+  "@privacidad": {
+    "description": "Boton para privacidad."
+  },
+  "notificaciones": "Notificaciones",
+  "@notificaciones": {
+    "description": "Boton para las notificaciones."
+  },
+  "cambPassword": "Cambiar contraseña",
+  "@cambPassword": {
+    "description": "Boton para cambiar contraseña" 
+  },
+  "cerrarSesion": "Cerrar sesión",
+  "@cerrarSesion": {
+    "description": "Boton para cerrar sesión."
+    },
+  "cerrarSesionConfirmacion": "¿Estás a punto de cerrar la sesión.¿Estás seguro de continuar?",
+  "@cerrarSesionConfirmacion": {
+    "description": "Mensaje de confirmación para cerrar sesión."
+  },
+  "cerrarSesionConfirmacionSi": "Si",
+  "@cerrarSesionConfirmacionSi": {
+    "description": "Respuesta afirmativa para cerrar sesión."
+  },
+  "cerrarSesionConfirmacionNo": "No",
+  "@cerrarSesionConfirmacionNo": {
+    "description": "Respuesta negativa para cerrar sesión."
+  },
+  "cerrarSesionTitle": "Cerrar Sesión",
+  "@cerrarSesionTitle": {
+    "description": "Título para cerrar sesión."
+  },
+  "titleTransactions": "Transacciones",
+  "@titleTransactions": {
+    "description": "Título para transacciones."
+  },
+  "titleactionTransaction": "Acción de la cuenta",
+  "@titleactionTransaction": {
+    "description": "Título para acción de la cuenta."
+  },
+  "textUpdPass": "¿Desea actualizar la contraseña? Introduce tu correo electrónico para cambiar la contraseña.",
+  "@textUpdPass": {
+    "description": "Mensaje para actualizar contraseña."
+  },
+  "titlecreaCuenta": "Crea una Nueva Cuenta",
+  "@titlecreaCuenta": {
+    "description": "Título para crear una nueva cuenta."
+  },
+  "iconselected": "Ícono seleccionado: ",
+  "@iconselected": {
+    "description": "Ícono seleccionado."
+  },
+  "selectedIcon": "Seleccionar ícono de cuenta",
+  "@selectedIcon": {
+    "description": "Botón para seleccionar ícono de cuenta."
+  },
+  "selecionaIcono": "Selecciona un ícono",
+  "@selecionaIcono": {
+    "description": "Mensaje para seleccionar ícono."
+  },
+  "accountType": "Tipo de cuenta",
+  "@accountType": {
+    "description": "Tipo de cuenta."
+  },
+  "descpAccount": "Introduce una descripción de la cuenta",
+  "@descpAccount": {
+    "description": "Mensaje para descripción de la cuenta."
+  },
+  "accountType1": "Cuenta de corriente",
+  "@accountType1": {
+    "description": "Tipo de cuenta de ahorro."
+  },
+  "accountType2": "Cuenta de ahorro",
+  "@accountType2": {
+    "description": "Tipo de cuenta de ahorro."
+  },
+  "accountType3": "Cuenta de inversiones",
+  "@accountType3": {
+    "description": "Tipo de cuenta de inversiones."
+  },
+  "titleAddmoney": "Añade fondos a tu cuenta",
+  "@titleAddmoney": {
+    "description": "Título para añadir fondos a la cuenta."
+  },
+  "textAddmoney": "Introduce la cantidad que deseas añadir y un concepto para identificar la transacción",
+  "@textAddmoney": {
+    "description": "Mensaje para añadir fondos a la cuenta."
+  },
+  "buttoncancel": "Cancelar",
+  "@buttoncancel": {
+    "description": "Botón para cancelar la operación."
+  },
+  "buttonaceptar": "Aceptar",
+  "@buttonaceptar": {
+    "description": "Botón para aceptar la operación."
+  },
+  "buttonguardar": "Guardar",
+  "@buttonguardar": {
+    "description": "Botón para guardar la operación."
+  },
+  "buttonaplicar": "Aplicar",
+  "@buttonaplicar": {
+    "description": "Botón para aplicar la operación."
+  },
+  "buttonenviar": "Enviar",
+  "@buttonenviar": {
+    "description": "Botón para enviar la operación."
+  },
+  "textemailPass": "Correo electrónico",
+  "@textemailPass": {
+    "description": "Mensaje para correo electrónico."
+  },
+  "titleUpdUser": "Actualiza tus datos",
+  "@titleUpdUser": {
+    "description": "Título para actualizar los datos del usuario."
+  },
+  "nameUpdUser": "Nombre",
+  "@nameUpdUser": {
+    "description": "Nombre del usuario."
+  },
+  "surnameUpdUser": "Apellido",
+  "@surnameUpdUser": {
+    "description": "Apellido del usuario."
+  },
+  "ageUpdUser": "Edad",
+  "@ageUpdUser": {
+    "description": "Edad del usuario."
+  },
+  "titledelete": "Eliminar cuenta",
+  "@titledelete": {
+    "description": "Título para eliminar la cuenta."
+  },
+  "textdelete": "Estas a punto de eliminar la cuenta.¿Estás seguro de continuar?",
+  "@textdelete": {
+    "description": "Mensaje para eliminar la cuenta."
+  },
+  "textaddmoney": "Añadir dinero",
+  "@textaddmoney": {
+    "description": "Mensaje para añadir dinero."
+  },
+  "textcantidadadd": "¿Cuánto dinero deseas añadir?",
+  "@textcantidadadd": {
+    "description": "Mensaje para la cantidad de dinero a añadir."
+  },
+  "textconceptoadd": "¿Cuál es el concepto de la operación?",
+  "@textconceptoadd": {
+    "description": "Mensaje para el concepto de la operación."
+  },
+  "textcantidad": "Cantidad",
+  "@textcantidad": {
+    "description": "Mensaje para la cantidad."
+  },
+  "textfecha": "Fecha",
+  "@textfecha": {
+    "description": "Mensaje para la fecha."
+  },
+  "textmovimiento": "Tipo de movimiento",
+  "@textmovimiento": {
+    "description": "Mensaje para el tipo de movimiento."
+  },
+  "textingreso": "Ingreso",
+  "@textingreso": {
+    "description": "Mensaje para el ingreso."
+  },
+  "textgasto": "Gasto",
+  "@textgasto": {
+    "description": "Mensaje para el gasto."
+  },
+  "textdescripcion": "Descripción",
+  "@textdescripcion": {
+    "description": "Mensaje para la descripción."
+  },
+  "titlefiltrer": "Filtrar Transacciones",
+  "@titlefiltrer": {
+    "description": "Título para filtrar transacciones."
+  },
+  "textbuttonlogin": "Empieza ya",
+  "@textbuttonlogin": {
+    "description": "Mensaje para el botón de inicio de sesión."
+  },
+  "textcontrolfinanzas": "Toma el control de tus finanzas. Banca segura, rápida e inteligente al alcance de tu mano. Descubre herramientas intuitivas para gestionar tu dinero sin esfuerzo.",
+  "@textcontrolfinanzas": {
+    "description": "Texto principal para animar a los usuarios a usar la banca de la app."
+  },
+  "textstartapp": "Empieza a gestionar tu dinero desde nuestra App",
+  "@textstartapp": {
+    "description": "Mensaje de introducción para comenzar a usar la app."
+  },
+  "textloginprompt": "Inicia sesión o regístrate si no tienes una cuenta.",
+  "@textloginprompt": {
+    "description": "Texto que anima al usuario a iniciar sesión o registrarse."
+  },
+  "textforgotpassword": "¿Has Olvidado la contraseña?",
+  "@textforgotpassword": {
+    "description": "Texto para que el usuario recupere su contraseña."
+  },
+  "textregister": "Registrarse",
+  "@textregister": {
+    "description": "Texto para el botón de registro."
+  },
+  "bienvenido": "Bienvenido",
+  "@bienvenido": {
+    "description": "Mensaje de bienvenida."
+  },
+  "usuarioRegistradoCorrectamente": "Usuario registrado correctamente",
+  "@usuarioRegistradoCorrectamente": {
+    "description": "Mensaje de éxito al registrar usuario."
+  },
+  "errorRegistrarUsuario": "Error al registrar usuario.",
+  "@errorRegistrarUsuario": {
+    "description": "Mensaje de error al registrar usuario."
+  },
+  "errorRegistrarUsuarioIntentarDeNuevo": "Error al registrar usuario. Inténtalo de nuevo.",
+  "@errorRegistrarUsuarioIntentarDeNuevo": {
+    "description": "Mensaje de error al registrar usuario, sugiere intentar de nuevo."
+  },
+  "password": "Contraseña",
+  "@password": {
+    "description": "Campo para la contraseña."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Campo para el email."
+  },
+  "introduceTuNombre": "Introduce tu nombre",
+  "@introduceTuNombre": {
+    "description": "Campo para introducir el nombre."
+  },
+  "elNombreEsObligatorio": "El nombre es obligatorio",
+  "@elNombreEsObligatorio": {
+    "description": "Mensaje de error si el nombre está vacío."
+  },
+  "introduceTuApellido": "Introduce tu apellido",
+  "@introduceTuApellido": {
+    "description": "Campo para introducir el apellido."
+  },
+  "elApellidoEsObligatorio": "El apellido es obligatorio",
+  "@elApellidoEsObligatorio": {
+    "description": "Mensaje de error si el apellido está vacío."
+  },
+  "introduceTuEmail": "Introduce tu email",
+  "@introduceTuEmail": {
+    "description": "Campo para introducir el email."
+  },
+  "introduceUnEmailValido": "Introduce un email válido",
+  "@introduceUnEmailValido": {
+    "description": "Mensaje de error si el email no es válido."
+  },
+  "introduceTuPassword": "Introduce tu contraseña",
+  "@introduceTuPassword": {
+    "description": "Campo para introducir la contraseña."
+  },
+  "laPasswordDebeTenerAlMenos6Caracteres": "La contraseña debe tener al menos 6 caracteres",
+  "@laPasswordDebeTenerAlMenos6Caracteres": {
+    "description": "Mensaje de error si la contraseña es demasiado corta."
+  },
+  "introduceTuEdad": "Introduce tu edad",
+  "@introduceTuEdad": {
+    "description": "Campo para introducir la edad."
+  },
+  "laEdadNoPuedeEstarVacia": "La edad no puede estar vacía",
+  "@laEdadNoPuedeEstarVacia": {
+    "description": "Mensaje de error si la edad está vacía."
+  },
+  "porFavorIngresaUnNumeroValido": "Por favor, ingresa un número válido",
+  "@porFavorIngresaUnNumeroValido": {
+    "description": "Mensaje de error si el número no es válido."
+  },
+  "laEdadDebeSerMayorOIgualA18": "La edad debe ser mayor o igual a 18",
+  "@laEdadDebeSerMayorOIgualA18": {
+    "description": "Mensaje de error si la edad es menor a 18."
+  },
+  "introduceTuDNI": "Introduce tu DNI",
+  "@introduceTuDNI": {
+    "description": "Campo para introducir el DNI."
+  },
+  "rellenarElDNIEsObligatorio": "Rellenar el DNI es obligatorio",
+  "@rellenarElDNIEsObligatorio": {
+    "description": "Mensaje de error si el DNI está vacío."
+  },
+  "formatoDeDNINoValido": "Formato de DNI no válido.",
+  "@formatoDeDNINoValido": {
+    "description": "Mensaje de error si el formato del DNI no es válido."
+  }, 
+  "laDescripcionNoPuedeEstarVacia": "La descripción no puede estar vacía",
+  "@laDescripcionNoPuedeEstarVacia": {
+    "description": "Mensaje de error si la descripción está vacía."
+  },
+  "texttransactionmoney": "Transacción",
+  "@texttransactionmoney": {
+    "description": "Botón de transacción."
+  },
+  "textbizummoney": "Bizum",
+  "@textbizummoney": {
+    "description": "Botón de Bizum."
+  },
+  "titleactionTransaction": "Acciones de Transacción",
+  "textaddmoney": "Añadir Dinero",
+  "texttransactionmoney": "Transferir Dinero",
+  "textbizummoney": "Bizum",
+  "titledelete": "Eliminar Cuenta",
+  "buttoncancel": "Cancelar",
+  "titletransactionpage": "Transacciones",
+  "enteramount": "Ingrese el monto",
+  "amount": "Monto",
+  "description": "Descripción",
+  "enterdescription": "Ingrese una descripción",
+  "fillallfields": "Por favor, complete todos los campos",
+  "transactionsuccessful": "¡Transacción realizada con éxito!",
+  "buttonconfirm": "Confirmar"
+}

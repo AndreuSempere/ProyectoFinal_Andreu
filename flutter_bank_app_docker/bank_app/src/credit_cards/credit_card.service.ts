@@ -16,7 +16,7 @@ export class Credit_CardService {
     private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
-  async getCreditCard(id: number, xml?: string): Promise<any> {
+  async getidCreditCard(id: number, xml?: string): Promise<any> {
     const result = await this.creditCardRepository.findOne({
       where: { id_tarjeta: id },
       relations: ['accounts'],
@@ -34,6 +34,20 @@ export class Credit_CardService {
     }
 
     return result;
+  }
+
+  async getCreditCard(num: number): Promise<any> {
+    const result = await this.creditCardRepository.findOne({
+      where: { numero_tarjeta: num },
+      relations: ['accounts'],
+    });
+    
+    if (!result) {
+      throw new Error("Tarjeta no encontrada");
+    }
+    
+    return result;
+    
   }
 
   async getAllCreditCards(xml?: string): Promise<any> {

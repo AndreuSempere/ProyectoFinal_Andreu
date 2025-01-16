@@ -20,9 +20,14 @@ export class Credit_CardController {
     return this.credit_cardService.getAllCreditCards(xml);
   }
 
-  @Get(':id')
-  getCreditCard(@Param('id') id: string, @Query('xml') xml: string) {
-    return this.credit_cardService.getCreditCard(parseInt(id), xml);
+  @Get('id/:id')
+  getidCreditCard(@Param('id') id: string, @Query('xml') xml: string) {
+    return this.credit_cardService.getidCreditCard(parseInt(id), xml);
+  }
+
+  @Get('num/:num')
+  getCreditCard(@Param('num') num: string) {
+    return this.credit_cardService.getCreditCard(parseInt(num));
   }
 
   @Post()

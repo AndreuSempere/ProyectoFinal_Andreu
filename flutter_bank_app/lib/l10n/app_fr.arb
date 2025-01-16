@@ -1,0 +1,338 @@
+{
+  "titleHomeScreen": "Bonjour {nombreUsuario}! Voici votre liste de comptes",
+  "@titleHomeScreen": {
+    "description": "Message d'accueil pour l'écran d'accueil, inclut le nom de l'utilisateur.",
+    "placeholders": {
+      "nombreUsuario": {
+        "type": "String",
+        "example": "Jean"
+      }
+    }
+  },
+  "changeLanguage": "Changer de langue",
+  "@changeLanguage": {
+    "description": "Bouton pour changer la langue de l'application."
+  },
+  "creaCuenta": "Créer un compte",
+  "@creaCuenta": {
+    "description": "Bouton pour créer un compte."
+  },
+  "activarHuellaID": "Activer Face ID / Empreinte digitale",
+  "@activarHuellaID": {
+    "description": "Bouton pour activer Face ID / Empreinte digitale."
+  },
+  "editarPerfil": "Modifier le profil",
+  "@editarPerfil": {
+    "description": "Bouton pour modifier le profil."
+  },
+  "privacidad": "Confidentialité",
+  "@privacidad": {
+    "description": "Bouton pour la confidentialité."
+  },
+  "notificaciones": "Notifications",
+  "@notificaciones": {
+    "description": "Bouton pour les notifications."
+  },
+  "cambPassword": "Changer le mot de passe",
+  "@cambPassword": {
+    "description": "Bouton pour changer le mot de passe."
+  },
+  "cerrarSesion": "Se déconnecter",
+  "@cerrarSesion": {
+    "description": "Bouton pour se déconnecter."
+  },
+  "cerrarSesionConfirmacion": "Voulez-vous vraiment vous déconnecter?",
+  "@cerrarSesionConfirmacion": {
+    "description": "Message de confirmation pour se déconnecter."
+  },
+  "cerrarSesionConfirmacionSi": "Oui, je suis sûr(e)",
+  "@cerrarSesionConfirmacionSi": {
+    "description": "Bouton pour confirmer la déconnexion."
+  },
+  "cerrarSesionConfirmacionNo": "Non, je me suis trompée",
+  "@cerrarSesionConfirmacionNo": {
+    "description": "Bouton pour annuler la déconnexion."
+  },
+  "cerrarSesionTitle": "Se déconnecter",
+  "@cerrarSesionTitle": {
+    "description": "Titre de la fenêtre de déconnexion."
+  },
+  "titleTransactions": "Transactions",
+  "@titleTransactions": {
+    "description": "Titre de la section des transactions."
+  },
+  "titleactionTransaction": "Action de transaction",
+  "@titleactionTransaction": {
+    "description": "Titre de la section de l'action de transaction."
+  },
+  "textUpdPass": "Voulez-vous mettre à jour votre mot de passe ? Entrez votre email pour changer votre mot de passe",
+  "@textUpdPass": {
+    "description": "Message pour mettre à jour le mot de passe."
+  },
+  "titlecreaCuenta": "Créer un compte",
+  "@titlecreaCuenta": {
+    "description": "Titre de la section de création de compte."
+  },
+  "iconselected": "Icône sélectionnée",
+  "@iconselected": {
+    "description": "Icône sélectionnée."
+  },
+  "selectedIcon": "Sélectionner l'icône du compte",
+  "@selectedIcon": {
+    "description": "Message pour sélectionner l'icône du compte."
+  },
+  "selecionaIcono": "Sélectionner l'icône",
+  "@selecionaIcono": {
+    "description": "Message pour sélectionner l'icône."
+  },
+  "accountType": "Type de compte",
+  "@accountType": {
+    "description": "Titre de la section du type de compte."
+  },
+  "descpAccount": "Entrez une description du compte",
+  "@descpAccount": {
+    "description": "Message pour entrer une description du compte."
+  },
+  "accountType1": "Compte courant",
+  "@accountType1": {
+    "description": "Type de compte courant."
+  },
+  "accountType2": "Compte épargne",
+  "@accountType2": {
+    "description": "Type de compte épargne."
+  },
+  "accountType3": "Compte d'investissement",
+  "@accountType3": {
+    "description": "Type de compte d'investissement."
+  },
+  "titleAddmoney": "Ajoutez des fonds sur votre compte",
+  "@titleAddmoney": {
+    "description": "Titre de la section d'ajout de fonds sur le compte."
+  },
+  "textAddmoney": "Entrez le montant que vous souhaitez ajouter et un concept pour identifier la transaction",
+  "@textAddmoney": {
+    "description": "Message pour ajouter des fonds au compte."
+  },
+  "buttoncancel": "Annuler",
+  "@buttoncancel": {
+    "description": "Message pour annuler l'opération."
+  },
+  "buttonaceptar": "Accepter",
+  "@buttonaceptar": {
+    "description": "Message pour accepter l'opération."
+  },
+  "buttonguardar": "Garder",
+  "@buttonguardar": {
+    "description": "Message pour sauvegarder les informations."
+  },
+  "buttonaplicar": "Appliquer",
+  "@buttonaplicar": {
+    "description": "Message pour appliquer les modifications."
+  },
+  "buttonenviar": "Envoyer",
+  "@buttonenviar": {
+    "description": "Message pour envoyer les informations."
+  },
+  "textemailPass": "Entrez votre adresse email",
+  "@textemailPass": {
+    "description": "Entrez votre adresse e-mail et votre mot de passe."
+  },
+  "titleUpdUser": "Mise à jour de l'utilisateur",
+  "@titleUpdUser": {
+    "description": "Titre de la section de mise à jour de l'utilisateur."
+  },
+  "nameUpdUser": "Nom de l'utilisateur",
+  "@nameUpdUser": {
+    "description": "Nom de l'utilisateur."
+  },
+  "surnameUpdUser": "Prénom de l'utilisateur",
+  "@surnameUpdUser": {
+    "description": "Prénom de l'utilisateur."
+  },
+  "ageUpdUser": "Âge de l'utilisateur",
+  "@ageUpdUser": {
+    "description": "Âge de l'utilisateur."
+  },
+  "titledelete": "Supprimer Compte",
+  "@titledelete": {
+    "description": "Titre de la section de suppression de compte."
+  },
+  "textdelete": "Confirmer la suppression de votre compte?",
+  "@textdelete": {
+    "description": "Message pour confirmer la suppression de compte."
+  },
+  "textaddmoney": "Ajouter de l'argent",
+  "@textaddmoney": {
+    "description": "Message pour ajouter de l'argent."
+  },
+  "textcantidadadd": "Entrez la quantité d'argent à ajouter",
+  "@textcantidadadd": {
+    "description": "Entrez la quantité d'argent à ajouter."
+  },
+  "textconceptoadd": "Quel est le concept de l'opération",
+  "@textconceptoadd": {
+    "description": "Quel est le concept de l'opération."
+  },
+  "textcantidad": "Entrez la quantité",
+  "@textcantidad": {
+    "description": "Entrez la quantité."
+  },
+  "textfecha": "Entrez la date",
+  "@textfecha": {
+    "description": "Entrez la date."
+  },
+  "textmovimiento": "Entrez le mouvement",
+  "@textmovimiento": {
+    "description": "Entrez le mouvement."
+  },
+  "textingreso": "Revenu",
+  "@textingreso": {
+    "description": "Revenu."
+  },
+  "textgasto": "Dépensé",
+  "@textgasto": {
+    "description": "Dépensé."
+  },
+  "textdescripcion": "Entrez la description",
+  "@textdescripcion": {
+    "description": "Entrez la description."
+  },
+  "titlefiltrer": "Filtrer les transactions",
+  "@titlefiltrer": {
+    "description": "Titre pour filtrer les transactions."
+  },
+  "textbuttonlogin": "Commencez maintenant", 
+  "@textbuttonlogin": { 
+    "description": "Message pour le bouton de connexion." 
+  },
+  "textcontrolfinanzas": "Prenez le contrôle de vos finances. Une banque sécurisée, rapide et intelligente à portée de main. Découvrez des outils intuitifs pour gérer votre argent sans effort.",
+  "@textcontrolfinanzas": {
+    "description": "Texte principal incitant les utilisateurs à utiliser les services bancaires de l'application."
+  },
+  "textstartapp": "Commencez à gérer votre argent depuis notre application",
+  "@textstartapp": {
+    "description": "Message introductif pour commencer à utiliser l'application."
+  },
+  "textloginprompt": "Connectez-vous ou inscrivez-vous si vous n'avez pas de compte.",
+  "@textloginprompt": {
+    "description": "Texte incitant l'utilisateur à se connecter ou à s'inscrire."
+  },
+  "textforgotpassword": "Mot de passe oublié ?",
+  "@textforgotpassword": {
+    "description": "Texte guidant l'utilisateur pour récupérer son mot de passe."
+  },
+  "textregister": "S'inscrire",
+  "@textregister": {
+    "description": "Texte pour le bouton d'inscription."
+  },
+  "bienvenido": "Bienvenue",
+  "@bienvenido": {
+    "description": "Message de bienvenue."
+  },
+  "usuarioRegistradoCorrectamente": "Utilisateur enregistré avec succès",
+  "@usuarioRegistradoCorrectamente": {
+    "description": "Message de succès pour l'enregistrement de l'utilisateur."
+  },
+  "errorRegistrarUsuario": "Erreur lors de l'enregistrement de l'utilisateur.",
+  "@errorRegistrarUsuario": {
+    "description": "Message d'erreur lors de l'enregistrement de l'utilisateur."
+  },
+  "errorRegistrarUsuarioIntentarDeNuevo": "Erreur lors de l'enregistrement de l'utilisateur. Veuillez réessayer.",
+  "@errorRegistrarUsuarioIntentarDeNuevo": {
+    "description": "Message d'erreur lors de l'enregistrement de l'utilisateur, suggère de réessayer."
+  },
+  "password": "Mot de passe",
+  "@password": {
+    "description": "Champ pour le mot de passe."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Champ pour l'email."
+  },
+  "introduceTuNombre": "Entrez votre nom",
+  "@introduceTuNombre": {
+    "description": "Champ pour entrer le nom."
+  },
+  "elNombreEsObligatorio": "Le nom est requis",
+  "@elNombreEsObligatorio": {
+    "description": "Message d'erreur si le nom est vide."
+  },
+  "introduceTuApellido": "Entrez votre prénom",
+  "@introduceTuApellido": {
+    "description": "Champ pour entrer le prénom."
+  },
+  "elApellidoEsObligatorio": "Le prénom est requis",
+  "@elApellidoEsObligatorio": {
+    "description": "Message d'erreur si le prénom est vide."
+  },
+  "introduceTuEmail": "Entrez votre email",
+  "@introduceTuEmail": {
+    "description": "Champ pour entrer l'email."
+  },
+  "introduceUnEmailValido": "Entrez un email valide",
+  "@introduceUnEmailValido": {
+    "description": "Message d'erreur si l'email n'est pas valide."
+  },
+  "introduceTuPassword": "Entrez votre mot de passe",
+  "@introduceTuPassword": {
+    "description": "Champ pour entrer le mot de passe."
+  },
+  "laPasswordDebeTenerAlMenos6Caracteres": "Le mot de passe doit comporter au moins 6 caractères",
+  "@laPasswordDebeTenerAlMenos6Caracteres": {
+    "description": "Message d'erreur si le mot de passe est trop court."
+  },
+  "introduceTuEdad": "Entrez votre âge",
+  "@introduceTuEdad": {
+    "description": "Champ pour entrer l'âge."
+  },
+  "laEdadNoPuedeEstarVacia": "L'âge ne peut pas être vide",
+  "@laEdadNoPuedeEstarVacia": {
+    "description": "Message d'erreur si l'âge est vide."
+  },
+  "porFavorIngresaUnNumeroValido": "Veuillez entrer un nombre valide",
+  "@porFavorIngresaUnNumeroValido": {
+    "description": "Message d'erreur si le nombre n'est pas valide."
+  },
+  "laEdadDebeSerMayorOIgualA18": "L'âge doit être de 18 ans ou plus",
+  "@laEdadDebeSerMayorOIgualA18": {
+    "description": "Message d'erreur si l'âge est inférieur à 18."
+  },
+  "introduceTuDNI": "Entrez votre numéro d'identité",
+  "@introduceTuDNI": {
+    "description": "Champ pour entrer le numéro d'identité."
+  },
+  "rellenarElDNIEsObligatorio": "Le remplissage du numéro d'identité est obligatoire",
+  "@rellenarElDNIEsObligatoire": {
+    "description": "Message d'erreur si le numéro d'identité est vide."
+  },
+  "formatoDeDNINoValido": "Format de numéro d'identité invalide.",
+  "@formatoDeDNINoValido": {
+    "description": "Message d'erreur si le format du numéro d'identité n'est pas valide."
+  },
+  "laDescripcionNoPuedeEstarVacia": "La description ne peut pas être vide",
+  "@laDescripcionNoPuedeEstarVacia": {
+    "description": "Message d'erreur si la description est vide."
+  },
+  "texttransactionmoney": "Transaction",
+  "@texttransactionmoney": {
+    "description": "Texte de la transaction."
+  },
+  "textbizummoney": "Bizum",
+  "@textbizummoney": {
+    "description": "Botón de Bizum."
+  },
+  "titleactionTransaction": "Actions de Transaction",
+  "textaddmoney": "Ajouter de l'argent",
+  "texttransactionmoney": "Transférer de l'argent",
+  "textbizummoney": "Bizum",
+  "titledelete": "Supprimer le compte",
+  "buttoncancel": "Annuler",
+  "titletransactionpage": "Transactions",
+  "enteramount": "Saisissez le montant",
+  "amount": "Montant",
+  "description": "Description",
+  "enterdescription": "Saisissez une description",
+  "fillallfields": "Veuillez remplir tous les champs",
+  "transactionsuccessful": "Transaction réussie !",
+  "buttonconfirm": "Confirmer"
+}

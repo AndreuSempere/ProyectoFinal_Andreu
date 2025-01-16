@@ -2,12 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Config/router/routes.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/language/language_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,25 +47,44 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => sl<TransactionBloc>(),
         ),
-      ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'Bankify',
-        theme: ThemeData(
-          scaffoldBackgroundColor: const Color(0xFFEEF1F8),
-          primarySwatch: Colors.blue,
-          fontFamily: "Intel",
-          inputDecorationTheme: InputDecorationTheme(
-            filled: true,
-            fillColor: Colors.white,
-            errorStyle: const TextStyle(height: 0),
-            border: defaultInputBorder,
-            enabledBorder: defaultInputBorder,
-            focusedBorder: defaultInputBorder,
-            errorBorder: defaultInputBorder,
-          ),
+        BlocProvider(
+          create: (_) => sl<LanguageBloc>(),
         ),
-        routerConfig: router,
+      ],
+      child: BlocBuilder<LanguageBloc, LanguageState>(
+        builder: (context, state) {
+          return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            title: 'Bankify',
+            theme: ThemeData(
+              scaffoldBackgroundColor: const Color(0xFFEEF1F8),
+              primarySwatch: Colors.blue,
+              fontFamily: "Intel",
+              inputDecorationTheme: InputDecorationTheme(
+                filled: true,
+                fillColor: Colors.white,
+                errorStyle: const TextStyle(height: 0),
+                border: defaultInputBorder,
+                enabledBorder: defaultInputBorder,
+                focusedBorder: defaultInputBorder,
+                errorBorder: defaultInputBorder,
+              ),
+            ),
+            locale: state.locale,
+            supportedLocales: const [
+              Locale('en'),
+              Locale('es'),
+              Locale('fr'),
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            routerConfig: router,
+          );
+        },
       ),
     );
   }

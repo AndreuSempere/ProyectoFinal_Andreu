@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/modificar_user_widget.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/privacidad_drawer_widget.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Logaout/alerta_logaout_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Edit%20User/modificar_user_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/privacidad_drawer_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Logaout/alerta_logaout_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DrawerWidget extends StatefulWidget {
   const DrawerWidget({super.key});
@@ -132,9 +133,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Icons.person,
                     color: Color(0xFFF2F2F2),
                   ),
-                  title: const Text(
-                    'Editar perfil',
-                    style: TextStyle(
+                  title: Text(
+                    AppLocalizations.of(context)!.editarPerfil,
+                    style: const TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
                   ),
@@ -156,9 +157,9 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     Icons.security,
                     color: Color(0xFFF2F2F2),
                   ),
-                  title: const Text(
-                    'Privacidad',
-                    style: TextStyle(
+                  title: Text(
+                    AppLocalizations.of(context)!.privacidad,
+                    style: const TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
                   ),
@@ -193,32 +194,32 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     onTap: () async {
                       context.go('/add_card');
                     }),
-                const ListTile(
-                  leading: Icon(
+                ListTile(
+                  leading: const Icon(
                     Icons.notifications,
                     color: Color(0xFFF2F2F2),
                   ),
                   title: Text(
-                    'Notificaciones',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.notificaciones,
+                    style: const TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
                   ),
-                  trailing: Icon(
+                  trailing: const Icon(
                     Icons.chevron_right,
                     color: Color(0xFFF2F2F2),
                   ),
                 ),
                 const Spacer(),
                 ListTile(
-                  title: const Row(
+                  title: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Cerrar sesión',
-                        style: TextStyle(color: Color(0xFFF2F2F2)),
+                        AppLocalizations.of(context)!.cerrarSesion,
+                        style: const TextStyle(color: Color(0xFFF2F2F2)),
                       ),
-                      Icon(Icons.exit_to_app, color: Color(0xFFF2F2F2)),
+                      const Icon(Icons.exit_to_app, color: Color(0xFFF2F2F2)),
                     ],
                   ),
                   onTap: () async {

@@ -24,6 +24,12 @@ export class CreateAccoutDto {
   @Length(1, 9)
   fecha_creacion: string;
 
+  @IsString()
+  description: string;
+
+  @IsString()
+  icon: string;
+
   @IsInt()
   accounts_type: number;
 
@@ -49,6 +55,14 @@ export class UpdateAccountDto {
   @IsString()
   @Length(1, 9)
   fecha_creacion?: string;
+
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @IsOptional()
+  @IsString()
+  icon?: string;
 
   @IsOptional()
   @IsInt()

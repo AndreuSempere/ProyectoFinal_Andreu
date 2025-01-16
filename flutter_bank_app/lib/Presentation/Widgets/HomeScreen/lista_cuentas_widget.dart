@@ -4,19 +4,25 @@ import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_state.dart'
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AccountListWidget extends StatelessWidget {
-  const AccountListWidget({super.key});
+  AccountListWidget({super.key});
 
-  // Lista de posibles tipos de cuenta
-  static const Map<int, String> tipoCuenta = {
-    1: "Corriente",
-    2: "Ahorros",
-    3: "Inversiones",
+  final Map<String, IconData> iconOptions = {
+    'bank': Icons.account_balance,
+    'piggy': Icons.savings,
+    'investment': Icons.trending_up,
+    'wallet': Icons.account_balance_wallet,
   };
-
   @override
   Widget build(BuildContext context) {
+    // Lista de posibles tipos de cuenta
+    final Map<int, String> tipoCuenta = {
+      1: AppLocalizations.of(context)!.accountType1,
+      2: AppLocalizations.of(context)!.accountType2,
+      3: AppLocalizations.of(context)!.accountType3,
+    };
     return BlocBuilder<AccountBloc, AccountState>(
       builder: (context, accountState) {
         if (accountState.isLoading) {
@@ -53,17 +59,26 @@ class AccountListWidget extends StatelessWidget {
                         tipoCuenta[account.accountType] ?? 'Desconocido';
 
                     return Card(
+                      color: const Color.fromARGB(255, 143, 193, 226),
                       margin: const EdgeInsets.all(8.0),
                       child: ListTile(
                         title: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Cuenta $accountTypeText',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration.underline,
-                              ),
+                            Row(
+                              children: [
+                                Text(
+                                  accountTypeText,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Icon(iconOptions[account.icon],
+                                    size: 30,
+                                    color: const Color.fromARGB(255, 6, 6, 6)),
+                              ],
                             ),
                             const SizedBox(height: 4),
                             Text(
@@ -95,7 +110,10 @@ class AccountListWidget extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) => TransactionInfoPage(
-                                  accountId: account.idCuenta!),
+                                accountId: account.idCuenta!,
+                                description: account.description,
+                                numeroCuenta: account.numeroCuenta!,
+                              ),
                             ),
                           );
                         },

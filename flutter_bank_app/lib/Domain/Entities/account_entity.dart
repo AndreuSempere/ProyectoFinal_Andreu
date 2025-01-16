@@ -6,6 +6,8 @@ class Account {
   final String? createdAt;
   final int accountType;
   final int idUser;
+  final String description;
+  final String? icon;
 
   Account(
       {this.idCuenta,
@@ -14,5 +16,7 @@ class Account {
       this.estado,
       this.createdAt,
       required this.accountType,
-      required this.idUser});
+      required this.idUser,
+      required this.description,
+      this.icon});
 }

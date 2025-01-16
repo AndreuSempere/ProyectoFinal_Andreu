@@ -2,7 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Auth/animated_button_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Auth/formularios_widget.dart';
-import 'package:rive/rive.dart';
+import 'package:rive/rive.dart' as rive;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -13,11 +14,11 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isSignInDialogShown = false;
-  late RiveAnimationController _btnAnimationController;
+  late rive.RiveAnimationController _btnAnimationController;
 
   @override
   void initState() {
-    _btnAnimationController = OneShotAnimation("active", autoplay: false);
+    _btnAnimationController = rive.OneShotAnimation("active", autoplay: false);
     super.initState();
   }
 
@@ -35,7 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 10),
         )),
-        const RiveAnimation.asset('assets/RiveAssets/shapes.riv'),
+        const rive.RiveAnimation.asset('assets/RiveAssets/shapes.riv'),
         Positioned.fill(
             child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 20, sigmaY: 10),
@@ -53,19 +54,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Spacer(),
-                    const SizedBox(
+                    SizedBox(
                       width: 260,
                       child: Column(children: [
-                        Text(
+                        const Text(
                           "Bankify",
                           style: TextStyle(
                               fontSize: 60, fontFamily: "Poppins", height: 1.2),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 16,
                         ),
-                        Text(
-                            "Toma el control de tus finanzas. Banca segura, rápida e inteligente al alcance de tu mano. Descubre herramientas intuitivas para gestionar tu dinero sin esfuerzo.")
+                        Text(AppLocalizations.of(context)!.textcontrolfinanzas)
                       ]),
                     ),
                     const Spacer(
@@ -79,7 +79,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           setState(() {
                             isSignInDialogShown = true;
                           });
-                          // ignore: use_build_context_synchronously
                           customSigninDialog(context, onClosed: (_) {
                             setState(() {
                               isSignInDialogShown = false;
@@ -88,11 +87,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         });
                       },
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24.0),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 24.0),
                       child: Text(
-                        "Empieza a gestionar tu dinero desde nuestra App",
-                        style: TextStyle(),
+                        AppLocalizations.of(context)!.textstartapp,
+                        style: const TextStyle(),
                       ),
                     )
                   ]),

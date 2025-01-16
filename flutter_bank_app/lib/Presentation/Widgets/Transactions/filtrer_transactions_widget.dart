@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterDialog extends StatefulWidget {
   const FilterDialog({super.key});
@@ -23,33 +24,38 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Filtrar Transacciones'),
+      title: Text(AppLocalizations.of(context)!.titlefiltrer),
       content: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
-              decoration: const InputDecoration(labelText: 'Descripción'),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.textdescripcion),
               onChanged: (value) {
                 filters['descripcion'] = value.trim();
               },
             ),
             DropdownButtonFormField<String>(
-              decoration:
-                  const InputDecoration(labelText: 'Tipo de movimiento'),
-              items: const [
-                DropdownMenuItem(value: 'ingreso', child: Text('Ingreso')),
-                DropdownMenuItem(value: 'gasto', child: Text('Gasto')),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.textmovimiento),
+              items: [
+                DropdownMenuItem(
+                    value: 'ingreso',
+                    child: Text(AppLocalizations.of(context)!.textingreso)),
+                DropdownMenuItem(
+                    value: 'gasto',
+                    child: Text(AppLocalizations.of(context)!.textgasto)),
               ],
               onChanged: (value) {
                 filters['tipo'] = value;
               },
             ),
             TextField(
-              decoration: const InputDecoration(
-                labelText: 'Fecha',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.textfecha,
                 hintText: 'dd/mm/aa',
-                suffixIcon: Icon(Icons.calendar_today),
+                suffixIcon: const Icon(Icons.calendar_today),
               ),
               readOnly: true,
               controller: TextEditingController(text: selectedDate),
@@ -63,7 +69,8 @@ class _FilterDialogState extends State<FilterDialog> {
                 );
                 if (date != null) {
                   final formattedDate =
-                      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${(date.year % 100).toString().padLeft(2, '0')}';
+                      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year.toString()}';
+
                   setState(() {
                     selectedDate = formattedDate;
                     filters['created_at'] = formattedDate;
@@ -72,7 +79,8 @@ class _FilterDialogState extends State<FilterDialog> {
               },
             ),
             TextField(
-              decoration: const InputDecoration(labelText: 'Cantidad'),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.textcantidad),
               keyboardType: TextInputType.number,
               onChanged: (value) {
                 filters['cantidad'] = double.tryParse(value);
@@ -82,11 +90,13 @@ class _FilterDialogState extends State<FilterDialog> {
         ),
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text('Cancelar'),
+          child: Text(
+            AppLocalizations.of(context)!.buttoncancel,
+          ),
         ),
         ElevatedButton(
           onPressed: () {
@@ -96,7 +106,9 @@ class _FilterDialogState extends State<FilterDialog> {
             context.read<TransactionBloc>().add(GetAllTransactions(filters));
             Navigator.of(context).pop();
           },
-          child: const Text('Aplicar'),
+          child: Text(
+            AppLocalizations.of(context)!.buttonaplicar,
+          ),
         ),
       ],
     );

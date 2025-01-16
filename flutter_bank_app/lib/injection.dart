@@ -22,6 +22,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_transaction
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/get_transactions_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -87,8 +88,8 @@ Future<void> configureDependencies() async {
       signOutUserUseCase: sl<SignoutUserUseCase>(),
       getCurrentUserUseCase: sl<FetchUserDataUseCase>(),
       resetPasswordUseCase: sl<ResetPasswordUseCase>(),
-      newuserUseCase: sl<NewUserUseCase>(),
-      updateuserUseCase: sl<UpdateUserUsecase>()));
+      newUserUseCase: sl<NewUserUseCase>(),
+      updateUserUseCase: sl<UpdateUserUsecase>()));
 
   sl.registerFactory<AccountBloc>(() => AccountBloc(
         createAccountUsecase: sl<CreateAccountUseCase>(),
@@ -100,4 +101,6 @@ Future<void> configureDependencies() async {
         createTransactionUsecase: sl<CreateTransactionUseCase>(),
         getTransactionsUsecase: sl<GetTransactionsUseCase>(),
       ));
+
+  sl.registerFactory<LanguageBloc>(() => LanguageBloc());
 }

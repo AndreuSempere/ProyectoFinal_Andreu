@@ -5,6 +5,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CrearCuentaWidget extends StatefulWidget {
   const CrearCuentaWidget({super.key});
@@ -14,27 +15,72 @@ class CrearCuentaWidget extends StatefulWidget {
 }
 
 class _CrearCuentaState extends State<CrearCuentaWidget> {
-  final _tipoCuentaController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String? _selectedAccountType;
+  String? _selectedIcon;
+  final TextEditingController _descriptionController = TextEditingController();
 
-  final Map<String, String> _accountTypes = {
-    '1': "Corriente",
-    '2': "Ahorros",
-    '3': "Inversiones",
+  final Map<String, IconData> _iconOptions = {
+    'bank': Icons.account_balance,
+    'piggy': Icons.savings,
+    'investment': Icons.trending_up,
+    'wallet': Icons.account_balance_wallet,
   };
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, String> accountTypes = {
+      '1': AppLocalizations.of(context)!.accountType1,
+      '2': AppLocalizations.of(context)!.accountType2,
+      '3': AppLocalizations.of(context)!.accountType3,
+    };
+
     return AlertDialog(
-      title: const Text('Crear Nueva Cuenta'),
+      title: Text(AppLocalizations.of(context)!.titlecreaCuenta),
       content: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            GestureDetector(
+              onTap: () async {
+                final selected = await _selectIcon(context);
+                if (selected != null) {
+                  setState(() {
+                    _selectedIcon = selected;
+                  });
+                }
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.grey[100],
+                ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedIcon != null
+                          ? '${AppLocalizations.of(context)!.iconselected} ${_selectedIcon!.capitalize()}'
+                          : AppLocalizations.of(context)!.selectedIcon,
+                    ),
+                    Icon(
+                      _selectedIcon != null
+                          ? _iconOptions[_selectedIcon]
+                          : Icons.add_circle_outline,
+                      color: Colors.blue,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
-              decoration: const InputDecoration(labelText: 'Tipo de Cuenta:'),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.accountType),
               value: _selectedAccountType,
               onChanged: (String? newValue) {
                 setState(() {
@@ -42,7 +88,7 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                 });
               },
               items:
-                  _accountTypes.entries.map<DropdownMenuItem<String>>((entry) {
+                  accountTypes.entries.map<DropdownMenuItem<String>>((entry) {
                 return DropdownMenuItem<String>(
                   value: entry.key,
                   child: Text(entry.value),
@@ -50,7 +96,22 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
               }).toList(),
               validator: (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Seleccione un tipo de inventario';
+                  return 'Seleccione un tipo de cuenta';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _descriptionController,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.descpAccount,
+                border: const OutlineInputBorder(),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'La descripción no puede estar vacía';
                 }
                 return null;
               },
@@ -59,17 +120,20 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
         ),
       ),
       actions: [
-        TextButton(
+        ElevatedButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(
+            AppLocalizations.of(context)!.buttoncancel,
+          ),
         ),
         ElevatedButton(
           onPressed: () {
-            if (_formKey.currentState!.validate()) {
+            if (_formKey.currentState!.validate() && _selectedIcon != null) {
               final int tipoCuenta =
                   int.tryParse(_selectedAccountType ?? '1') ?? 1;
-              const saldoInicial = 0.0;
+              final String description = _descriptionController.text;
 
+              const saldoInicial = 0.0;
               final myLoginState = context.read<LoginBloc>().state;
               final userid = myLoginState.user?.idUser;
               if (userid == null) {
@@ -82,37 +146,51 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                 estado: 'Activo',
                 accountType: tipoCuenta,
                 idUser: userid,
+                description: description,
+                icon: _selectedIcon,
               );
 
-              context.read<AccountBloc>().add(
-                    CreateAccount(newAccount),
-                  );
-              Navigator.of(context).pop(); // Cerrar el diálogo
+              context.read<AccountBloc>().add(CreateAccount(newAccount));
+              Navigator.of(context).pop();
             }
           },
-          child: const Text('Guardar'),
+          child: Text(
+            AppLocalizations.of(context)!.buttonguardar,
+          ),
         ),
       ],
     );
   }
 
-  /// Genera un número de cuenta de 16 dígitos aleatorio.
+  Future<String?> _selectIcon(BuildContext context) async {
+    return await showDialog<String>(
+      context: context,
+      builder: (context) {
+        return SimpleDialog(
+          title: Text(AppLocalizations.of(context)!.selecionaIcono),
+          children: _iconOptions.entries.map((entry) {
+            return SimpleDialogOption(
+              onPressed: () => Navigator.of(context).pop(entry.key),
+              child: Row(
+                children: [
+                  Icon(entry.value, color: Colors.blue),
+                  const SizedBox(width: 16),
+                  Text(entry.key.capitalize()),
+                ],
+              ),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
   String _generateAccountNumber() {
     final random = Random();
-    const int length = 16;
-    String accountNumber = '';
-
-    for (int i = 0; i < length; i++) {
-      accountNumber +=
-          random.nextInt(10).toString(); // Genera dígitos del 0 al 9
-    }
-
-    return accountNumber;
+    return List.generate(16, (_) => random.nextInt(10).toString()).join();
   }
+}
 
-  @override
-  void dispose() {
-    _tipoCuentaController.dispose();
-    super.dispose();
-  }
+extension StringExtension on String {
+  String capitalize() => '${this[0].toUpperCase()}${substring(1)}';
 }

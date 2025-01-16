@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DialogAlertaDelete extends StatelessWidget {
   const DialogAlertaDelete({
@@ -8,21 +9,20 @@ class DialogAlertaDelete extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Eliminar cuenta'),
-      content: const Text(
-          'Estas a punto de eliminar la cuenta.¿Estás seguro de continuar?'),
+      title: Text(AppLocalizations.of(context)!.titledelete),
+      content: Text(AppLocalizations.of(context)!.textdelete),
       actions: <Widget>[
         TextButton(
           onPressed: () {
             Navigator.pop(context, 'Cancelar');
           },
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context)!.buttoncancel),
         ),
         TextButton(
           onPressed: () {
             Navigator.pop(context, 'Aceptar');
           },
-          child: const Text('Aceptar'),
+          child: Text(AppLocalizations.of(context)!.buttonaceptar),
         ),
       ],
     );

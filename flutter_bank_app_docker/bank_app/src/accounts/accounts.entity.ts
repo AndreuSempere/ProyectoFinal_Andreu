@@ -26,6 +26,12 @@ export class Accounts {
   @Column()
   estado: string;
 
+  @Column()
+  description: string;
+
+  @Column()
+  icon: string;
+
   @CreateDateColumn({ type: 'timestamp' })
   fecha_creacion: Date;
 

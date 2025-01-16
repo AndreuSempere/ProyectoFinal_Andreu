@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PasswordCambiarDialog extends StatefulWidget {
   const PasswordCambiarDialog({super.key});
@@ -18,22 +19,21 @@ class _PasswordResetDialogState extends State<PasswordCambiarDialog> {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      title: const Text(
-        "Cambiar Contraseña",
-        style: TextStyle(fontWeight: FontWeight.bold),
+      title: Text(
+        AppLocalizations.of(context)!.cambPassword,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       content: Form(
         key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-                "Introduce tu correo electrónico para cambiar la contraseña."),
+            Text(AppLocalizations.of(context)!.textUpdPass),
             const SizedBox(height: 10),
             TextFormField(
               controller: _emailController,
               decoration: InputDecoration(
-                labelText: "Correo electrónico",
+                labelText: AppLocalizations.of(context)!.textemailPass,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(15),
                 ),
@@ -55,7 +55,7 @@ class _PasswordResetDialogState extends State<PasswordCambiarDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text("Cancelar"),
+          child: Text(AppLocalizations.of(context)!.buttoncancel),
         ),
         ElevatedButton(
           onPressed: () {
@@ -71,7 +71,7 @@ class _PasswordResetDialogState extends State<PasswordCambiarDialog> {
               );
             }
           },
-          child: const Text("Enviar"),
+          child: Text(AppLocalizations.of(context)!.buttonenviar),
         ),
       ],
     );

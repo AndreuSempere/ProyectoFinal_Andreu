@@ -65,18 +65,6 @@ class FirebaseAuthDataSource {
   Future<void> newUser(String name, String surname, String email,
       String password, String dni, String age) async {
     try {
-      // Insertar en Firebase
-      final databaseRef = FirebaseFirestore.instance.collection('users');
-      await databaseRef.add({
-        'name': name,
-        'surname': surname,
-        'email': email,
-        'password': password,
-        'dni': dni,
-        'age': age,
-      });
-
-      // Insertar en backend local
       final response = await http.post(
         Uri.parse('http://localhost:8080/Users'),
         headers: {'Content-Type': 'application/json'},

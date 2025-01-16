@@ -10,9 +10,10 @@ import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart'
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/crear_cuenta_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/lista_cuentas_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +32,10 @@ class HomePage extends StatelessWidget {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state.errorMessage != null) {
+          } else if (state.message != null) {
             return Center(
               child: Text(
-                'Error: ${state.errorMessage}',
+                'Error: ${state.message}',
                 style: const TextStyle(fontSize: 18, color: Colors.red),
               ),
             );
@@ -43,33 +44,34 @@ class HomePage extends StatelessWidget {
               children: [
                 const SizedBox(height: 23),
                 Center(
-                  child: Text(
-                    'Hola ${state.user!.name}! aquí tienes tu listado de cuentas',
-                    style: const TextStyle(fontSize: 16),
+                  child: Column(
+                    children: [
+                      Text(
+                        AppLocalizations.of(context)!
+                            .titleHomeScreen(state.user!.name),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 30),
+                      FloatingActionButton.extended(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return const CrearCuentaWidget();
+                            },
+                          );
+                        },
+                        label: Text(
+                          AppLocalizations.of(context)!.creaCuenta,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        icon: const Icon(Icons.add),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 100),
-                const Expanded(child: AccountListWidget()),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    FloatingActionButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const CrearCuentaWidget();
-                          },
-                        );
-                      },
-                      child: const Icon(Icons.add),
-                    ),
-                    const SizedBox(
-                      height: 80,
-                      width: 10,
-                    )
-                  ],
-                )
+                const SizedBox(height: 30),
+                Expanded(child: AccountListWidget()),
               ],
             );
           } else {

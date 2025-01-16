@@ -29,6 +29,8 @@ class AccountRepositoryImpl implements AccountsRepository {
         estado: account.estado,
         accounts_type: account.accountType,
         id_user: account.idUser,
+        description: account.description,
+        icon: account.icon,
       );
 
       await remoteDataSource.createdAccount(accountModel);
@@ -39,11 +41,13 @@ class AccountRepositoryImpl implements AccountsRepository {
         estado: account.estado,
         accountType: account.accountType,
         idUser: account.idUser,
+        description: account.description,
+        icon: account.icon,
       );
 
       return Right(createdAccount);
     } catch (e) {
-      return Left('Fallo al crear el tweet: $e');
+      return Left('Fallo al crear la cuenta: $e');
     }
   }
 

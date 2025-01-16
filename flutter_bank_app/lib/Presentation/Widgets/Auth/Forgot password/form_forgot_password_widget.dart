@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PasswordResetDialog extends StatefulWidget {
   const PasswordResetDialog({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PasswordResetDialogState createState() => _PasswordResetDialogState();
 }
 
@@ -21,15 +21,15 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
     return Form(
       key: _formKey,
       child: AlertDialog(
-        title: const Text("Recuperar Contraseña"),
+        title: Text(AppLocalizations.of(context)!.textforgotpassword),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text("Introduce tu correo electrónico"),
+            Text(AppLocalizations.of(context)!.introduceTuEmail),
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(
-                hintText: "Correo electrónico",
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.textemailPass,
               ),
               keyboardType: TextInputType.emailAddress,
             ),
@@ -46,13 +46,13 @@ class _PasswordResetDialogState extends State<PasswordResetDialog> {
                 Navigator.of(context).pop();
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content:
-                          Text("Por favor, ingresa un correo electrónico")),
+                  SnackBar(
+                      content: Text(AppLocalizations.of(context)!
+                          .porFavorIngresaUnNumeroValido)),
                 );
               }
             },
-            child: const Text("Enviar"),
+            child: Text(AppLocalizations.of(context)!.buttonenviar),
           ),
         ],
       ),

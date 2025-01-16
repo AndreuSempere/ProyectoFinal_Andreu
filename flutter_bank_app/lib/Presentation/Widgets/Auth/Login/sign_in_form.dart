@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:rive/rive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({super.key});
@@ -35,26 +36,24 @@ class SignInRepository extends State<SignInForm> {
         context.read<LoginBloc>().add(
               LoginButtonPressed(email: email, password: password),
             );
-
-        context.read<LoginBloc>().stream.listen((state) {
-          if (state.email != null) {
-            context.go('/home');
-          } else if (state.errorMessage != null) {}
-        });
-
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {});
-        });
-      } else {
-        Future.delayed(const Duration(seconds: 2), () {
-          setState(() {});
-        });
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    context.read<LoginBloc>().stream.listen((state) {
+      if (state.email != null) {
+        context.go('/home');
+      } else if (state.message != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(state.message ??
+                  AppLocalizations.of(context)!.errorRegistrarUsuario)),
+        );
+      }
+    });
+
     return Stack(
       children: [
         Form(
@@ -63,16 +62,17 @@ class SignInRepository extends State<SignInForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Email",
-                  style: TextStyle(color: Colors.black54),
+                Text(
+                  AppLocalizations.of(context)!.email,
+                  style: const TextStyle(color: Colors.black54),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
                     controller: _emailController,
-                    validator: (value) =>
-                        value!.isEmpty ? "El campo es obligatorio" : null,
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.elNombreEsObligatorio
+                        : null,
                     decoration: InputDecoration(
                       prefixIcon: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -81,16 +81,17 @@ class SignInRepository extends State<SignInForm> {
                     ),
                   ),
                 ),
-                const Text(
-                  "Password",
-                  style: TextStyle(color: Colors.black54),
+                Text(
+                  AppLocalizations.of(context)!.password,
+                  style: const TextStyle(color: Colors.black54),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0, bottom: 16),
                   child: TextFormField(
                     controller: _passwordController,
-                    validator: (value) =>
-                        value!.isEmpty ? "El campo es obligatorio" : null,
+                    validator: (value) => value!.isEmpty
+                        ? AppLocalizations.of(context)!.elNombreEsObligatorio
+                        : null,
                     obscureText: true,
                     decoration: InputDecoration(
                       prefixIcon: Padding(
@@ -116,9 +117,9 @@ class SignInRepository extends State<SignInForm> {
                         ),
                       ),
                     ),
-                    label: const Text(
-                      "Sign In",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    label: Text(
+                      AppLocalizations.of(context)!.textbuttonlogin,
+                      style: const TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     icon: const Icon(Icons.arrow_forward),
                   ),

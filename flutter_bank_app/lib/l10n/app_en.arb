@@ -1,0 +1,338 @@
+{
+  "titleHomeScreen": "Hello {nombreUsuario}! Here is your list of accounts",
+  "@titleHomeScreen": {
+    "description": "Greeting message for the home screen, includes the user's name.",
+    "placeholders": {
+      "nombreUsuario": {
+        "type": "String",
+        "example": "John"
+      }
+    }
+  },
+  "changeLanguage": "Change Language",
+  "@changeLanguage": {
+    "description": "Button to change the application language."
+  },
+  "creaCuenta": "Create account",
+  "@creaCuenta": {
+    "description": "Button for create account."
+  },
+  "activarHuellaID": "Active Face ID / Fingerprint",
+  "@activarHuellaID": {
+    "description": "Button for active Face ID / Fingerprint."
+  },
+  "editarPerfil": "Edit profile",
+  "@editarPerfil": {
+    "description": "Button for edit profile."
+  },
+  "privacidad": "Privacy",
+  "@privacidad": {
+    "description": "Button for privacy."
+  },
+  "notificaciones": "Notifications",
+  "@notificaciones": {
+    "description": "Button for notifications."
+  },
+  "cambPassword": "Change password",
+  "@cambPassword": {
+    "description": "Change password button."
+  },
+  "cerrarSesion": "Close session",
+  "@cerrarSesion": {
+    "description": "Button to close the session."
+  },
+  "cerrarSesionConfirmacion": "Are you sure you want to close the session?",
+  "@cerrarSesionConfirmacion": {
+    "description": "Confirmation message for closing the session."
+  },
+  "cerrarSesionConfirmacionSi": "Yes, close the session",
+  "@cerrarSesionConfirmacionSi": {
+    "description": "Button to confirm closing the session."
+  },
+  "cerrarSesionConfirmacionNo": "No, cancel",
+  "@cerrarSesionConfirmacionNo": {
+    "description": "Button to cancel closing the session."
+  },
+  "cerrarSesionTitle": "You will be logged out of the application.",
+  "@cerrarSesionTitle": {
+    "description": "Title for closing the session."
+  },
+  "titleTransactions": "Transactions",
+  "@titleTransactions": {
+    "description": "Title for transactions."
+  },
+  "titleactionTransaction": "Transaction action",
+  "@titleactionTransaction": {
+    "description": "Title for transaction action."
+  },
+  "textUpdPass": "Do you want to update your password? Enter your email to change your password",
+  "@textUpdPass": {
+    "description": "Text for updating password."
+  },
+  "titlecreaCuenta": "Create account",
+  "@titlecreaCuenta": {
+    "description": "Title for creating an account."
+  },
+  "iconselected": "Selected icon",
+  "@iconselected": {
+    "description": "Icon for selected item."
+  },
+  "selectedIcon": "Select account icon",
+  "@selectedIcon": {
+    "description": "Icon for selected account."
+  },
+  "selecionaIcono": "Select icon",
+  "@selecionaIcono": {
+    "description": "Button to select icon."
+  },
+  "accountType": "Account type",
+  "@accountType": {
+    "description": "Title for account type."
+  },
+  "descpAccount": "Enter a description of the account",
+  "@descpAccount": {
+    "description": "Description for account."
+  },
+  "accountType1": "Current account",
+  "@accountType1": {
+    "description": "Type of current account."
+  },
+  "accountType2": "Savings account",
+  "@accountType2": {
+    "description": "Type of savings account."
+  },
+  "accountType3": "Investment Account",
+  "@accountType3": {
+    "description": "Type of Investment account."
+  },
+  "titleAddmoney": "Add funds to your account",
+  "@titleAddmoney": {
+    "description": "Title for adding money to account."
+  },
+  "textAddmoney": "Enter the amount you want to add and a concept to identify the transaction",
+  "@textAddmoney": {
+    "description": "Text for adding money to account."
+  },
+  "buttoncancel": "Cancel",
+  "@buttoncancel": {
+    "description": "Button to cancel action."
+  },
+  "buttonaceptar": "Accept",
+  "@buttonaceptar": {
+    "description": "Button to accept action."
+  },
+  "buttonguardar": "Save",
+  "@buttonguardar": {
+    "description": "Button to save action."
+  },
+  "buttonaplicar": "Apply",
+  "@buttonaplicar": {
+    "description": "Button to apply action."
+  },
+  "buttonenviar": "Send",
+  "@buttonenviar": {
+    "description": "Button to send action."
+  },
+  "textemailPass": "Enter your email",
+  "@textemailPass": {
+    "description": "Text for email password."
+  },
+  "titleUpdUser": "Update user",
+  "@titleUpdUser": {
+    "description": "Title for updating user."
+  },
+  "nameUpdUser": "Name",
+  "@nameUpdUser": {
+    "description": "Name for updating user."
+  },
+  "surnameUpdUser": "Surname",
+  "@surnameUpdUser": {
+    "description": "Surname for updating user."
+  },
+  "ageUpdUser": "Age",
+  "@ageUpdUser": {
+    "description": "Age for updating user."
+  },
+  "titledelete": "Delete Account",
+  "@titledelete": {
+    "description": "Title for deleting account."
+  },
+  "textdelete": "Are you sure you want to delete your account?",
+  "@textdelete": {
+    "description": "Text for deleting account."
+  },
+  "textaddmoney": "Add money",
+  "@textaddmoney": {
+    "description": "Text for adding money to account."
+  },
+  "textcantidadadd": "Enter the amount you want to add",
+  "@textcantidadadd": {
+    "description": "Text for entering the amount to add."
+  },
+  "textconceptoadd": "What is the concept of the operation?",
+  "@textconceptoadd": {
+    "description": "Text for entering the concept of the operation."
+  },
+  "textcantidad": "Enter the amount",
+  "@textcantidad": {
+    "description": "Text for entering the amount."
+  },
+  "textfecha": "Select the date",
+  "@textfecha": {
+    "description": "Text for selecting the date."
+  },
+  "textmovimiento": "Select the movement",
+  "@textmovimiento": {
+    "description": "Text for selecting the movement."
+  },
+  "textingreso": "Income",
+  "@textingreso": {
+    "description": "Text for selecting the movement type."
+  },
+  "textgasto": "Spent",
+  "@textgasto": {
+    "description": "Text for selecting the movement type."
+  },
+  "textdescripcion": "Enter the description",
+  "@textdescripcion": {
+    "description": "Text for entering the description."
+  },
+  "titlefiltrer": "Filter Transactions",
+  "@titlefiltrer": {
+    "description": "Title to filter transactions."
+  },
+  "textbuttonlogin": "Get started now",
+  "@textbuttonlogin": {
+    "description": "Message for the login button."
+  },
+  "textcontrolfinanzas": "Take control of your finances. Secure, fast, and smart banking at your fingertips. Discover intuitive tools to manage your money effortlessly.",
+  "@textcontrolfinanzas": {
+    "description": "Main text encouraging users to use the app's banking."
+  },
+  "textstartapp": "Start managing your money from our App",
+  "@textstartapp": {
+    "description": "Introductory message to start using the app."
+  },
+  "textloginprompt": "Log in or sign up if you don't have an account.",
+  "@textloginprompt": {
+    "description": "Text encouraging the user to log in or sign up."
+  },
+  "textforgotpassword": "Forgot your password?",
+  "@textforgotpassword": {
+    "description": "Text to guide the user to recover their password."
+  },
+  "textregister": "Sign Up",
+  "@textregister": {
+    "description": "Text for the registration button."
+  },
+  "bienvenido": "Welcome",
+  "@bienvenido": {
+    "description": "Welcome message."
+  },
+  "usuarioRegistradoCorrectamente": "User registered successfully",
+  "@usuarioRegistradoCorrectamente": {
+    "description": "Success message for user registration."
+  },
+  "errorRegistrarUsuario": "Error registering user.",
+  "@errorRegistrarUsuario": {
+    "description": "Error message for user registration."
+  },
+  "errorRegistrarUsuarioIntentarDeNuevo": "Error registering user. Please try again.",
+  "@errorRegistrarUsuarioIntentarDeNuevo": {
+    "description": "Error message for user registration, suggests trying again."
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Field for password."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Field for email."
+  },
+  "introduceTuNombre": "Enter your name",
+  "@introduceTuNombre": {
+    "description": "Field for entering name."
+  },
+  "elNombreEsObligatorio": "Name is required",
+  "@elNombreEsObligatorio": {
+    "description": "Error message if name is empty."
+  },
+  "introduceTuApellido": "Enter your surname",
+  "@introduceTuApellido": {
+    "description": "Field for entering surname."
+  },
+  "elApellidoEsObligatorio": "Surname is required",
+  "@elApellidoEsObligatorio": {
+    "description": "Error message if surname is empty."
+  },
+  "introduceTuEmail": "Enter your email",
+  "@introduceTuEmail": {
+    "description": "Field for entering email."
+  },
+  "introduceUnEmailValido": "Enter a valid email",
+  "@introduceUnEmailValido": {
+    "description": "Error message if email is not valid."
+  },
+  "introduceTuPassword": "Enter your password",
+  "@introduceTuPassword": {
+    "description": "Field for entering password."
+  },
+  "laPasswordDebeTenerAlMenos6Caracteres": "Password must be at least 6 characters long",
+  "@laPasswordDebeTenerAlMenos6Caracteres": {
+    "description": "Error message if password is too short."
+  },
+  "introduceTuEdad": "Enter your age",
+  "@introduceTuEdad": {
+    "description": "Field for entering age."
+  },
+  "laEdadNoPuedeEstarVacia": "Age cannot be empty",
+  "@laEdadNoPuedeEstarVacia": {
+    "description": "Error message if age is empty."
+  },
+  "porFavorIngresaUnNumeroValido": "Please enter a valid number",
+  "@porFavorIngresaUnNumeroValido": {
+    "description": "Error message if number is not valid."
+  },
+  "laEdadDebeSerMayorOIgualA18": "Age must be 18 or older",
+  "@laEdadDebeSerMayorOIgualA18": {
+    "description": "Error message if age is less than 18."
+  },
+  "introduceTuDNI": "Enter your ID number",
+  "@introduceTuDNI": {
+    "description": "Field for entering ID number."
+  },
+  "rellenarElDNIEsObligatorio": "Filling in the ID number is mandatory",
+  "@rellenarElDNIEsObligatorio": {
+    "description": "Error message if ID number is empty."
+  },
+  "formatoDeDNINoValido": "Invalid ID number format.",
+  "@formatoDeDNINoValido": {
+    "description": "Error message if ID number format is invalid."
+  },
+  "laDescripcionNoPuedeEstarVacia": "The description cannot be empty",
+  "@laDescripcionNoPuedeEstarVacia": {
+    "description": "Error message if the description is empty."
+  },
+  "texttransactionmoney": "Transaction money",
+  "@texttransactionmoney": {
+    "description": "Text for transaction money."
+  },
+  "textbizummoney": "Bizum",
+  "@textbizummoney": {
+    "description": "Botón de Bizum."
+  },
+  "titleactionTransaction": "Transaction Actions",
+  "textaddmoney": "Add Money",
+  "texttransactionmoney": "Transfer Money",
+  "textbizummoney": "Bizum",
+  "titledelete": "Delete Account",
+  "buttoncancel": "Cancel",
+  "titletransactionpage": "Transactions",
+  "enteramount": "Enter the amount",
+  "amount": "Amount",
+  "description": "Description",
+  "enterdescription": "Enter a description",
+  "fillallfields": "Please fill all fields",
+  "transactionsuccessful": "Transaction successful!",
+  "buttonconfirm": "Confirm"
+}

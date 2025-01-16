@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:rive/rive.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AnimatedBtn extends StatelessWidget {
   const AnimatedBtn({
@@ -23,17 +24,17 @@ class AnimatedBtn extends StatelessWidget {
             "assets/RiveAssets/button.riv",
             controllers: [_btnAnimationController],
           ),
-          const Positioned.fill(
+          Positioned.fill(
               top: 8,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(CupertinoIcons.arrow_right),
-                  SizedBox(
+                  const Icon(CupertinoIcons.arrow_right),
+                  const SizedBox(
                     width: 8,
                   ),
-                  Text("Empieza ya",
-                      style: TextStyle(fontWeight: FontWeight.w600))
+                  Text(AppLocalizations.of(context)!.textbuttonlogin,
+                      style: const TextStyle(fontWeight: FontWeight.w600))
                 ],
               )),
         ]),
