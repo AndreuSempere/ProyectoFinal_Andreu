@@ -10,8 +10,8 @@ plugins {
 
 android {
     namespace = "com.example.flutter_bank_app"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 35
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -23,13 +23,12 @@ android {
     }
 
     defaultConfig {
-    applicationId "com.bank.app"
-    minSdk = 23 // Cambiado a 23
-    targetSdk = 33 // Ajusta este valor según tu necesidad
-    versionCode = 1
-    versionName = "1.0"
-}
-
+        applicationId "com.bank.app"
+        minSdk = 23 // Cambiado a 23
+        targetSdk = 33 // Ajusta este valor según tu necesidad
+        versionCode = 1
+        versionName = "1.0"
+    }
 
     buildTypes {
         release {

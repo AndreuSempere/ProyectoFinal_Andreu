@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -199,11 +198,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                 return null;
               },
             ),
-          ),
-          SizedBox(height: 10),
-          ElevatedButton(
-            onPressed: () => HomePage(),
-            child: Text("Subir DNI"),
           ),
           SizedBox(height: 14),
           Row(
