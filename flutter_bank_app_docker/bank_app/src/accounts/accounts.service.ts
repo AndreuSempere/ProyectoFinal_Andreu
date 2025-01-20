@@ -44,6 +44,17 @@ export class AccountsService {
     return result;
   }
 
+  async getAccountsByUserId(userId: number): Promise<any> {
+    const result = await this.accountsRepository
+      .createQueryBuilder('account')
+      .innerJoinAndSelect('account.accounts_type', 'accounts_type')
+      .innerJoinAndSelect('account.id_user', 'user')
+      .where('user.id_user = :userId', { userId })
+      .getMany();
+  
+    return result;
+  }
+  
   async createAccount(
     createAccountsDto: CreateAccoutDto,
   ): Promise<{ message: string }> {

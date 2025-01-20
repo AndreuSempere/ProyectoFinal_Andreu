@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/cambiar_contrase%C3%B1a_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/change_password_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/change_language_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

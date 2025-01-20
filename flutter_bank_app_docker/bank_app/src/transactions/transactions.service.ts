@@ -34,39 +34,73 @@ export class TransactionsService {
     return result;
   }
 
-  async createTransaction(
-    createTransactionDto: CreateTransactionDto,
-  ): Promise<{ message: string }> {
-    const account = await this.accountsRepository.findOne({
-      where: { id_cuenta: createTransactionDto.accountId },
-    });
-  
-    if (!account) {
-      throw new Error('Cuenta no encontrada');
-    }
-  
-    let newBalance = account.saldo;
-  
-    if (createTransactionDto.tipo === 'ingreso') {
-      newBalance += createTransactionDto.cantidad;
-    } else if (createTransactionDto.tipo === 'gasto') {
-      if (newBalance < createTransactionDto.cantidad) {
-        throw new Error('Fondos insuficientes');
+    async createTransaction(
+      createTransactionDto: CreateTransactionDto,
+    ): Promise<{ message: string }> {
+      const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
+    
+      const sourceAccount = await this.accountsRepository.findOne({
+        where: { id_cuenta: accountId },
+      });
+    
+      if (!sourceAccount) {
+        throw new Error('Cuenta origen no encontrada');
       }
-      newBalance -= createTransactionDto.cantidad;
-    } else {
-      throw new Error('Tipo de transacción inválido');
+    
+      if (tipo === 'ingreso') {
+        sourceAccount.saldo += cantidad;
+      } else if (tipo === 'gasto' && sourceAccount.saldo < cantidad) {
+        throw new Error('Fondos insuficientes en la cuenta origen');
+      } else if (tipo === 'gasto') {
+        sourceAccount.saldo -= cantidad;
+      } else {
+        throw new Error('Tipo de transacción inválido');
+      }
+    
+      let targetAccount = null;
+      if (targetAccountId) {
+        targetAccount = await this.accountsRepository.findOne({
+          where: { id_cuenta: targetAccountId },
+        });
+    
+        if (!targetAccount) {
+          throw new Error('Cuenta destino no encontrada');
+        }
+    
+        if (tipo === 'gasto') {
+          targetAccount.saldo += cantidad;
+        }
+      }
+    
+      const sourceTransaction = this.transactionsRepository.create({
+        account: { id_cuenta: accountId },
+        cantidad,
+        tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
+        descripcion: descripcion || 'Transferencia',
+      });
+    
+      let targetTransaction = null;
+      if (targetAccount) {
+        targetTransaction = this.transactionsRepository.create({
+          account: { id_cuenta: targetAccountId },
+          cantidad,
+          tipo: 'ingreso',
+          descripcion: descripcion || 'Transferencia recibida',
+        });
+      }
+    
+      await this.transactionsRepository.save(sourceTransaction);
+      if (targetTransaction) {
+        await this.transactionsRepository.save(targetTransaction);
+      }
+    
+      await this.accountsRepository.save(sourceAccount);
+      if (targetAccount) {
+        await this.accountsRepository.save(targetAccount);
+      }
+    
+      return { message: 'Transacción procesada con éxito' };
     }
-  
-    const transaction = this.transactionsRepository.create({
-      ...createTransactionDto,
-      account: { id_cuenta: createTransactionDto.accountId },
-    });
-  
-    await this.transactionsRepository.save(transaction);
-    await this.accountsService.updateAccount(account.id_cuenta, { saldo: newBalance });
-    return { message: 'Transacción procesada con éxito' };
-  }
   
     async deleteTransaction(id: number): Promise<{ message: string }> {
       const result = await this.transactionsRepository.delete(id);

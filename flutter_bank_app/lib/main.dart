@@ -23,9 +23,19 @@ Future<void> main() async {
     debugPrint('Error al cargar el archivo .env: $e');
   }
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+      debugPrint('Firebase inicializado correctamente.');
+    } else {
+      debugPrint('Firebase ya estaba inicializado.');
+    }
+  } catch (e, stack) {
+    debugPrint('Error al inicializar Firebase: $e');
+    debugPrint('$stack');
+  }
 
   configureDependencies();
   runApp(const MyApp());

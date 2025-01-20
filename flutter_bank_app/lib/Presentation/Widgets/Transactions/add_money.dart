@@ -3,7 +3,7 @@ import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Transactions/plantilla_add_money_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/template_add_money_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

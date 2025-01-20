@@ -66,7 +66,7 @@ class FirebaseAuthDataSource {
       String password, String dni, String age) async {
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8080/Users'),
+        Uri.parse('http://192.168.18.26:8080/Users'),
         headers: {'Content-Type': 'application/json'},
         body: '''
         {
@@ -90,8 +90,8 @@ class FirebaseAuthDataSource {
   }
 
   Future<UserModel> getUserInfo(String email) async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8080/users/user/$email'));
+    final response = await http
+        .get(Uri.parse('http://192.168.18.26:8080/users/user/$email'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> userJson = json.decode(response.body);
@@ -105,7 +105,7 @@ class FirebaseAuthDataSource {
       String dni, String age) async {
     try {
       final response = await http.put(
-        Uri.parse('http://localhost:8080/Users/$idUser'),
+        Uri.parse('http://192.168.18.26:8080/Users/$idUser'),
         headers: {'Content-Type': 'application/json'},
         body: '''
         {

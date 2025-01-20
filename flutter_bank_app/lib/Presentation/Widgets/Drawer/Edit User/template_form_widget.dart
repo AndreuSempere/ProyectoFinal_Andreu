@@ -9,14 +9,14 @@ class PlantillaTextField extends StatelessWidget {
   final String? Function(String?)? customValidator;
 
   const PlantillaTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.label,
     required this.icon,
     this.validatorMsg,
     this.keyboardType = TextInputType.text,
     this.customValidator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

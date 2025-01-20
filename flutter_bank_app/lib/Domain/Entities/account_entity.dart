@@ -1,7 +1,7 @@
 class Account {
   final int? idCuenta;
   final String? numeroCuenta;
-  final double? saldo;
+  final int? saldo;
   final String? estado;
   final String? createdAt;
   final int accountType;

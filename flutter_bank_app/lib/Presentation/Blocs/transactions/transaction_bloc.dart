@@ -29,7 +29,9 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
             if (event.filters['descripcion'] != null &&
                 event.filters['descripcion'].isNotEmpty) {
               coincide = coincide &&
-                  transaction.descripcion == event.filters['descripcion'];
+                  transaction.descripcion!
+                      .toLowerCase()
+                      .contains(event.filters['descripcion'].toLowerCase());
             }
 
             if (event.filters['tipo'] != null &&

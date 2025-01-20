@@ -60,7 +60,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         const Text(
                           "Bankify",
                           style: TextStyle(
-                              fontSize: 60, fontFamily: "Poppins", height: 1.2),
+                              fontSize: 50, fontFamily: "Poppins", height: 1.2),
                         ),
                         const SizedBox(
                           height: 16,

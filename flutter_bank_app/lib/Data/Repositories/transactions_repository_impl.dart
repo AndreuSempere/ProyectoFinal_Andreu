@@ -28,6 +28,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         tipo: transaction.tipo,
         descripcion: transaction.descripcion,
         account: transaction.account,
+        targetAccount: transaction.targetAccount,
       );
 
       await remoteDataSource.createdTransactions(transactionModel);
@@ -36,6 +37,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
         tipo: transaction.tipo,
         descripcion: transaction.descripcion,
         account: transaction.account,
+        targetAccount: transaction.targetAccount,
       );
 
       return Right(createdTransaction);

@@ -15,7 +15,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   @override
   Future<List<TransactionModel>> getAllTransactions() async {
     final response =
-        await http.get(Uri.parse('http://localhost:8080/transaction'));
+        await http.get(Uri.parse('http://192.168.18.26:8080/transaction'));
     if (response.statusCode == 200) {
       final List<dynamic> accountsJson = json.decode(response.body);
       return accountsJson
@@ -29,7 +29,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   @override
   Future<bool> createdTransactions(TransactionModel transaction) async {
     final response = await http.post(
-      Uri.parse('http://localhost:8080/transaction'),
+      Uri.parse('http://192.168.18.26:8080/transaction'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(transaction.toJson()),
     );

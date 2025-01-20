@@ -23,4 +23,8 @@ export class Transaction {
   })
   @JoinColumn({ name: 'accountId' })
   account: Accounts;
+
+  @ManyToOne(() => Accounts, { nullable: true })
+  @JoinColumn({ name: 'targetAccountId' })
+  targetAccount: Accounts;
 }

@@ -29,6 +29,11 @@ export class AccountsController {
     return this.accountsService.getAccount(parseInt(id), xml);
   }
 
+  @Get('user/:id')
+  getAccountByUserId(@Param('id') id: string) {
+    return this.accountsService.getAccountsByUserId(parseInt(id));
+  }
+
   @Post()
   createAccount(@Body() createAccoutDto: CreateAccoutDto) {
     return this.accountsService.createAccount(createAccoutDto);

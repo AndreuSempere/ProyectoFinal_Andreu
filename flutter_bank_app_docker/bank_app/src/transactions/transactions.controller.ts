@@ -18,7 +18,6 @@ export class TransactionsController {
     getAccount(@Param('id') id: string) {
       return this.transactionsService.getTransaction(parseInt(id));
     }
-  
 
     @Post()
     createTransaction(@Body() createTransactionDto: CreateTransactionDto) {

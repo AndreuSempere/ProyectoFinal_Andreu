@@ -8,7 +8,7 @@ class GetAccountUseCase {
 
   GetAccountUseCase(this.repository);
 
-  Future<Either<Failure, List<Account>>> call() async {
-    return await repository.getAccounts();
+  Future<Either<Failure, List<Account>>> call(int id) async {
+    return await repository.getAccounts(id);
   }
 }

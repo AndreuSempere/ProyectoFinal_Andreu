@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 class AccountModel {
   final int? idCuenta;
   final String? numero_cuenta;
-  final double? saldo;
+  final int? saldo;
   final String? estado;
   final String? fecCreacion;
   final int accounts_type;

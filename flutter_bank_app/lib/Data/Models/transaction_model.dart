@@ -6,6 +6,7 @@ class TransactionModel {
   final String tipo;
   final String? descripcion;
   final int account;
+  final int? targetAccount;
   final String? created_at;
 
   TransactionModel({
@@ -13,6 +14,7 @@ class TransactionModel {
     required this.tipo,
     this.descripcion,
     required this.account,
+    this.targetAccount,
     this.created_at,
   });
 
@@ -32,6 +34,7 @@ class TransactionModel {
       tipo: json['tipo'],
       descripcion: json['descripcion'],
       account: json['account']?['id_cuenta'],
+      targetAccount: json['targetAccount'],
       created_at: formattedDate,
     );
   }
@@ -42,6 +45,7 @@ class TransactionModel {
       'tipo': tipo,
       'descripcion': descripcion,
       'accountId': account,
+      'targetAccountId': targetAccount,
     };
   }
 
@@ -51,6 +55,7 @@ class TransactionModel {
       tipo: tipo,
       descripcion: descripcion,
       account: account,
+      targetAccount: targetAccount,
       created_at: created_at,
     );
   }

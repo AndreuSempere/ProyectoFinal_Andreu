@@ -10,9 +10,9 @@ class AccountRepositoryImpl implements AccountsRepository {
   AccountRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<Account>>> getAccounts() async {
+  Future<Either<Failure, List<Account>>> getAccounts(int id) async {
     try {
-      final accountModels = await remoteDataSource.getAllAccounts();
+      final accountModels = await remoteDataSource.getAccounts(id);
       return Right(accountModels.map((model) => model.toEntity()).toList());
     } catch (e) {
       return Left(AuthFailure());

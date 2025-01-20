@@ -133,7 +133,7 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                   int.tryParse(_selectedAccountType ?? '1') ?? 1;
               final String description = _descriptionController.text;
 
-              const saldoInicial = 0.0;
+              const saldoInicial = 0;
               final myLoginState = context.read<LoginBloc>().state;
               final userid = myLoginState.user?.idUser;
               if (userid == null) {

@@ -334,5 +334,22 @@
   "enterdescription": "Saisissez une description",
   "fillallfields": "Veuillez remplir tous les champs",
   "transactionsuccessful": "Transaction réussie !",
-  "buttonconfirm": "Confirmer"
+  "buttonconfirm": "Confirmer",
+  "titletransactionpage": "Page de Transaction",
+  "enteramount": "Entrez le montant",
+  "amount": "Montant",
+  "description": "Description",
+  "enterdescription": "Entrez la description",
+  "fillallfields": "Veuillez remplir tous les champs",
+  "transactionsuccessful": "Transaction réussie",
+  "buttonconfirm": "Confirmer",
+  "chooseTransactionType": "Choisissez le type de transaction",
+  "toOwnAccount": "Vers un compte propre",
+  "toOtherAccount": "Vers un autre compte",
+  "targetAccount": "Compte cible",
+  "enterTargetAccount": "Entrez le compte cible",
+  "chooseFromAccount": "Choisissez le compte d'origine",
+  "selectFromAccount": "Sélectionner le compte d'origine",
+  "chooseToAccount": "Choisissez le compte de destination",
+  "selectToAccount": "Sélectionner le compte de destination"
 }
