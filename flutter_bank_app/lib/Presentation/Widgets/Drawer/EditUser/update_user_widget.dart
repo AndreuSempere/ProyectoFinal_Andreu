@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Edit%20User/template_form_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/EditUser/template_form_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 
 class EditarUser extends StatefulWidget {
   const EditarUser({super.key});
@@ -26,8 +26,8 @@ class DialogoState extends State<EditarUser> {
     if (myLoginState.user != null) {
       _nameController.text = myLoginState.user!.name;
       _surnameController.text = myLoginState.user!.surname;
-      _edadController.text = myLoginState.user!.age!;
-      _dniController.text = myLoginState.user!.dni!;
+      _edadController.text = myLoginState.user!.age?.toString() ?? '';
+      _dniController.text = myLoginState.user!.dni ?? '';
     }
   }
 
@@ -85,7 +85,7 @@ class DialogoState extends State<EditarUser> {
                   return null;
                 },
               ),
-              const SizedBox(height: 8)
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -103,14 +103,17 @@ class DialogoState extends State<EditarUser> {
               final String name = _nameController.text;
               final String surname = _surnameController.text;
               final String dni = _dniController.text;
-              final String age = _edadController.text;
+              final int age = int.parse(_edadController.text);
 
               final myLoginState = context.read<LoginBloc>().state;
               final String email = myLoginState.user!.email;
               final int? idUser = myLoginState.user!.idUser;
+              final int telf = 0;
 
               context.read<LoginBloc>().add(
-                  UpdateUserEvent(idUser!, name, surname, email, dni, age));
+                    UpdateUserEvent(
+                        idUser!, name, surname, email, dni, age, telf),
+                  );
 
               Navigator.of(context).pop();
             }

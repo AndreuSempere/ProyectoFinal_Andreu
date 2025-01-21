@@ -32,19 +32,16 @@ class LoginState extends Equatable {
     );
   }
 
-  /// Estado inicial del login
   factory LoginState.initial() => const LoginState(
         isLoading: false,
         isSuccess: false,
       );
 
-  /// Estado cuando el proceso está cargando
   factory LoginState.loading() => const LoginState(
         isLoading: true,
         isSuccess: false,
       );
 
-  /// Estado cuando el login o registro es exitoso
   factory LoginState.success({
     String? email,
     UserEntity? user,
@@ -56,7 +53,6 @@ class LoginState extends Equatable {
         user: user,
       );
 
-  /// Estado cuando ocurre un fallo
   factory LoginState.failure(String errorMessage) => LoginState(
         isLoading: false,
         isSuccess: false,

@@ -5,7 +5,8 @@ class UserEntity {
   final String email;
   final String? password;
   final String? dni;
-  final String? age;
+  final int? age;
+  final int? telf;
 
   UserEntity({
     this.idUser,
@@ -15,5 +16,6 @@ class UserEntity {
     this.password,
     this.dni,
     this.age,
+    this.telf,
   });
 }

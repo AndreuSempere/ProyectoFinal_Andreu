@@ -18,12 +18,21 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<LoginBloc>().add(FetchUserDataEvent());
-    // context.read<AccountBloc>().add(GetAllAccount());
     context.read<TransactionBloc>().add(GetAllTransactions());
 
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text('Bankify')),
+        backgroundColor: const Color.fromARGB(255, 143, 193, 226),
+        title: const Text(
+          'Bankify',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: Colors.white,
+          ),
+        ),
+        centerTitle: true,
+        elevation: 5,
       ),
       drawer: const DrawerWidget(),
       body: BlocBuilder<LoginBloc, LoginState>(

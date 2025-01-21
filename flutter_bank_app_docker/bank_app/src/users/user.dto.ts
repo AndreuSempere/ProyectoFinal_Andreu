@@ -4,8 +4,6 @@ import {
   IsString,
   IsOptional,
   IsInt,
-  Min,
-  Max,
   Length,
 } from 'class-validator';
 export class CreateUserDto {
@@ -27,9 +25,13 @@ export class CreateUserDto {
   @IsEmail()
   email: string;
 
+  @IsInt()
+  @IsOptional()
+  telf?: number | null;
+
   @IsString()
   @Length(1, 9)
-  dni: string;
+  dni: string | null ;
 
   @IsInt()
   edad: number;
@@ -57,6 +59,10 @@ export class UpdateUserDto {
   @IsEmail()
   @IsOptional()
   email?: string;
+
+  @IsInt()
+  @IsOptional()
+  telf?: number;
 
   @IsString()
   @IsOptional()

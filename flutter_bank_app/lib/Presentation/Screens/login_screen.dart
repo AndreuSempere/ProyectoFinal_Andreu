@@ -14,6 +14,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   bool isSignInDialogShown = false;
+  bool _isButtonPressed = false;
   late rive.RiveAnimationController _btnAnimationController;
 
   @override
@@ -74,7 +75,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     AnimatedBtn(
                       btnAnimationController: _btnAnimationController,
                       press: () {
+                        if (_isButtonPressed) {
+                          return;
+                        }
+                        _isButtonPressed = true;
                         _btnAnimationController.isActive = true;
+
                         Future.delayed(const Duration(milliseconds: 800), () {
                           setState(() {
                             isSignInDialogShown = true;
@@ -82,6 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           customSigninDialog(context, onClosed: (_) {
                             setState(() {
                               isSignInDialogShown = false;
+                              _isButtonPressed = false;
                             });
                           });
                         });
@@ -93,7 +100,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         AppLocalizations.of(context)!.textstartapp,
                         style: const TextStyle(),
                       ),
-                    )
+                    ),
                   ]),
             ),
           ),

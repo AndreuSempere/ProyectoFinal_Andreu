@@ -15,8 +15,8 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
 
   @override
   Future<List<AccountModel>> getAccounts(int id) async {
-    final response = await http
-        .get(Uri.parse('http://192.168.18.26:8080/accounts/user/$id'));
+    final response =
+        await http.get(Uri.parse('http://localhost:8080/accounts/user/$id'));
     if (response.statusCode == 200) {
       final List<dynamic> accountsJson = json.decode(response.body);
       return accountsJson.map((json) => AccountModel.fromJson(json)).toList();
@@ -28,7 +28,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<bool> createdAccount(AccountModel account) async {
     final response = await http.post(
-      Uri.parse('http://192.168.18.26:8080/accounts'),
+      Uri.parse('http://localhost:8080/accounts'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(account.toJson()),
     );
@@ -44,7 +44,7 @@ class AccountRemoteDataSourceImpl implements AccountRemoteDataSource {
   @override
   Future<void> deleteAccount(int id) async {
     final response = await client.delete(
-      Uri.parse('http://192.168.18.26:8080/accounts/$id'),
+      Uri.parse('http://localhost:8080/accounts/$id'),
       headers: {'Content-Type': 'application/json'},
     );
 

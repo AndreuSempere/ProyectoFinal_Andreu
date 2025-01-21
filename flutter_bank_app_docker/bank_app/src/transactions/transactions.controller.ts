@@ -24,6 +24,11 @@ export class TransactionsController {
       return this.transactionsService.createTransaction(createTransactionDto);
     }
 
+    @Post('/bizum/')
+    bizumTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+      return this.transactionsService.bizumTransaction(createTransactionDto);
+    }
+
     @Delete(':id')
     deleteTransaction(@Param('id') id: string) {
         return this.transactionsService.deleteTransaction(parseInt(id));

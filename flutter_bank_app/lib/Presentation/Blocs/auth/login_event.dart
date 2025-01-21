@@ -17,16 +17,6 @@ class LoginButtonPressed extends LoginEvent {
 
 class LogoutButtonPressed extends LoginEvent {}
 
-class RegisterButtonPressed extends LoginEvent {
-  final String email;
-  final String password;
-
-  RegisterButtonPressed({required this.email, required this.password});
-
-  @override
-  List<Object?> get props => [email, password];
-}
-
 class CheckAuthentication extends LoginEvent {}
 
 class ResetPasswordEvent extends LoginEvent {
@@ -38,15 +28,15 @@ class ResetPasswordEvent extends LoginEvent {
   List<Object?> get props => [email];
 }
 
-class NewUserEvent extends LoginEvent {
+class RegisterButtonPressed extends LoginEvent {
   final String name;
   final String surname;
   final String email;
   final String password;
   final String dni;
-  final String age;
+  final int age;
 
-  NewUserEvent(
+  RegisterButtonPressed(
       this.name, this.surname, this.email, this.password, this.dni, this.age);
 }
 
@@ -58,8 +48,16 @@ class UpdateUserEvent extends LoginEvent {
   final String surname;
   final String email;
   final String dni;
-  final String age;
+  final int age;
+  final int telf;
 
   UpdateUserEvent(
-      this.idUser, this.name, this.surname, this.email, this.dni, this.age);
+    this.idUser,
+    this.name,
+    this.surname,
+    this.email,
+    this.dni,
+    this.age,
+    this.telf,
+  );
 }

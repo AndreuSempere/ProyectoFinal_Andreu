@@ -23,8 +23,11 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ unique: true })
-  dni: string;
+  @Column({ unique: true, nullable: true }) 
+  telf?: number | null;  
+
+  @Column({ unique: true, nullable: true })
+  dni: string | null;
 
   @Column()
   age: number;

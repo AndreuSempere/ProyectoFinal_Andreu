@@ -8,6 +8,7 @@ class UserModel {
   final String surname;
   final String? dni;
   final int? age;
+  final int? telf;
 
   UserModel({
     this.id_user,
@@ -16,6 +17,7 @@ class UserModel {
     required this.surname,
     this.dni,
     this.age,
+    this.telf,
   });
 
   static UserModel fromUserCredential(UserCredential userCredentials) {
@@ -34,6 +36,7 @@ class UserModel {
       surname: json['surname'] as String,
       dni: json['dni'] as String?,
       age: json['age'] as int?,
+      telf: json['telf'] as int?,
     );
   }
 
@@ -45,6 +48,7 @@ class UserModel {
       'surname': surname,
       'dni': dni,
       'age': age,
+      'telf': telf,
     };
   }
 
@@ -55,7 +59,8 @@ class UserModel {
       surname: surname,
       email: email,
       dni: dni,
-      age: age?.toString(),
+      age: age,
+      telf: telf,
     );
   }
 }

@@ -31,8 +31,17 @@ class _TransactionPageState extends State<TransactionPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppLocalizations.of(context)!.titletransactionpage),
+        backgroundColor: const Color.fromARGB(255, 143, 193, 226),
+        title: const Text(
+          'Bankify',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: Colors.white,
+          ),
+        ),
         centerTitle: true,
+        elevation: 5,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -26,14 +26,27 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<Failure, Msg>> signUp(String email, String password) async {
+  Future<Either<String, Msg>> signUp(String name, String surname, String email,
+      String password, String dni, int age) async {
     try {
+      final response = await dataSource.registerInBackend(
+        name,
+        surname,
+        email,
+        password,
+        age,
+      );
+
+      if (!response) {
+        return Left('Error al registrar la cuenta.');
+      }
+
       await dataSource.signUp(email, password);
       await sharedPreferences.setString(_userKey, email);
 
       return const Right(Msg());
     } catch (e) {
-      return Left(AuthFailure());
+      return Left('Fallo al crear la cuenta: $e');
     }
   }
 
@@ -71,17 +84,6 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<String, Msg>> newUser(String name, String surname, String email,
-      String password, String dni, String age) async {
-    try {
-      await dataSource.newUser(name, surname, email, password, dni, age);
-      return const Right(Msg());
-    } catch (e) {
-      return Left('Fallo al crear la cuenta: $e');
-    }
-  }
-
-  @override
   Future<Either<Failure, UserEntity>> getUserInfo(String email) async {
     try {
       final userModel = await dataSource.getUserInfo(email);
@@ -94,12 +96,12 @@ class SignInRepositoryImpl implements SignInRepository {
 
   @override
   Future<Either<String, Msg>> updateUser(int idUser, String name,
-      String surname, String email, String dni, String age) async {
+      String surname, String email, String dni, int age, int telf) async {
     try {
-      await dataSource.updateUser(idUser, name, surname, email, dni, age);
+      await dataSource.updateUser(idUser, name, surname, email, dni, age, telf);
       return const Right(Msg());
     } catch (e) {
-      return Left('Fallo al crear la cuenta: $e');
+      return Left('Fallo al actualizar la cuenta: $e');
     }
   }
 }

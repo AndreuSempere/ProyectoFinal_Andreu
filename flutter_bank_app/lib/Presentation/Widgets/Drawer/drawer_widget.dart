@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Edit%20User/update_user_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/EditUser/update_user_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/privacidad_drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Logout/alert_logout_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

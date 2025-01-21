@@ -12,6 +12,33 @@ class FirebaseAuthDataSource {
 
   FirebaseAuthDataSource({required this.auth});
 
+  Future<bool> registerInBackend(String name, String surname, String email,
+      String password, int age) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:8080/Users'),
+        headers: {'Content-Type': 'application/json'},
+        body: '''
+        {
+          "name": "$name",
+          "surname": "$surname",
+          "email": "$email",
+          "password": "$password",
+          "age": $age
+        }
+        ''',
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return true;
+      }
+
+      throw Exception('Error en el backend: ${response.body}');
+    } catch (e) {
+      throw Exception('Fallo al registrar en el backend: $e');
+    }
+  }
+
   Future<UserModel> signUp(String email, String password) async {
     try {
       UserCredential userCredentials =
@@ -62,36 +89,9 @@ class FirebaseAuthDataSource {
     }
   }
 
-  Future<void> newUser(String name, String surname, String email,
-      String password, String dni, String age) async {
-    try {
-      final response = await http.post(
-        Uri.parse('http://192.168.18.26:8080/Users'),
-        headers: {'Content-Type': 'application/json'},
-        body: '''
-        {
-          "name": "$name",
-          "surname": "$surname",
-          "email": "$email",
-          "password": "$password",
-          "dni": "$dni",
-          "age": "$age"
-        }
-        ''',
-      );
-
-      if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception(
-            'Error al crear usuario en el backend: ${response.body}');
-      }
-    } catch (e) {
-      throw Exception("Error al crear el usuario: $e");
-    }
-  }
-
   Future<UserModel> getUserInfo(String email) async {
-    final response = await http
-        .get(Uri.parse('http://192.168.18.26:8080/users/user/$email'));
+    final response =
+        await http.get(Uri.parse('http://localhost:8080/users/user/$email'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> userJson = json.decode(response.body);
@@ -102,10 +102,10 @@ class FirebaseAuthDataSource {
   }
 
   Future<void> updateUser(int idUser, String name, String surname, String email,
-      String dni, String age) async {
+      String dni, int age, int telf) async {
     try {
       final response = await http.put(
-        Uri.parse('http://192.168.18.26:8080/Users/$idUser'),
+        Uri.parse('http://localhost:8080/Users/$idUser'),
         headers: {'Content-Type': 'application/json'},
         body: '''
         {
@@ -113,7 +113,8 @@ class FirebaseAuthDataSource {
           "surname": "$surname",
           "email": "$email",
           "dni": "$dni",
-          "age": "$age"
+          "age": "$age",
+          "telf": "$telf"
         }
         ''',
       );

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Transactions/transaction_page_screen.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Transactions/add_money.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/Bizum/bizum_page_widgets.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/Transactions/transaction_action_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/AddMoney/add_money.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/delete_account_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,9 +66,7 @@ class ActionsAccountWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => AddMoneyPage(
-                    accountId: accountId,
-                  ),
+                  builder: (context) => BizumPage(),
                 ),
               );
             },

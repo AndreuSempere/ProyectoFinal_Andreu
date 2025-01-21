@@ -9,14 +9,14 @@ class PlantillaAddTextField extends StatelessWidget {
   final String? Function(String?)? validator;
 
   const PlantillaAddTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.label,
     required this.icon,
     this.validatorMsg,
     this.keyboardType = TextInputType.text,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +32,10 @@ class PlantillaAddTextField extends StatelessWidget {
         ),
         validator: (value) {
           if (validator != null) {
-            return validator!(
-                value); // Usa el validador personalizado si existe
+            return validator!(value);
           }
           if (value == null || value.isEmpty) {
-            return validatorMsg; // Usa el mensaje predeterminado
+            return validatorMsg;
           }
           return null;
         },

@@ -39,16 +39,11 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
       final String email = _emailController.text;
       final String password = _passwordController.text;
       final String dni = _dniController.text;
-      final String age = _ageController.text;
-
-      context.read<LoginBloc>().add(RegisterButtonPressed(
-            email: email,
-            password: password,
-          ));
+      final int age = int.parse(_ageController.text);
 
       context
           .read<LoginBloc>()
-          .add(NewUserEvent(name, surname, email, password, dni, age));
+          .add(RegisterButtonPressed(name, surname, email, password, dni, age));
 
       await Future.delayed(const Duration(seconds: 1));
 

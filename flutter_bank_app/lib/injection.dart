@@ -12,11 +12,10 @@ import 'package:flutter_bank_app/Domain/Usecases/Accounts/create_account_usecase
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/delete_account_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/get_accounts_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/fetch_user_data_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/Auth/new_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_out_user_usecase.dart';
-import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_up_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/update_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_transaction_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/get_transactions_usecase.dart';
@@ -65,7 +64,6 @@ Future<void> configureDependencies() async {
       () => FetchUserDataUseCase(sl()));
   sl.registerLazySingleton<ResetPasswordUseCase>(
       () => ResetPasswordUseCase(sl()));
-  sl.registerLazySingleton<NewUserUseCase>(() => NewUserUseCase(sl()));
   sl.registerLazySingleton<UpdateUserUsecase>(() => UpdateUserUsecase(sl()));
 
   sl.registerLazySingleton<GetAccountUseCase>(() => GetAccountUseCase(sl()));
@@ -82,13 +80,11 @@ Future<void> configureDependencies() async {
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
-      signInRepository: sl<SignInRepository>(),
       signInUserUseCase: sl<SigninUserUseCase>(),
       signUpUserUseCase: sl<SignupUserUseCase>(),
       signOutUserUseCase: sl<SignoutUserUseCase>(),
       getCurrentUserUseCase: sl<FetchUserDataUseCase>(),
       resetPasswordUseCase: sl<ResetPasswordUseCase>(),
-      newUserUseCase: sl<NewUserUseCase>(),
       updateUserUseCase: sl<UpdateUserUsecase>()));
 
   sl.registerFactory<AccountBloc>(() => AccountBloc(

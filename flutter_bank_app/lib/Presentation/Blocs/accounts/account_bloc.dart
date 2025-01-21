@@ -4,7 +4,6 @@ import 'package:flutter_bank_app/Domain/Usecases/Accounts/delete_account_usecase
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/get_accounts_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_state.dart';
-// import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountBloc extends Bloc<AccountsEvent, AccountState> {
@@ -48,7 +47,7 @@ class AccountBloc extends Bloc<AccountsEvent, AccountState> {
             accounts: updatedAccount,
             isLoading: false,
           ));
-          // datosAccount();
+          datosAccount(event.account.idUser);
         },
       );
     });
@@ -68,14 +67,12 @@ class AccountBloc extends Bloc<AccountsEvent, AccountState> {
             return account.idUser != event.id;
           }).toList();
           emit(state.copyWith(accounts: updatedAccounts));
-          // datosAccount();
+          datosAccount(event.id);
         },
       );
     });
   }
-  // void datosAccount() {
-  //   final myLoginState = context.read<LoginBloc>().state;
-  //   final userid = myLoginState.user?.idUser;
-  //   add(GetAllAccount(id: userid));
-  // }
+  void datosAccount(id) {
+    add(GetAllAccount(id: id));
+  }
 }

@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { Accounts } from '../accounts/accounts.entity';
 import { Transaction } from './transactions.entity';
 import { CreateTransactionDto } from './transactions.dto';
-import { AccountsService } from '../accounts/accounts.service';
 
 @Injectable()
 export class TransactionsService {
@@ -13,7 +12,6 @@ export class TransactionsService {
     private readonly transactionsRepository: Repository<Transaction>,
     @InjectRepository(Accounts)
     private readonly accountsRepository: Repository<Accounts>,
-    private readonly accountsService: AccountsService,
 
   
   ) {}
@@ -34,9 +32,9 @@ export class TransactionsService {
     return result;
   }
 
-    async createTransaction(
-      createTransactionDto: CreateTransactionDto,
-    ): Promise<{ message: string }> {
+  async createTransaction(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<{ message: string }> {
       const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
     
       const sourceAccount = await this.accountsRepository.findOne({
@@ -100,6 +98,74 @@ export class TransactionsService {
       }
     
       return { message: 'Transacción procesada con éxito' };
+    }
+
+    async bizumTransaction(
+      createTransactionDto: CreateTransactionDto,
+    ): Promise<{ message: string }> {
+      const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
+    
+      const sourceAccount = await this.accountsRepository.findOne({
+        where: { id_cuenta: accountId },
+      });
+    
+      if (!sourceAccount) {
+        throw new Error('Cuenta origen no encontrada');
+      }
+    
+      if (tipo === 'ingreso') {
+        sourceAccount.saldo += cantidad;
+      } else if (tipo === 'gasto' && sourceAccount.saldo < cantidad) {
+        throw new Error('Fondos insuficientes en la cuenta origen');
+      } else if (tipo === 'gasto') {
+        sourceAccount.saldo -= cantidad;
+      } else {
+        throw new Error('Tipo de transacción inválido');
+      }
+    
+      let targetAccount = null;
+      if (targetAccountId) {
+        targetAccount = await this.accountsRepository.findOne({
+          where: { id_cuenta: targetAccountId },
+        });
+    
+        if (!targetAccount) {
+          throw new Error('Cuenta destino no encontrada');
+        }
+    
+        if (tipo === 'gasto') {
+          targetAccount.saldo += cantidad;
+        }
+      }
+    
+      const sourceTransaction = this.transactionsRepository.create({
+        account: { id_cuenta: accountId },
+        cantidad,
+        tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
+        descripcion: descripcion || 'Transferencia',
+      });
+    
+      let targetTransaction = null;
+      if (targetAccount) {
+        targetTransaction = this.transactionsRepository.create({
+          account: { id_cuenta: targetAccountId },
+          cantidad,
+          tipo: 'ingreso',
+          descripcion: descripcion || 'Bizum recibido',
+        });
+      }
+    
+      await this.transactionsRepository.save(sourceTransaction);
+      if (targetTransaction) {
+        await this.transactionsRepository.save(targetTransaction);
+      }
+    
+      await this.accountsRepository.save(sourceAccount);
+      if (targetAccount) {
+        await this.accountsRepository.save(targetAccount);
+      }
+    
+      return { message: 'Bizum procesado con éxito' };
     }
   
     async deleteTransaction(id: number): Promise<{ message: string }> {

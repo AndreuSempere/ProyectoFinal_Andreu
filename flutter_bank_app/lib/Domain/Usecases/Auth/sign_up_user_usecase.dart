@@ -1,13 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
-import 'package:flutter_bank_app/core/failure.dart';
 
 class SignupUserUseCase {
   final SignInRepository repository;
 
   SignupUserUseCase(this.repository);
 
-  Future<Either<Failure, void>> call(String email, String password) async {
-    return await repository.signUp(email, password);
+  Future<Either<String, void>> call(String name, String surname, String email,
+      String password, String dni, int age) async {
+    return await repository.signUp(name, surname, email, password, dni, age);
   }
 }

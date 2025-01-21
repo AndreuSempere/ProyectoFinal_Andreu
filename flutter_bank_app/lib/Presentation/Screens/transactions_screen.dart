@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/actions_account_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/actions_account_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/filtrer_transactions_widget.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Transactions/transactions_list_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/Transactions/transactions_list_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TransactionInfoPage extends StatelessWidget {
