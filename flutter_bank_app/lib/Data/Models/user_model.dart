@@ -7,7 +7,7 @@ class UserModel {
   final String name;
   final String surname;
   final String? dni;
-  final int? age;
+  final String? age;
   final int? telf;
 
   UserModel({
@@ -35,7 +35,7 @@ class UserModel {
       name: json['name'] as String,
       surname: json['surname'] as String,
       dni: json['dni'] as String?,
-      age: json['age'] as int?,
+      age: json['age'] as String?,
       telf: json['telf'] as int?,
     );
   }

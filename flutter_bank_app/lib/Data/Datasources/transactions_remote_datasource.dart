@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 abstract class TransactionsRemoteDataSource {
   Future<List<TransactionModel>> getAllTransactions();
   Future<bool> createdTransactions(TransactionModel transaction);
+  Future<bool> createdTransactionsBizum(TransactionModel transaction);
 }
 
 class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
@@ -15,7 +16,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   @override
   Future<List<TransactionModel>> getAllTransactions() async {
     final response =
-        await http.get(Uri.parse('http://localhost:8080/transaction'));
+        await http.get(Uri.parse('http://172.20.10.8:8080/transaction'));
     if (response.statusCode == 200) {
       final List<dynamic> accountsJson = json.decode(response.body);
       return accountsJson
@@ -29,7 +30,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   @override
   Future<bool> createdTransactions(TransactionModel transaction) async {
     final response = await http.post(
-      Uri.parse('http://localhost:8080/transaction'),
+      Uri.parse('http://172.20.10.8:8080/transaction'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(transaction.toJson()),
     );
@@ -39,6 +40,21 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
     } else {
       throw Exception(
           'Error al crear una transacción en el backend: ${response.body}');
+    }
+  }
+
+  @override
+  Future<bool> createdTransactionsBizum(TransactionModel transaction) async {
+    final response = await http.post(
+      Uri.parse('http://172.20.10.8:8080/transaction/bizum'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(transaction.toJson()),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return true;
+    } else {
+      throw Exception('Error al enviar el bizum: ${response.body}');
     }
   }
 }

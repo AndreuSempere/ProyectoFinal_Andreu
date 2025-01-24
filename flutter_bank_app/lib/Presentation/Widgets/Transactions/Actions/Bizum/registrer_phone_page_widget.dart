@@ -79,11 +79,9 @@ class RegisterPhonePage extends StatelessWidget {
                   final int? idUser = myLoginState.user!.idUser;
                   final String name = myLoginState.user!.name;
                   final String surname = myLoginState.user!.surname;
-                  final String dni = myLoginState.user!.dni!;
-                  final int? age = myLoginState.user!.age;
 
-                  context.read<LoginBloc>().add(UpdateUserEvent(
-                      idUser!, name, surname, email, dni, age!, telf));
+                  context.read<LoginBloc>().add(
+                      UpdateUserEvent(idUser!, name, surname, email, telf));
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

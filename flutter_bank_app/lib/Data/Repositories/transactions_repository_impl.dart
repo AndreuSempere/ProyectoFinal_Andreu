@@ -45,4 +45,31 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
       return Left('Fallo al crear la transaction: $e');
     }
   }
+
+  @override
+  Future<Either<String, Transaction>> createdTransactionsBizum(
+      Transaction transaction) async {
+    try {
+      final transactionModel = TransactionModel(
+        cantidad: transaction.cantidad,
+        tipo: transaction.tipo,
+        descripcion: transaction.descripcion,
+        account: transaction.account,
+        targetAccount: transaction.targetAccount,
+      );
+
+      await remoteDataSource.createdTransactionsBizum(transactionModel);
+      final createdTransaction = Transaction(
+        cantidad: transaction.cantidad,
+        tipo: transaction.tipo,
+        descripcion: transaction.descripcion,
+        account: transaction.account,
+        targetAccount: transaction.targetAccount,
+      );
+
+      return Right(createdTransaction);
+    } catch (e) {
+      return Left('Fallo al crear la transaction: $e');
+    }
+  }
 }

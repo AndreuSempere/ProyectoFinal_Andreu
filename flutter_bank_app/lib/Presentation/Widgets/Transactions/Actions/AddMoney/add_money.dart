@@ -2,19 +2,89 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
-import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/NFC/nfc_service.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/AddMoney/template_add_money_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class AddMoneyPage extends StatelessWidget {
+class AddMoneyPage extends StatefulWidget {
   final int accountId;
 
-  AddMoneyPage({super.key, required this.accountId});
+  const AddMoneyPage({super.key, required this.accountId});
 
+  @override
+  State<AddMoneyPage> createState() => _AddMoneyPageState();
+}
+
+class _AddMoneyPageState extends State<AddMoneyPage> {
   final _formKey = GlobalKey<FormState>();
   final _cantidadController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _cardNumberController = TextEditingController();
+
+  final NFCService _nfcService = NFCService();
+
+  bool setupComplete = false;
+  int setupStatusIndex = 0;
+  String setupMessage = "Initializing SDK..";
+  bool isScanning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeNFC();
+  }
+
+  Future<void> _initializeNFC() async {
+    setupStatusIndex = await _nfcService.checkNFCStatus();
+    setState(() {
+      setupMessage = setupStatusIndex == 0
+          ? "NFC no disponible"
+          : setupStatusIndex == 1
+              ? "Activa NFC y reinicia la app"
+              : "NFC listo para escanear";
+      setupComplete = true;
+    });
+  }
+
+  Future<void> _startCardScan() async {
+    if (isScanning) return;
+
+    setState(() {
+      isScanning = true;
+    });
+
+    final result = await _nfcService.initCardScanListener();
+    if (result['success'] == true) {
+      final cardData = result['cardData'];
+      final cardNumber = _nfcService.extractCardNumber(cardData);
+      final maskedCardNumber =
+          _nfcService.maskCardNumber(cardNumber); // Enmascarar aquí
+
+      setState(() {
+        _cardNumberController.text = maskedCardNumber;
+        isScanning = false;
+      });
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(result['error'] ?? "Error escaneando tarjeta")),
+        );
+      }
+      setState(() {
+        isScanning = false;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _cantidadController.dispose();
+    _descriptionController.dispose();
+    _cardNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,55 +128,89 @@ class AddMoneyPage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 24),
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  elevation: 4,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      children: [
-                        PlantillaAddTextField(
-                          controller: _cantidadController,
-                          label: AppLocalizations.of(context)!.textcantidadadd,
-                          icon: Icons.monetization_on,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Este campo no puede estar vacío';
-                            }
-                            final cantidad = int.tryParse(value);
-                            if (cantidad == null || cantidad <= 0) {
-                              return 'Introduce una cantidad válida (entero positivo)';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        PlantillaAddTextField(
-                          controller: _descriptionController,
-                          label: AppLocalizations.of(context)!.textconceptoadd,
-                          icon: Icons.description,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Este campo no puede estar vacío';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
+                if (!setupComplete)
+                  const Center(child: CircularProgressIndicator())
+                else if (setupStatusIndex != 2)
+                  Center(
+                    child: Text(
+                      setupMessage,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  )
+                else
+                  Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          PlantillaAddTextField(
+                            controller: _cantidadController,
+                            label:
+                                AppLocalizations.of(context)!.textcantidadadd,
+                            icon: Icons.monetization_on,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Este campo no puede estar vacío';
+                              }
+                              final cantidad = int.tryParse(value);
+                              if (cantidad == null || cantidad <= 0) {
+                                return 'Introduce una cantidad válida (entero positivo)';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          PlantillaAddTextField(
+                            controller: _descriptionController,
+                            label:
+                                AppLocalizations.of(context)!.textconceptoadd,
+                            icon: Icons.description,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Este campo no puede estar vacío';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          PlantillaAddTextField(
+                            controller: _cardNumberController,
+                            label: "Número de tarjeta",
+                            icon: Icons.credit_card,
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Por favor, escanea una tarjeta válida.';
+                              }
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: !setupComplete || isScanning
+                                ? null
+                                : _startCardScan,
+                            icon: const Icon(Icons.nfc),
+                            label: isScanning
+                                ? const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  )
+                                : const Text("Escanear tarjeta"),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
                 const SizedBox(height: 32),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton.icon(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Navigator.of(context).pop();
-                      },
+                      onPressed: () => Navigator.of(context).pop(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.redAccent,
                         shape: RoundedRectangleBorder(
@@ -128,24 +232,18 @@ class AddMoneyPage extends StatelessWidget {
                           final cantidad = int.parse(_cantidadController.text);
                           final descripcion = _descriptionController.text;
 
-                          const String tipo = "ingreso";
-
                           final newTransaction = Transaction(
-                            account: accountId,
+                            account: widget.accountId,
                             cantidad: cantidad,
                             descripcion: descripcion,
-                            tipo: tipo,
+                            tipo: "ingreso",
                           );
 
                           context
                               .read<TransactionBloc>()
                               .add(CreateTransactions(newTransaction));
 
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const HomePage()),
-                          );
+                          Navigator.of(context).pop();
                         }
                       },
                       style: ElevatedButton.styleFrom(

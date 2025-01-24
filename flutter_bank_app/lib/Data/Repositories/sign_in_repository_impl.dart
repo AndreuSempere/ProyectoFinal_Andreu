@@ -3,21 +3,28 @@ import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart'
 import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bank_app/core/unit.dart';
 
 class SignInRepositoryImpl implements SignInRepository {
   final FirebaseAuthDataSource dataSource;
   final SharedPreferences sharedPreferences;
+  final FlutterSecureStorage secureStorage;
 
-  SignInRepositoryImpl(this.dataSource, this.sharedPreferences);
+  SignInRepositoryImpl(
+      this.dataSource, this.sharedPreferences, this.secureStorage);
 
   static const String _userKey = 'user_email';
   @override
   Future<Either<Failure, Msg>> signIn(String email, String password) async {
     try {
       await dataSource.signIn(email, password);
-      await sharedPreferences.setString(_userKey, email);
+      await sharedPreferences.setString(
+        _userKey,
+        email,
+      );
+      // await secureStorage.write(key: 'user_password', value: password);
 
       return const Right(Msg());
     } catch (e) {
@@ -27,15 +34,10 @@ class SignInRepositoryImpl implements SignInRepository {
 
   @override
   Future<Either<String, Msg>> signUp(String name, String surname, String email,
-      String password, String dni, int age) async {
+      String password, String dni, String age) async {
     try {
       final response = await dataSource.registerInBackend(
-        name,
-        surname,
-        email,
-        password,
-        age,
-      );
+          name, surname, email, password, dni, age);
 
       if (!response) {
         return Left('Error al registrar la cuenta.');
@@ -66,7 +68,6 @@ class SignInRepositoryImpl implements SignInRepository {
     try {
       await dataSource.logout();
       await sharedPreferences.remove(_userKey);
-
       return const Right(Msg());
     } catch (e) {
       return Left(AuthFailure());
@@ -95,10 +96,10 @@ class SignInRepositoryImpl implements SignInRepository {
   }
 
   @override
-  Future<Either<String, Msg>> updateUser(int idUser, String name,
-      String surname, String email, String dni, int age, int telf) async {
+  Future<Either<String, Msg>> updateUser(
+      int idUser, String name, String surname, String email, int telf) async {
     try {
-      await dataSource.updateUser(idUser, name, surname, email, dni, age, telf);
+      await dataSource.updateUser(idUser, name, surname, email, telf);
       return const Right(Msg());
     } catch (e) {
       return Left('Fallo al actualizar la cuenta: $e');

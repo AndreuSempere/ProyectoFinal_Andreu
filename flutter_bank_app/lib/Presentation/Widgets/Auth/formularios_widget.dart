@@ -137,12 +137,20 @@ void _showSignUpDialog(BuildContext context) {
     },
     pageBuilder: (context, _, __) => Center(
       child: Container(
-        height: 620,
+        height: 680,
         margin: const EdgeInsets.symmetric(horizontal: 16),
         padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.95),
+          color: Colors.white,
           borderRadius: const BorderRadius.all(Radius.circular(40)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: const InitialPage(),
       ),

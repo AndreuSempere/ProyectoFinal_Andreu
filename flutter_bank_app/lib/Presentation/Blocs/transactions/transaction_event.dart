@@ -23,3 +23,11 @@ class GetAllTransactions extends TransactionsEvent {
   @override
   List<Object?> get props => [filters];
 }
+
+class CreateTransactionsBizum extends TransactionsEvent {
+  final Transaction transaction;
+
+  CreateTransactionsBizum(
+    this.transaction,
+  );
+}

@@ -1,6 +1,6 @@
 import 'dart:async';
 
-class Validators{
+mixin Validators {
   final validateCardHolderName = StreamTransformer<String, String>.fromHandlers(
       handleData: (cardHolderName, sink) {
     RegExp('[a-zA-Z]').hasMatch(cardHolderName)
@@ -10,9 +10,7 @@ class Validators{
 
   final validateCardNumber = StreamTransformer<String, String>.fromHandlers(
       handleData: (cardNumber, sink) {
-    //1st Regular Expression to Validate Credit Card Number
     RegExp(r'^(?:4[0-9]{12}(?:[0-9]{3})?|[25][1-7][0-9]{14}|6(?:011|5[0-9][0-9])[0-9]{12}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|(?:2131|1800|35\d{3})\d{11})$')
-            //2nd Regular Expression to remove white spaces
             .hasMatch(cardNumber.replaceAll(RegExp(r'\s+\b|\b\s'), ''))
         ? sink.add(cardNumber)
         : sink.addError('Enter a valid card number');
@@ -49,6 +47,4 @@ class Validators{
       sink.addError('Invalid cvv');
     }
   });
-
-
 }

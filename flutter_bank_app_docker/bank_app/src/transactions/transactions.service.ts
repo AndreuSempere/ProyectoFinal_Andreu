@@ -36,7 +36,6 @@ export class TransactionsService {
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
       const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
-    
       const sourceAccount = await this.accountsRepository.findOne({
         where: { id_cuenta: accountId },
       });
@@ -104,10 +103,11 @@ export class TransactionsService {
       createTransactionDto: CreateTransactionDto,
     ): Promise<{ message: string }> {
       const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
-    
-      const sourceAccount = await this.accountsRepository.findOne({
-        where: { id_cuenta: accountId },
-      });
+      const sourceAccount = await this.accountsRepository
+        .createQueryBuilder('account')
+        .innerJoinAndSelect('account.id_user', 'user')
+        .where('user.telf = :telf', { telf: accountId })
+        .getOne();
     
       if (!sourceAccount) {
         throw new Error('Cuenta origen no encontrada');
@@ -124,10 +124,13 @@ export class TransactionsService {
       }
     
       let targetAccount = null;
+    
       if (targetAccountId) {
-        targetAccount = await this.accountsRepository.findOne({
-          where: { id_cuenta: targetAccountId },
-        });
+        targetAccount = await this.accountsRepository
+          .createQueryBuilder('account')
+          .innerJoinAndSelect('account.id_user', 'user')
+          .where('user.telf = :telf', { telf: targetAccountId })
+          .getOne();
     
         if (!targetAccount) {
           throw new Error('Cuenta destino no encontrada');
@@ -139,16 +142,17 @@ export class TransactionsService {
       }
     
       const sourceTransaction = this.transactionsRepository.create({
-        account: { id_cuenta: accountId },
+        account: { id_cuenta: sourceAccount.id_cuenta },
         cantidad,
         tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
         descripcion: descripcion || 'Transferencia',
       });
     
       let targetTransaction = null;
+    
       if (targetAccount) {
         targetTransaction = this.transactionsRepository.create({
-          account: { id_cuenta: targetAccountId },
+          account: { id_cuenta: targetAccount.id_cuenta },
           cantidad,
           tipo: 'ingreso',
           descripcion: descripcion || 'Bizum recibido',
@@ -159,14 +163,14 @@ export class TransactionsService {
       if (targetTransaction) {
         await this.transactionsRepository.save(targetTransaction);
       }
-    
-      await this.accountsRepository.save(sourceAccount);
+          await this.accountsRepository.save(sourceAccount);
       if (targetAccount) {
         await this.accountsRepository.save(targetAccount);
       }
     
       return { message: 'Bizum procesado con éxito' };
     }
+    
   
     async deleteTransaction(id: number): Promise<{ message: string }> {
       const result = await this.transactionsRepository.delete(id);

@@ -34,7 +34,7 @@ class RegisterButtonPressed extends LoginEvent {
   final String email;
   final String password;
   final String dni;
-  final int age;
+  final String age;
 
   RegisterButtonPressed(
       this.name, this.surname, this.email, this.password, this.dni, this.age);
@@ -47,8 +47,6 @@ class UpdateUserEvent extends LoginEvent {
   final String name;
   final String surname;
   final String email;
-  final String dni;
-  final int age;
   final int telf;
 
   UpdateUserEvent(
@@ -56,8 +54,6 @@ class UpdateUserEvent extends LoginEvent {
     this.name,
     this.surname,
     this.email,
-    this.dni,
-    this.age,
     this.telf,
   );
 }

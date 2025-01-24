@@ -35,7 +35,7 @@ class PlantillaTextField extends StatelessWidget {
             return validatorMsg;
           }
           if (customValidator != null) {
-            return customValidator!(value);
+            return customValidator!(value); // Aquí se llama a customValidator
           }
           return null;
         },

@@ -2,6 +2,7 @@ import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Card/ui/app.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/NFC/read_screen.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:go_router/go_router.dart';
 
@@ -14,6 +15,8 @@ final GoRouter router = GoRouter(
       ),
       GoRoute(path: '/home', builder: (context, state) => const HomePage()),
       GoRoute(path: '/add_card', builder: (context, state) => const App()),
+      GoRoute(
+          path: '/readScreen', builder: (context, state) => const ReadScreen()),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();

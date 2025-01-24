@@ -5,7 +5,7 @@ class UserEntity {
   final String email;
   final String? password;
   final String? dni;
-  final int? age;
+  final String? age;
   final int? telf;
 
   UserEntity({

@@ -6,4 +6,6 @@ abstract class TransactionsRepository {
   Future<Either<Failure, List<Transaction>>> getTransactions();
   Future<Either<String, Transaction>> createdTransaction(
       Transaction transaction);
+  Future<Either<String, Transaction>> createdTransactionsBizum(
+      Transaction transaction);
 }

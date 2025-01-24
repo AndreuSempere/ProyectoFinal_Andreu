@@ -30,7 +30,7 @@ export class User {
   dni: string | null;
 
   @Column()
-  age: number;
+  age: string;
 
   @OneToMany(() => Accounts, (accounts) => accounts.id_user)
   accounts: Accounts[];

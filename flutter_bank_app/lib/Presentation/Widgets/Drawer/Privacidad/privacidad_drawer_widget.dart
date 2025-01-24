@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/biometric_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/change_password_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/change_language_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -42,7 +43,11 @@ class PrivacidadDrawer extends StatelessWidget {
             label: AppLocalizations.of(context)!.activarHuellaID,
             icon: Icons.fingerprint,
             onPressed: () {
-              Navigator.of(context).pop();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => BiometricSettingsPage(),
+                ),
+              );
             },
           ),
           const SizedBox(height: 16),

@@ -100,8 +100,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<UpdateUserEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
 
-      final result = await updateUserUseCase(event.idUser, event.name,
-          event.surname, event.email, event.dni, event.age, event.telf);
+      final result = await updateUserUseCase(
+          event.idUser, event.name, event.surname, event.email, event.telf);
 
       result.fold(
           (errorMessage) => emit(state.copyWith(

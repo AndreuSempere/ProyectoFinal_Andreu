@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SendMoneyPage extends StatelessWidget {
   final TextEditingController _targetPhoneController = TextEditingController();
@@ -9,6 +14,9 @@ class SendMoneyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final myUserState = context.read<LoginBloc>().state;
+    final telfUser = myUserState.user!.telf;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 143, 193, 226),
@@ -42,6 +50,14 @@ class SendMoneyPage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
+              onChanged: (value) {
+                if (value.isNotEmpty && !RegExp(r'^\d+$').hasMatch(value)) {
+                  _targetPhoneController.text =
+                      value.replaceAll(RegExp(r'[^\d]'), '');
+                  _targetPhoneController.selection = TextSelection.fromPosition(
+                      TextPosition(offset: _targetPhoneController.text.length));
+                }
+              },
             ),
             const SizedBox(height: 20),
             TextField(
@@ -69,12 +85,13 @@ class SendMoneyPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  final targetPhone = _targetPhoneController.text;
-                  final amount = _amountController.text;
+                  final targetPhoneText = _targetPhoneController.text;
+                  final amountText = _amountController.text;
                   final concept = _conceptController.text;
 
-                  if (targetPhone.isEmpty ||
-                      amount.isEmpty ||
+                  // Validar y convertir los campos
+                  if (targetPhoneText.isEmpty ||
+                      amountText.isEmpty ||
                       concept.isEmpty) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
@@ -83,6 +100,30 @@ class SendMoneyPage extends StatelessWidget {
                     );
                     return;
                   }
+
+                  final targetPhone = int.tryParse(targetPhoneText);
+                  final amount = int.tryParse(amountText);
+
+                  if (targetPhone == null || amount == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text(
+                              'Por favor, introduce valores numéricos válidos.')),
+                    );
+                    return;
+                  }
+
+                  final newTransaction = Transaction(
+                    account: telfUser!,
+                    targetAccount: targetPhone,
+                    cantidad: amount,
+                    descripcion: concept,
+                    tipo: 'gasto',
+                  );
+
+                  context
+                      .read<TransactionBloc>()
+                      .add(CreateTransactionsBizum(newTransaction));
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

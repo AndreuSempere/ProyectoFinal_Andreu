@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Config/router/routes.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<LanguageBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<BiometricAuthBloc>(),
         ),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(

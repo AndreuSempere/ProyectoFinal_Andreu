@@ -102,8 +102,6 @@ class DialogoState extends State<EditarUser> {
 
               final String name = _nameController.text;
               final String surname = _surnameController.text;
-              final String dni = _dniController.text;
-              final int age = int.parse(_edadController.text);
 
               final myLoginState = context.read<LoginBloc>().state;
               final String email = myLoginState.user!.email;
@@ -111,8 +109,7 @@ class DialogoState extends State<EditarUser> {
               final int telf = 0;
 
               context.read<LoginBloc>().add(
-                    UpdateUserEvent(
-                        idUser!, name, surname, email, dni, age, telf),
+                    UpdateUserEvent(idUser!, name, surname, email, telf),
                   );
 
               Navigator.of(context).pop();

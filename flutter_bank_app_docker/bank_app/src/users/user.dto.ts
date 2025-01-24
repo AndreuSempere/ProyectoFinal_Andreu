@@ -33,8 +33,8 @@ export class CreateUserDto {
   @Length(1, 9)
   dni: string | null ;
 
-  @IsInt()
-  edad: number;
+  @IsString()
+  edad: string;
 }
 
 export class UpdateUserDto {
@@ -68,7 +68,7 @@ export class UpdateUserDto {
   @IsOptional()
   dni?: string;
 
-  @IsInt()
+  @IsString()
   @IsOptional()
-  edad?: number;
+  edad?: string;
 }

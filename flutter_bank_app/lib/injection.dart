@@ -17,12 +17,15 @@ import 'package:flutter_bank_app/Domain/Usecases/Auth/reset_password_usecase.dar
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_in_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/sign_out_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Auth/update_user_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_bizum_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_transaction_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/get_transactions_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +36,9 @@ Future<void> configureDependencies() async {
   // SharedPreferences
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+
+  const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  sl.registerLazySingleton<FlutterSecureStorage>(() => secureStorage);
 
   // HTTP Client
   sl.registerLazySingleton<http.Client>(() => http.Client());
@@ -50,7 +56,9 @@ Future<void> configureDependencies() async {
 
   // Repository
   sl.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl(
-      sl<FirebaseAuthDataSource>(), sl<SharedPreferences>()));
+      sl<FirebaseAuthDataSource>(),
+      sl<SharedPreferences>(),
+      sl<FlutterSecureStorage>()));
   sl.registerLazySingleton<AccountsRepository>(
       () => AccountRepositoryImpl(sl()));
   sl.registerLazySingleton<TransactionsRepository>(
@@ -77,7 +85,8 @@ Future<void> configureDependencies() async {
 
   sl.registerLazySingleton<CreateTransactionUseCase>(
       () => CreateTransactionUseCase(sl()));
-
+  sl.registerLazySingleton<CreateTransactionBizumUseCase>(
+      () => CreateTransactionBizumUseCase(sl()));
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
       signInUserUseCase: sl<SigninUserUseCase>(),
@@ -96,7 +105,13 @@ Future<void> configureDependencies() async {
   sl.registerFactory<TransactionBloc>(() => TransactionBloc(
         createTransactionUsecase: sl<CreateTransactionUseCase>(),
         getTransactionsUsecase: sl<GetTransactionsUseCase>(),
+        createTransactionBizumUsecase: sl<CreateTransactionBizumUseCase>(),
       ));
 
   sl.registerFactory<LanguageBloc>(() => LanguageBloc());
+
+  sl.registerFactory<BiometricAuthBloc>(() => BiometricAuthBloc(
+        sharedPreferences: sl<SharedPreferences>(),
+        secureStorage: sl<FlutterSecureStorage>(),
+      ));
 }
