@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/EditUser/update_user_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/privacidad_drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Logout/alert_logout_widget.dart';
@@ -224,8 +226,12 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   ),
                   onTap: () async {
                     final resultado = await _mostrarAlerta(context);
+
                     if (resultado == "Aceptar") {
                       context.read<LoginBloc>().add(LogoutButtonPressed());
+                      context
+                          .read<BiometricAuthBloc>()
+                          .add(LoadBiometricStatus());
                       context.go('/login');
                     }
                   },

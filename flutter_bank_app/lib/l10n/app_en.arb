@@ -351,5 +351,16 @@
   "chooseFromAccount": "Choose the from account",
   "selectFromAccount": "Select the from account",
   "chooseToAccount": "Choose the to account",
-  "selectToAccount": "Select the to account"
+  "selectToAccount": "Select the to account",
+  "biometricSettingsTitle": "Biometric Settings",
+  "biometricEnabled": "Biometric Authentication is enabled",
+  "biometricDisabled": "Biometric Authentication is disabled",
+  "enableBiometric": "Enable Biometric",
+  "disableBiometric": "Disable Biometric",
+  "unexpectedState": "Unexpected State",
+  "unexpectedError": "Unexpected Error",
+  "textbuttonloginBiometrico": "Login with Biometric",
+  "biometricAuthReason": "Please authenticate using biometrics to proceed.",
+  "biometricAuthFailed": "Biometric authentication failed. Please try again.",
+  "loginSuccess": "Login successful"
 }

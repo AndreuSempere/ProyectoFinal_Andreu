@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,6 +24,8 @@ class _FilterDialogState extends State<FilterDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = context.read<LoginBloc>().state.user!.idUser!;
+
     return AlertDialog(
       title: Text(AppLocalizations.of(context)!.titlefiltrer),
       content: SingleChildScrollView(
@@ -103,7 +106,10 @@ class _FilterDialogState extends State<FilterDialog> {
             filters.removeWhere(
                 (key, value) => value == null || value.toString().isEmpty);
 
-            context.read<TransactionBloc>().add(GetAllTransactions(filters));
+            context
+                .read<TransactionBloc>()
+                .add(GetAllTransactions(id: userId, filters: filters));
+
             Navigator.of(context).pop();
           },
           child: Text(

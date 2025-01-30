@@ -25,20 +25,17 @@ Future<void> main() async {
   }
 
   try {
-    if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
-      debugPrint('Firebase inicializado correctamente.');
-    } else {
-      debugPrint('Firebase ya estaba inicializado.');
-    }
+    await Firebase.initializeApp(
+      name: 'bankifyApp',
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    debugPrint('Firebase inicializado correctamente.');
   } catch (e, stack) {
     debugPrint('Error al inicializar Firebase: $e');
     debugPrint('$stack');
   }
 
-  configureDependencies();
+  await configureDependencies();
   runApp(const MyApp());
 }
 

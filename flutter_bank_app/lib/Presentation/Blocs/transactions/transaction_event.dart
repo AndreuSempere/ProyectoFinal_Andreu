@@ -16,12 +16,13 @@ class CreateTransactions extends TransactionsEvent {
 }
 
 class GetAllTransactions extends TransactionsEvent {
+  final int id;
   final Map<String, dynamic> filters;
 
-  GetAllTransactions([this.filters = const {}]);
+  GetAllTransactions({required this.id, this.filters = const {}});
 
   @override
-  List<Object?> get props => [filters];
+  List<Object?> get props => [id, filters];
 }
 
 class CreateTransactionsBizum extends TransactionsEvent {

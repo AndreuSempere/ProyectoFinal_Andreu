@@ -8,7 +8,7 @@ Future<Object?> customSigninDialog(BuildContext context,
     {required ValueChanged onClosed}) {
   return showGeneralDialog(
     context: context,
-    barrierDismissible: true,
+    barrierDismissible: false,
     barrierLabel: "Sign In",
     transitionDuration: const Duration(milliseconds: 400),
     transitionBuilder: (context, animation, secondaryAnimation, child) {
@@ -23,7 +23,8 @@ Future<Object?> customSigninDialog(BuildContext context,
     pageBuilder: (context, _, __) {
       return Center(
         child: Container(
-          height: 620,
+          constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.9),
           margin: const EdgeInsets.symmetric(horizontal: 16),
           padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
           decoration: BoxDecoration(
@@ -32,85 +33,102 @@ Future<Object?> customSigninDialog(BuildContext context,
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
-            resizeToAvoidBottomInset: false,
+            resizeToAvoidBottomInset: true,
             body: Stack(
               clipBehavior: Clip.none,
               children: [
-                Column(
-                  children: [
-                    const Text(
-                      "Sign In",
-                      style: TextStyle(fontSize: 34, fontFamily: "Poppins"),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Text(
-                        AppLocalizations.of(context)!.textloginprompt,
-                        textAlign: TextAlign.center,
+                SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  padding: const EdgeInsets.only(bottom: 32),
+                  child: Column(
+                    children: [
+                      const Text(
+                        "Sign In",
+                        style: TextStyle(fontSize: 23, fontFamily: "Poppins"),
                       ),
-                    ),
-                    const SignInForm(),
-                    ElevatedButton(
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          AppLocalizations.of(context)!.textloginprompt,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      const SignInForm(),
+                      const SizedBox(height: 18),
+                      ElevatedButton(
                         onPressed: () {
                           _showResetPasswordDialog(context);
                         },
-                        child: Text(
-                            AppLocalizations.of(context)!.textforgotpassword)),
-                    const SizedBox(height: 10),
-                    const Row(
-                      children: [
-                        Expanded(
-                          child: Divider(),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            "OR",
-                            style: TextStyle(color: Colors.black26),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 20),
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(25),
+                              bottomRight: Radius.circular(25),
+                              bottomLeft: Radius.circular(25),
+                            ),
                           ),
                         ),
-                        Expanded(
-                          child: Divider(),
+                        child: Text(
+                            AppLocalizations.of(context)!.textforgotpassword),
+                      ),
+                      const SizedBox(height: 10),
+                      const Row(
+                        children: [
+                          Expanded(child: Divider()),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8),
+                            child: Text(
+                              "OR",
+                              style: TextStyle(color: Colors.black26),
+                            ),
+                          ),
+                          Expanded(child: Divider()),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          _showSignUpDialog(context);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFF77D8E),
+                          minimumSize: const Size(double.infinity, 20),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 80,
+                            vertical: 12,
+                          ),
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        _showSignUpDialog(context);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFF77D8E),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 80,
-                          vertical: 12,
+                        child: Text(
+                          AppLocalizations.of(context)!.textregister,
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 14),
                         ),
                       ),
-                      child: Text(
-                        AppLocalizations.of(context)!.textregister,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                    ),
-                  ],
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: -48,
-                  child: CircleAvatar(
-                    radius: 16,
-                    backgroundColor: Colors.white,
-                    child: IconButton(
-                      icon: const Icon(Icons.close, color: Colors.black),
-                      onPressed: () => Navigator.pop(context),
-                    ),
+                    ],
                   ),
                 ),
+                // Positioned(
+                //   left: 0,
+                //   right: 0,
+                //   bottom: -48,
+                //   child: CircleAvatar(
+                //     radius: 16,
+                //     backgroundColor: Colors.white,
+                //     child: IconButton(
+                //       icon: const Icon(Icons.close, color: Colors.black),
+                //       onPressed: () => Navigator.pop(context),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),

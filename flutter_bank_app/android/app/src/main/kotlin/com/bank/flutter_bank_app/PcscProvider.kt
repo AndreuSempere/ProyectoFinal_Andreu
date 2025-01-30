@@ -1,4 +1,4 @@
-package com.example.flutter_bank_app
+package com.bank.app
 
 import android.nfc.tech.IsoDep
 import com.github.devnied.emvnfccard.exception.CommunicationException

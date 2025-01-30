@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Screens/graficos_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/actions_account_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/filtrer_transactions_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/Transactions/transactions_list_widget.dart';
@@ -92,6 +93,21 @@ class TransactionInfoPage extends StatelessWidget {
                       builder: (BuildContext context) {
                         return const FilterDialog();
                       },
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.bar_chart,
+                    size: 32,
+                    color: Color.fromARGB(255, 154, 174, 208),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => StatisticsPage(),
+                      ),
                     );
                   },
                 ),

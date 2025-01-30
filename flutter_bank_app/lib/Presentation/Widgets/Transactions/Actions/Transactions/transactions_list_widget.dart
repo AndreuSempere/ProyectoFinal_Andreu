@@ -6,8 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class TransactionListWidget extends StatelessWidget {
   final int accountId;
 
-  const TransactionListWidget({Key? key, required this.accountId})
-      : super(key: key);
+  const TransactionListWidget({super.key, required this.accountId});
 
   @override
   Widget build(BuildContext context) {

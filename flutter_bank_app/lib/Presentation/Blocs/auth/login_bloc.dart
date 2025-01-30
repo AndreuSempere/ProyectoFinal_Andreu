@@ -83,9 +83,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LogoutButtonPressed>((event, emit) async {
       final result = await signOutUserUseCase(NoParams());
       result.fold(
-        (failure) => emit(LoginState.failure("Fallo al realizar el logout")),
-        (_) => emit(LoginState.initial()),
-      );
+          (failure) => emit(LoginState.failure("Fallo al realizar el logout")),
+          (_) {
+        emit(LoginState.initial());
+      });
     });
 
     on<ResetPasswordEvent>((event, emit) async {

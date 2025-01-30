@@ -1,9 +1,9 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/generate_number_account_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -132,8 +132,9 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
               final int tipoCuenta =
                   int.tryParse(_selectedAccountType ?? '1') ?? 1;
               final String description = _descriptionController.text;
-
+              final String numeroCuenta = GenerateAccountNumber.generate();
               const saldoInicial = 0;
+
               final myLoginState = context.read<LoginBloc>().state;
               final userid = myLoginState.user?.idUser;
               if (userid == null) {
@@ -141,7 +142,7 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
               }
 
               final newAccount = Account(
-                numeroCuenta: _generateAccountNumber(),
+                numeroCuenta: numeroCuenta,
                 saldo: saldoInicial,
                 estado: 'Activo',
                 accountType: tipoCuenta,
@@ -183,11 +184,6 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
         );
       },
     );
-  }
-
-  String _generateAccountNumber() {
-    final random = Random();
-    return List.generate(16, (_) => random.nextInt(10).toString()).join();
   }
 }
 

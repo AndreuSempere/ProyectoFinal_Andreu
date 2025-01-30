@@ -18,7 +18,6 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<LoginBloc>().add(FetchUserDataEvent());
-    context.read<TransactionBloc>().add(GetAllTransactions());
 
     return Scaffold(
       appBar: AppBar(
@@ -51,6 +50,9 @@ class HomePage extends StatelessWidget {
           } else if (state.user != null) {
             final id_user = state.user!.idUser;
             context.read<AccountBloc>().add(GetAllAccount(id: id_user!));
+            context
+                .read<TransactionBloc>()
+                .add(GetAllTransactions(id: id_user));
 
             return Column(
               children: [

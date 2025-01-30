@@ -5,9 +5,9 @@ abstract class Failure {
 }
 
 class ServerFailure extends Failure {
-  ServerFailure({String? message}) : super(message: message);
+  ServerFailure({super.message});
 }
 
 class AuthFailure extends Failure {
-  AuthFailure({String? message}) : super(message: message);
+  AuthFailure({super.message});
 }

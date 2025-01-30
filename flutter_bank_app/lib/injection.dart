@@ -28,6 +28,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_blo
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt sl = GetIt.instance;
@@ -39,6 +40,9 @@ Future<void> configureDependencies() async {
 
   const FlutterSecureStorage secureStorage = FlutterSecureStorage();
   sl.registerLazySingleton<FlutterSecureStorage>(() => secureStorage);
+
+  LocalAuthentication localAuth = LocalAuthentication();
+  sl.registerLazySingleton<LocalAuthentication>(() => localAuth);
 
   // HTTP Client
   sl.registerLazySingleton<http.Client>(() => http.Client());
@@ -113,5 +117,6 @@ Future<void> configureDependencies() async {
   sl.registerFactory<BiometricAuthBloc>(() => BiometricAuthBloc(
         sharedPreferences: sl<SharedPreferences>(),
         secureStorage: sl<FlutterSecureStorage>(),
+        localAuth: sl<LocalAuthentication>(),
       ));
 }

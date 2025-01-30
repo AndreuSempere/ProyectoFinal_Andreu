@@ -113,17 +113,21 @@ class SendMoneyPage extends StatelessWidget {
                     return;
                   }
 
-                  final newTransaction = Transaction(
+                  final newBizum = Transaction(
                     account: telfUser!,
                     targetAccount: targetPhone,
                     cantidad: amount,
                     descripcion: concept,
                     tipo: 'gasto',
                   );
+                  final userId = context.read<LoginBloc>().state.user!.idUser;
 
                   context
                       .read<TransactionBloc>()
-                      .add(CreateTransactionsBizum(newTransaction));
+                      .add(CreateTransactionsBizum(newBizum));
+                  context
+                      .read<TransactionBloc>()
+                      .add(GetAllTransactions(id: userId!));
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

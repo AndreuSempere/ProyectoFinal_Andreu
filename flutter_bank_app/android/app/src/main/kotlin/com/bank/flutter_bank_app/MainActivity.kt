@@ -1,4 +1,4 @@
-package com.example.flutter_bank_app
+package com.bank.app
 
 import android.media.AudioManager
 import android.media.ToneGenerator
@@ -19,7 +19,7 @@ import java.io.IOException
 class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
     companion object {
         const val TAG = "EMVNFCApp"
-        const val CHANNEL = "com.example.flutter_bank_app"
+        const val CHANNEL = "com.bank.app"
     }
 
     private var nfcAdapter: NfcAdapter? = null
@@ -40,12 +40,14 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
     }
 
     private fun terminate(res: MethodChannel.Result) {
+        Log.d(TAG, "Terminating NFC listening")
         nfcAdapter?.disableReaderMode(this)
         isScanning = false
         res.success(true)
     }
 
     private fun initNFC(res: MethodChannel.Result) {
+        Log.d(TAG, "Initializing NFC")
         nfcAdapter = NfcAdapter.getDefaultAdapter(this)
         if (nfcAdapter == null) {
             res.success(0)
@@ -60,10 +62,12 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
 
     private fun initListen(res: MethodChannel.Result, call: MethodCall) {
         if (isScanning) {
+            Log.w(TAG, "Scan already in progress")
             res.success(parsedError("One read operation already running"))
             return
         }
         if (nfcAdapter == null) {
+            Log.w(TAG, "NFC not ready")
             res.success(parsedError("NFC Not Yet Ready"))
             return
         }
@@ -77,9 +81,11 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
                 NfcAdapter.FLAG_READER_NFC_F or NfcAdapter.FLAG_READER_NFC_V or
                 NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
         nfcAdapter?.enableReaderMode(this, this, nfcFlags, options)
+        Log.d(TAG, "Started NFC listening")
     }
 
     private fun sendCardInfo(data: String) {
+        Log.d(TAG, "Sending card data: $data")
         val jsonObject = JsonObject().apply {
             addProperty("success", true)
             addProperty("cardData", data)
@@ -97,6 +103,7 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
 
     override fun onTagDiscovered(tag: Tag) {
         try {
+            Log.d(TAG, "Tag discovered")
             val isoDep = IsoDep.get(tag)
             isoDep.connect()
             val provider: IProvider = PcscProvider(isoDep)
@@ -122,7 +129,7 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
             nfcAdapter?.disableReaderMode(this)
             isoDep.close()
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.e(TAG, "Error reading card", e)
             ToneGenerator(AudioManager.STREAM_MUSIC, 100).startTone(ToneGenerator.TONE_DTMF_P, 500)
             apiResult?.success(parsedError("Issue with card read"))
             isScanning = false
@@ -130,15 +137,44 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
         }
     }
 
-    override fun onPointerCaptureChanged(hasCapture: Boolean) {
-        super.onPointerCaptureChanged(hasCapture)
-    }
-
     override fun onPause() {
         super.onPause()
+        Log.d(TAG, "Pausing activity, disabling NFC reader")
         nfcAdapter?.disableReaderMode(this)
         if (isScanning) {
-            finish()
+            isScanning = false
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy activity, disabling NFC reader")
+        nfcAdapter?.disableReaderMode(this)
+        if (isScanning) {
+            isScanning = false
+        }
+    }
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "Stopping activity, disabling NFC reader")
+        //nfcAdapter?.disableReaderMode(this)
+        //if (isScanning) {
+        //    isScanning = false
+        //}
+        
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "Resuming activity")
+        if (isScanning && nfcAdapter != null) {
+            val options = Bundle().apply {
+                putInt(NfcAdapter.EXTRA_READER_PRESENCE_CHECK_DELAY, 250)
+            }
+            val nfcFlags = NfcAdapter.FLAG_READER_NFC_A or NfcAdapter.FLAG_READER_NFC_B or
+                    NfcAdapter.FLAG_READER_NFC_F or NfcAdapter.FLAG_READER_NFC_V or
+                    NfcAdapter.FLAG_READER_NO_PLATFORM_SOUNDS
+            nfcAdapter?.enableReaderMode(this, this, nfcFlags, options)
+            Log.d(TAG, "Reactivating NFC reader")
         }
     }
 }

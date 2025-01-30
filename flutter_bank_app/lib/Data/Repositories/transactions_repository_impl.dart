@@ -10,9 +10,9 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
   TransactionsRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<Transaction>>> getTransactions() async {
+  Future<Either<Failure, List<Transaction>>> getTransactions(int id) async {
     try {
-      final transactionModels = await remoteDataSource.getAllTransactions();
+      final transactionModels = await remoteDataSource.getAllTransactions(id);
       return Right(transactionModels.map((model) => model.toEntity()).toList());
     } catch (e) {
       return Left(AuthFailure());

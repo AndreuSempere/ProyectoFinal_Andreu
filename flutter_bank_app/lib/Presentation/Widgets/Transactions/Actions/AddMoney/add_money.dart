@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/NFC/nfc_service.dart';
@@ -28,6 +29,7 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
   int setupStatusIndex = 0;
   String setupMessage = "Initializing SDK..";
   bool isScanning = false;
+  bool cardScanned = false;
 
   @override
   void initState() {
@@ -57,14 +59,17 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
     final result = await _nfcService.initCardScanListener();
     if (result['success'] == true) {
       final cardData = result['cardData'];
-      final cardNumber = _nfcService.extractCardNumber(cardData);
-      final maskedCardNumber =
-          _nfcService.maskCardNumber(cardNumber); // Enmascarar aquí
-
-      setState(() {
-        _cardNumberController.text = maskedCardNumber;
-        isScanning = false;
-      });
+      try {
+        final maskedCardNumber = _nfcService.maskCardNumber(cardData);
+        setState(() {
+          _cardNumberController.text = maskedCardNumber;
+          cardScanned = true;
+          isScanning = false;
+        });
+        debugPrint("startCard1");
+      } catch (e) {
+        print("Error al enmascarar el número de tarjeta: $e");
+      }
     } else {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -147,122 +152,130 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
-                          PlantillaAddTextField(
-                            controller: _cantidadController,
-                            label:
-                                AppLocalizations.of(context)!.textcantidadadd,
-                            icon: Icons.monetization_on,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Este campo no puede estar vacío';
-                              }
-                              final cantidad = int.tryParse(value);
-                              if (cantidad == null || cantidad <= 0) {
-                                return 'Introduce una cantidad válida (entero positivo)';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          PlantillaAddTextField(
-                            controller: _descriptionController,
-                            label:
-                                AppLocalizations.of(context)!.textconceptoadd,
-                            icon: Icons.description,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Este campo no puede estar vacío';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          PlantillaAddTextField(
-                            controller: _cardNumberController,
-                            label: "Número de tarjeta",
-                            icon: Icons.credit_card,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, escanea una tarjeta válida.';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 16),
-                          ElevatedButton.icon(
-                            onPressed: !setupComplete || isScanning
-                                ? null
-                                : _startCardScan,
-                            icon: const Icon(Icons.nfc),
-                            label: isScanning
-                                ? const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: Colors.white,
-                                  )
-                                : const Text("Escanear tarjeta"),
-                          ),
+                          if (!cardScanned) // Mostrar solo si no se escaneó la tarjeta
+                            ElevatedButton.icon(
+                              onPressed: !setupComplete || isScanning
+                                  ? null
+                                  : _startCardScan,
+                              icon: const Icon(Icons.nfc),
+                              label: isScanning
+                                  ? const CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
+                                    )
+                                  : const Text("Escanear tarjeta"),
+                            ),
+                          if (cardScanned) ...[
+                            PlantillaAddTextField(
+                              controller: _cardNumberController,
+                              label: "Número de tarjeta",
+                              icon: Icons.credit_card,
+                              enabled: false,
+                            ),
+                            const SizedBox(height: 16),
+                            PlantillaAddTextField(
+                              controller: _cantidadController,
+                              label:
+                                  AppLocalizations.of(context)!.textcantidadadd,
+                              icon: Icons.monetization_on,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Este campo no puede estar vacío';
+                                }
+                                final cantidad = int.tryParse(value);
+                                if (cantidad == null || cantidad <= 0) {
+                                  return 'Introduce una cantidad válida (entero positivo)';
+                                }
+                                return null;
+                              },
+                            ),
+                            const SizedBox(height: 16),
+                            PlantillaAddTextField(
+                              controller: _descriptionController,
+                              label:
+                                  AppLocalizations.of(context)!.textconceptoadd,
+                              icon: Icons.description,
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Este campo no puede estar vacío';
+                                }
+                                return null;
+                              },
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton.icon(
+                                  onPressed: () => Navigator.of(context).pop(),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.redAccent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                  ),
+                                  icon: const Icon(Icons.cancel,
+                                      color: Colors.white),
+                                  label: Text(
+                                    AppLocalizations.of(context)!.buttoncancel,
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    if (_formKey.currentState!.validate()) {
+                                      final cantidad =
+                                          int.parse(_cantidadController.text);
+                                      final descripcion =
+                                          _descriptionController.text;
+
+                                      final newTransaction = Transaction(
+                                        account: widget.accountId,
+                                        cantidad: cantidad,
+                                        descripcion: descripcion,
+                                        tipo: "ingreso",
+                                      );
+                                      final userId = context
+                                          .read<LoginBloc>()
+                                          .state
+                                          .user!
+                                          .idUser;
+
+                                      context.read<TransactionBloc>().add(
+                                          CreateTransactions(newTransaction));
+                                      context
+                                          .read<TransactionBloc>()
+                                          .add(GetAllTransactions(id: userId!));
+
+                                      Navigator.of(context).pop();
+                                    }
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.green,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 12),
+                                  ),
+                                  icon: const Icon(Icons.check,
+                                      color: Colors.white),
+                                  label: Text(
+                                    AppLocalizations.of(context)!.buttonguardar,
+                                    style: const TextStyle(
+                                        fontSize: 16, color: Colors.white),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]
                         ],
                       ),
                     ),
                   ),
                 const SizedBox(height: 32),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    ElevatedButton.icon(
-                      onPressed: () => Navigator.of(context).pop(),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                      ),
-                      icon: const Icon(Icons.cancel, color: Colors.white),
-                      label: Text(
-                        AppLocalizations.of(context)!.buttoncancel,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          final cantidad = int.parse(_cantidadController.text);
-                          final descripcion = _descriptionController.text;
-
-                          final newTransaction = Transaction(
-                            account: widget.accountId,
-                            cantidad: cantidad,
-                            descripcion: descripcion,
-                            tipo: "ingreso",
-                          );
-
-                          context
-                              .read<TransactionBloc>()
-                              .add(CreateTransactions(newTransaction));
-
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 12),
-                      ),
-                      icon: const Icon(Icons.check, color: Colors.white),
-                      label: Text(
-                        AppLocalizations.of(context)!.buttonguardar,
-                        style:
-                            const TextStyle(fontSize: 16, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),

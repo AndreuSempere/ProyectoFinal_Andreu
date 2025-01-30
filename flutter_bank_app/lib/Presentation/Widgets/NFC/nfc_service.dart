@@ -2,8 +2,7 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 
 class NFCService {
-  final MethodChannel _javaChannel =
-      const MethodChannel("com.example.flutter_bank_app");
+  final MethodChannel _javaChannel = const MethodChannel("com.bank.app");
 
   Future<int> checkNFCStatus() async {
     try {
@@ -21,6 +20,7 @@ class NFCService {
       if (scanOp['success']) {
         String cardData = scanOp['cardData'];
         String cardNumber = extractCardNumber(cardData);
+        _javaChannel.setMethodCallHandler(null);
         return {'success': true, 'cardData': cardNumber}; // No enmascarado aquí
       } else {
         throw PlatformException(code: '01', stacktrace: scanOp['error']);

@@ -24,7 +24,14 @@ class SignInRepositoryImpl implements SignInRepository {
         _userKey,
         email,
       );
-      // await secureStorage.write(key: 'user_password', value: password);
+      try {
+        await secureStorage.write(key: 'user_password', value: password);
+        await secureStorage.write(key: 'user_email', value: email);
+
+        print('Password guardada correctamente.');
+      } catch (e) {
+        print('Error al guardar la contraseña: $e');
+      }
 
       return const Right(Msg());
     } catch (e) {
@@ -68,6 +75,7 @@ class SignInRepositoryImpl implements SignInRepository {
     try {
       await dataSource.logout();
       await sharedPreferences.remove(_userKey);
+
       return const Right(Msg());
     } catch (e) {
       return Left(AuthFailure());

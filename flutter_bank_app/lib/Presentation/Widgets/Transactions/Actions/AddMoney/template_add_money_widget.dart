@@ -4,6 +4,7 @@ class PlantillaAddTextField extends StatelessWidget {
   final TextEditingController controller;
   final String label;
   final IconData icon;
+  final bool? enabled;
   final String? validatorMsg;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
@@ -16,6 +17,7 @@ class PlantillaAddTextField extends StatelessWidget {
     this.validatorMsg,
     this.keyboardType = TextInputType.text,
     this.validator,
+    this.enabled,
   });
 
   @override

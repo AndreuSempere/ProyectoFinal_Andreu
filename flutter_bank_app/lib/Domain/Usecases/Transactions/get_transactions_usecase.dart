@@ -8,7 +8,7 @@ class GetTransactionsUseCase {
 
   GetTransactionsUseCase(this.repository);
 
-  Future<Either<Failure, List<Transaction>>> call() async {
-    return await repository.getTransactions();
+  Future<Either<Failure, List<Transaction>>> call(int id) async {
+    return await repository.getTransactions(id);
   }
 }

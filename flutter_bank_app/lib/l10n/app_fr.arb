@@ -351,5 +351,16 @@
   "chooseFromAccount": "Choisissez le compte d'origine",
   "selectFromAccount": "Sélectionner le compte d'origine",
   "chooseToAccount": "Choisissez le compte de destination",
-  "selectToAccount": "Sélectionner le compte de destination"
+  "selectToAccount": "Sélectionner le compte de destination",
+  "biometricSettingsTitle": "Paramètres biométriques",
+  "biometricEnabled": "L'authentification biométrique est activée",
+  "biometricDisabled": "L'authentification biométrique est désactivée",
+  "enableBiometric": "Activer la biométrie",
+  "disableBiometric": "Désactiver la biométrie",
+  "unexpectedState": "État inattendu",
+  "unexpectedError": "Erreur inattendue",
+  "textbuttonloginBiometrico": "Se connecter avec la biométrie",
+  "biometricAuthReason": "Veuillez vous authentifier à l'aide de la biométrie pour continuer.",
+  "biometricAuthFailed": "L'authentification biométrique a échoué. Veuillez réessayer.",
+  "loginSuccess": "Authentification réussie"
 }

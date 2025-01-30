@@ -1,14 +1,11 @@
-import 'package:equatable/equatable.dart';
-
-abstract class BiometricAuthEvent extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+abstract class BiometricAuthEvent {}
 
 class LoadBiometricStatus extends BiometricAuthEvent {}
 
-class ActivateBiometricAuth extends BiometricAuthEvent {
-  ActivateBiometricAuth();
-}
+class ActivateBiometricAuth extends BiometricAuthEvent {}
 
 class DeactivateBiometricAuth extends BiometricAuthEvent {}
+
+class RequestBiometricLogin extends BiometricAuthEvent {}
+
+class LogoutBiometricAuth extends BiometricAuthEvent {}

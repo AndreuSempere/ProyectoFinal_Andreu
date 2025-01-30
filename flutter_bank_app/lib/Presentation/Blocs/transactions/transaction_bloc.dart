@@ -19,7 +19,7 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
     on<GetAllTransactions>((event, emit) async {
       emit(state.copyWith(isLoading: true, transactions: []));
 
-      final result = await getTransactionsUsecase();
+      final result = await getTransactionsUsecase(event.id);
       result.fold(
         (error) => emit(state.copyWith(
             isLoading: false,
@@ -80,7 +80,6 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
             transactions: updatedtransaction,
             isLoading: false,
           ));
-          add(GetAllTransactions());
         },
       );
     });
@@ -103,7 +102,6 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
             transactions: updatedtransaction,
             isLoading: false,
           ));
-          add(GetAllTransactions());
         },
       );
     });

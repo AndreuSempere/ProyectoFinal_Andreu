@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.flutter_bank_app"
+    namespace = "com.bank.app"
     compileSdk = 35 // Actualizado a 35
     ndkVersion = "25.1.8937393" // Versión del NDK
 

@@ -57,6 +57,12 @@
   "@cerrarSesionTitle": {
     "description": "Título para cerrar sesión."
   },
+  "@loggedOut": {
+    "description": "Mensaje que indica que el usuario ha cerrado sesión."
+  },
+  "@logout": {
+    "description": "Texto para el botón de cerrar sesión."
+  },
   "titleTransactions": "Transacciones",
   "@titleTransactions": {
     "description": "Título para transacciones."
@@ -351,5 +357,16 @@
   "chooseFromAccount": "Elija la cuenta de origen",
   "selectFromAccount": "Seleccione la cuenta de origen",
   "chooseToAccount": "Elija la cuenta de destino",
-  "selectToAccount": "Seleccione la cuenta de destino"
+  "selectToAccount": "Seleccione la cuenta de destino",
+  "biometricSettingsTitle": "Configuración Biométrica",
+  "biometricEnabled": "La autenticación biométrica está habilitada",
+  "biometricDisabled": "La autenticación biométrica está deshabilitada",
+  "enableBiometric": "Habilitar Biometría",
+  "disableBiometric": "Deshabilitar Biometría",
+  "unexpectedState": "Estado inesperado",
+  "unexpectedError": "Error inesperado",
+  "textbuttonloginBiometrico": "Inicia sesion con Biometría",
+  "biometricAuthReason": "Por favor, autentíquese usando biometría para continuar.",
+  "biometricAuthFailed": "La autenticación biométrica falló. Inténtelo de nuevo.",
+  "loginSuccess": "¡Inició sesión con éxito!"
 }

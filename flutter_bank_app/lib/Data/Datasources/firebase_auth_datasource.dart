@@ -2,12 +2,15 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 
 class FirebaseAuthDataSource {
   final FirebaseAuth auth;
+  final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
+  final String usersPath = dotenv.env['API_USERS_PATH'] ?? '';
   FirebaseFirestore database = FirebaseFirestore.instance;
 
   FirebaseAuthDataSource({required this.auth});
@@ -16,7 +19,7 @@ class FirebaseAuthDataSource {
       String password, String dni, String age) async {
     try {
       final response = await http.post(
-        Uri.parse('http://172.20.10.8:8080/Users'),
+        Uri.parse('$baseUrl$usersPath'),
         headers: {'Content-Type': 'application/json'},
         body: '''
         {
@@ -91,22 +94,28 @@ class FirebaseAuthDataSource {
   }
 
   Future<UserModel> getUserInfo(String email) async {
-    final response =
-        await http.get(Uri.parse('http://172.20.10.8:8080/users/user/$email'));
+    try {
+      final uri = Uri.parse('$baseUrl$usersPath/user/$email');
+      final response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> userJson = json.decode(response.body);
-      return UserModel.fromJson(userJson);
-    } else {
-      throw Exception('Error al cargar la cuenta del usuario');
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> userJson = json.decode(response.body);
+        return UserModel.fromJson(userJson);
+      } else {
+        throw Exception(
+            'Error al cargar la cuenta del usuario: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Fallo al obtener la información del usuario: $e');
     }
   }
 
   Future<void> updateUser(
       int idUser, String name, String surname, String email, int telf) async {
     try {
+      final uri = Uri.parse('$baseUrl$usersPath/$idUser');
       final response = await http.put(
-        Uri.parse('http://172.20.10.8:8080/Users/$idUser'),
+        uri,
         headers: {'Content-Type': 'application/json'},
         body: '''
         {

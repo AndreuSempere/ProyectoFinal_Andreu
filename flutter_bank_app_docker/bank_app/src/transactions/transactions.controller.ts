@@ -10,13 +10,18 @@ export class TransactionsController {
     }
 
     @Get()
-    getAccountAll() {
+    getTransactionAll() {
       return this.transactionsService.getTransactionAll();
     }
   
     @Get(':id')
-    getAccount(@Param('id') id: string) {
+    getTransaction(@Param('id') id: string) {
       return this.transactionsService.getTransaction(parseInt(id));
+    }
+
+    @Get('user/:id')
+    getTransactionsByUserId(@Param('id') id: string) {
+    return this.transactionsService.getTransactionsByUserId(parseInt(id));
     }
 
     @Post()

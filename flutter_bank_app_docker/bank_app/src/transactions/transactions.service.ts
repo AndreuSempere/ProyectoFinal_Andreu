@@ -32,6 +32,18 @@ export class TransactionsService {
     return result;
   }
 
+  async getTransactionsByUserId(userId: number): Promise<any> {
+    const result = await this.transactionsRepository
+      .createQueryBuilder('transaction')
+      .innerJoinAndSelect('transaction.account', 'account')
+      .innerJoinAndSelect('account.id_user', 'user')
+      .where('account.id_user = :userId', { userId })
+      .getMany();
+  
+    return result;
+  }
+  
+
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
