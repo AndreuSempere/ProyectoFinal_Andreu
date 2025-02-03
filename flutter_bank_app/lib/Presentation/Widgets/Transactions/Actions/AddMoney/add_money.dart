@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/NFC/nfc_service.dart';
@@ -237,17 +236,9 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
                                         descripcion: descripcion,
                                         tipo: "ingreso",
                                       );
-                                      final userId = context
-                                          .read<LoginBloc>()
-                                          .state
-                                          .user!
-                                          .idUser;
 
                                       context.read<TransactionBloc>().add(
                                           CreateTransactions(newTransaction));
-                                      context
-                                          .read<TransactionBloc>()
-                                          .add(GetAllTransactions(id: userId!));
 
                                       Navigator.of(context).pop();
                                     }

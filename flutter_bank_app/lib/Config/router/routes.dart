@@ -1,6 +1,8 @@
+import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
+import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Card/ui/app.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:go_router/go_router.dart';
@@ -13,6 +15,17 @@ final GoRouter router = GoRouter(
         builder: (context, state) => const OnboardingScreen(),
       ),
       GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+      GoRoute(
+        path: '/transactions',
+        builder: (context, state) {
+          Account account = state.extra as Account; // -> casting is important
+          return TransactionInfoPage(
+            accountId: account.idCuenta!,
+            description: account.description,
+            numeroCuenta: account.numeroCuenta!,
+          );
+        },
+      ),
       GoRoute(path: '/add_card', builder: (context, state) => const App()),
     ],
     redirect: (context, state) async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
 import '../ui/widgets/my_appbar.dart';
-import '../blocs/bloc_provider.dart';
-import '../blocs/card_bloc.dart';
+import '../../../Blocs/card/card_bloc.dart';
 import '../ui/card_create.dart';
 
 class CardType extends StatelessWidget {
@@ -9,7 +9,7 @@ class CardType extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _buildTextInfo = Padding(
+    final buildTextInfo = Padding(
       padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 0.0),
       child: Text.rich(
         TextSpan(
@@ -56,7 +56,7 @@ class CardType extends StatelessWidget {
                     textColor:
                         Colors.grey[600] ?? Colors.black, // Fallback color
                     context: context),
-                _buildTextInfo,
+                buildTextInfo,
               ],
             )));
   }

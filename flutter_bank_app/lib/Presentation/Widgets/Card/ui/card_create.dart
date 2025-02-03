@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bank_app/Config/Theme/card_colors.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
 import '../ui/widgets/my_appbar.dart';
 import '../ui/widgets/flip_card.dart';
 import '../ui/widgets/card_front.dart';
 import '../ui/widgets/card_back.dart';
-import '../helpers/card_colors.dart';
 import '../helpers/formatters.dart';
-import '../blocs/card_bloc.dart';
-import '../blocs/bloc_provider.dart';
+import '../../../Blocs/card/card_bloc.dart';
 import '../models/card_color_model.dart';
 import '../ui/card_wallet.dart';
 
@@ -44,7 +44,7 @@ class _CardCreate extends State<CardCreate> {
   Widget build(BuildContext context) {
     final CardBloc bloc = BlocProvider.of<CardBloc>(context);
 
-    final _creditCard = Padding(
+    final creditCard = Padding(
       padding: const EdgeInsets.only(top: 6.0),
       child: Card(
         color: Colors.grey[100],
@@ -58,7 +58,7 @@ class _CardCreate extends State<CardCreate> {
       ),
     );
 
-    final _cardHolderName = StreamBuilder(
+    final cardHolderName = StreamBuilder(
         stream: bloc.cardHolderName,
         builder: (context, snapshot) {
           return TextField(
@@ -75,7 +75,7 @@ class _CardCreate extends State<CardCreate> {
           );
         });
 
-    final _cardNumber = Padding(
+    final cardNumber = Padding(
       padding: const EdgeInsets.only(top: 16.0),
       child: StreamBuilder(
         stream: bloc.cardNumber,
@@ -106,7 +106,7 @@ class _CardCreate extends State<CardCreate> {
       ),
     );
 
-    final _cardMonth = StreamBuilder(
+    final cardMonth = StreamBuilder(
       stream: bloc.cardMonth,
       builder: (context, snapshot) {
         return SizedBox(
@@ -133,7 +133,7 @@ class _CardCreate extends State<CardCreate> {
       },
     );
 
-    final _cardYear = StreamBuilder(
+    final cardYear = StreamBuilder(
         stream: bloc.cardYear,
         builder: (context, snapshot) {
           return SizedBox(
@@ -161,7 +161,7 @@ class _CardCreate extends State<CardCreate> {
           );
         });
 
-    final _cardVerificationValue = StreamBuilder(
+    final cardVerificationValue = StreamBuilder(
         stream: bloc.cardCvv,
         builder: (context, snapshot) {
           return SizedBox(
@@ -190,7 +190,7 @@ class _CardCreate extends State<CardCreate> {
           );
         });
 
-    final _saveCard = StreamBuilder(
+    final saveCard = StreamBuilder(
       stream: bloc.savecardValid,
       builder: (context, snapshot) {
         return SizedBox(
@@ -236,7 +236,7 @@ class _CardCreate extends State<CardCreate> {
               children: <Widget>[
                 Expanded(
                   flex: 4,
-                  child: _creditCard,
+                  child: creditCard,
                 ),
                 Expanded(
                   flex: 6,
@@ -245,22 +245,22 @@ class _CardCreate extends State<CardCreate> {
                     child: Column(
                       children: <Widget>[
                         const SizedBox(height: 8.0),
-                        _cardHolderName,
-                        _cardNumber,
+                        cardHolderName,
+                        cardNumber,
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            _cardMonth,
+                            cardMonth,
                             const SizedBox(width: 16.0),
-                            _cardYear,
+                            cardYear,
                             const SizedBox(width: 16.0),
-                            _cardVerificationValue,
+                            cardVerificationValue,
                           ],
                         ),
                         const SizedBox(height: 20.0),
                         cardColors(bloc),
                         const SizedBox(height: 50.0),
-                        _saveCard,
+                        saveCard,
                       ],
                     ),
                   ),

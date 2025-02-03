@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'package:flutter_bank_app/Config/Theme/card_colors.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/validators.dart';
 import 'package:rxdart/rxdart.dart';
-import '../models/card_color_model.dart';
-import '../helpers/card_colors.dart';
-import '../models/card_model.dart';
-import './validators.dart';
-import '../blocs/bloc_provider.dart';
-import '../blocs/card_list_bloc.dart';
+import '../../Widgets/Card/models/card_color_model.dart';
+import '../../Widgets/Card/models/card_model.dart';
+import 'card_list_bloc.dart';
 
 class CardBloc with Validators implements BlocBase {
   BehaviorSubject<String> _cardHolderName = BehaviorSubject<String>();

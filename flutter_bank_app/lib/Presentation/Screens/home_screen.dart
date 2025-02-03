@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/create_account_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/list_accounts_widget.dart';
@@ -48,12 +44,6 @@ class HomePage extends StatelessWidget {
               ),
             );
           } else if (state.user != null) {
-            final id_user = state.user!.idUser;
-            context.read<AccountBloc>().add(GetAllAccount(id: id_user!));
-            context
-                .read<TransactionBloc>()
-                .add(GetAllTransactions(id: id_user));
-
             return Column(
               children: [
                 const SizedBox(height: 23),
@@ -85,7 +75,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Expanded(child: AccountListWidget()),
+                Expanded(child: AccountListWidget(userId: state.user!.idUser!)),
               ],
             );
           } else {

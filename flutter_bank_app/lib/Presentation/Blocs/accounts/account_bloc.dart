@@ -19,7 +19,7 @@ class AccountBloc extends Bloc<AccountsEvent, AccountState> {
     on<GetAllAccount>((event, emit) async {
       emit(state.copyWith(isLoading: true, accounts: []));
 
-      final result = await getAccountsUsecase(event.id);
+      final result = await getAccountsUsecase(event.userId);
       result.fold(
         (error) => emit(state.copyWith(
             isLoading: false, errorMessage: error.toString(), accounts: [])),
@@ -73,6 +73,6 @@ class AccountBloc extends Bloc<AccountsEvent, AccountState> {
     });
   }
   void datosAccount(id) {
-    add(GetAllAccount(id: id));
+    add(GetAllAccount(userId: id));
   }
 }

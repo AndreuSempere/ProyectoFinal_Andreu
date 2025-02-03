@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
 import '../ui/widgets/card_front.dart';
 import '../ui/widgets/my_appbar.dart';
 import '../ui/app.dart';
-import '../blocs/card_bloc.dart';
-import '../blocs/bloc_provider.dart';
+import '../../../Blocs/card/card_bloc.dart';
 
 class CardWallet extends StatefulWidget {
   const CardWallet({super.key});

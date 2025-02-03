@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../helpers/card_colors.dart';
-import '../../blocs/card_bloc.dart';
-import '../../blocs/bloc_provider.dart';
+import 'package:flutter_bank_app/Config/Theme/card_colors.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/card_bloc.dart';
 
 class CardBack extends StatelessWidget {
   const CardBack({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../helpers/card_colors.dart';
+import 'package:flutter_bank_app/Config/Theme/card_colors.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/card/bloc_provider.dart';
 import '../widgets/card_chip.dart';
-import '../../blocs/card_bloc.dart';
-import '../../blocs/bloc_provider.dart';
+import '../../../../Blocs/card/card_bloc.dart';
 
 class CardFront extends StatelessWidget {
   final int rotatedTurnsValue;
@@ -12,7 +12,7 @@ class CardFront extends StatelessWidget {
   Widget build(BuildContext context) {
     final CardBloc bloc = BlocProvider.of<CardBloc>(context);
 
-    final _cardNumber = Padding(
+    final cardNumber = Padding(
       padding: const EdgeInsets.only(top: 15.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -29,7 +29,7 @@ class CardFront extends StatelessWidget {
       ),
     );
 
-    final _cardLastNumber = Padding(
+    final cardLastNumber = Padding(
         padding: const EdgeInsets.only(top: 1.0, left: 44.0),
         child: StreamBuilder<String>(
           stream: bloc.cardNumber,
@@ -45,7 +45,7 @@ class CardFront extends StatelessWidget {
           },
         ));
 
-    final _cardValidThru = Padding(
+    final cardValidThru = Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -93,7 +93,7 @@ class CardFront extends StatelessWidget {
       ),
     );
 
-    final _cardOwner = Padding(
+    final cardOwner = Padding(
       padding: const EdgeInsets.only(top: 15.0, left: 44.0),
       child: StreamBuilder(
           stream: bloc.cardHolderName,
@@ -107,7 +107,7 @@ class CardFront extends StatelessWidget {
           }),
     );
 
-    final _cardLogo = Column(
+    final cardLogo = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         const Padding(
@@ -148,12 +148,12 @@ class CardFront extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  _cardLogo,
+                  cardLogo,
                   const CardChip(),
-                  _cardNumber,
-                  _cardLastNumber,
-                  _cardValidThru,
-                  _cardOwner,
+                  cardNumber,
+                  cardLastNumber,
+                  cardValidThru,
+                  cardOwner,
                 ],
               ),
             ),

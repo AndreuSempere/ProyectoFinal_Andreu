@@ -1,9 +1,9 @@
 import 'dart:async';
+import 'package:flutter_bank_app/Config/Theme/card_colors.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../models/card_model.dart';
+import '../../Widgets/Card/models/card_model.dart';
 import 'dart:convert';
-import '../helpers/card_colors.dart';
 
 class CardListBloc {
   final _cardsCollection = BehaviorSubject<List<CardResults>>();
@@ -18,7 +18,8 @@ class CardListBloc {
       var decodedJson = jsonDecode(initialData);
       _cardResults = CardModel.fromJson(decodedJson).results;
       for (var i = 0; i < _cardResults.length; i++) {
-        _cardResults[i].cardColor = CardColor.baseColors[i % CardColor.baseColors.length];
+        _cardResults[i].cardColor =
+            CardColor.baseColors[i % CardColor.baseColors.length];
       }
       _cardsCollection.sink.add(_cardResults);
     } catch (e) {
@@ -26,11 +27,11 @@ class CardListBloc {
     }
   }
 
-  CardListBloc(){
+  CardListBloc() {
     initialData();
   }
 
-  void addCardToList(CardResults newCard){
+  void addCardToList(CardResults newCard) {
     _cardResults.add(newCard);
     _cardsCollection.sink.add(_cardResults);
   }

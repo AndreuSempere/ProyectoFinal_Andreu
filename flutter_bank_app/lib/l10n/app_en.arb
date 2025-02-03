@@ -362,5 +362,6 @@
   "textbuttonloginBiometrico": "Login with Biometric",
   "biometricAuthReason": "Please authenticate using biometrics to proceed.",
   "biometricAuthFailed": "Biometric authentication failed. Please try again.",
-  "loginSuccess": "Login successful"
+  "loginSuccess": "Login successful",
+  "buttonBorrarFiltros": "Clear filters"
 }

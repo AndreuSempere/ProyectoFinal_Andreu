@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/card_model.dart';
-import '../../blocs/card_list_bloc.dart';
+import '../../../../Blocs/card/card_list_bloc.dart';
 import '../widgets/card_chip.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 
@@ -54,7 +54,7 @@ class CardList extends StatelessWidget {
 
 class CardFrontList extends StatelessWidget {
   final CardResults cardModel;
-  const CardFrontList({Key? key, required this.cardModel}) : super(key: key);
+  const CardFrontList({super.key, required this.cardModel});
 
   @override
   Widget build(BuildContext context) {

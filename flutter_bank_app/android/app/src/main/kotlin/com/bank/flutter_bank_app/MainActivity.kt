@@ -139,12 +139,10 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
 
     override fun onPause() {
         super.onPause()
-        Log.d(TAG, "Pausing activity, disabling NFC reader")
-        nfcAdapter?.disableReaderMode(this)
-        if (isScanning) {
-            isScanning = false
-        }
+        Log.d(TAG, "Pausing activity, but keeping NFC active")
+        // No desactivamos NFC aquí
     }
+    
     override fun onDestroy() {
         super.onDestroy()
         Log.d(TAG, "onDestroy activity, disabling NFC reader")
@@ -156,12 +154,9 @@ class MainActivity : FlutterFragmentActivity(), NfcAdapter.ReaderCallback {
     override fun onStop() {
         super.onStop()
         Log.d(TAG, "Stopping activity, disabling NFC reader")
-        //nfcAdapter?.disableReaderMode(this)
-        //if (isScanning) {
-        //    isScanning = false
-        //}
-        
+        nfcAdapter?.disableReaderMode(this) // Mover la desactivación aquí
     }
+    
 
     override fun onResume() {
         super.onResume()

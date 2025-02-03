@@ -368,5 +368,6 @@
   "textbuttonloginBiometrico": "Inicia sesion con Biometría",
   "biometricAuthReason": "Por favor, autentíquese usando biometría para continuar.",
   "biometricAuthFailed": "La autenticación biométrica falló. Inténtelo de nuevo.",
-  "loginSuccess": "¡Inició sesión con éxito!"
+  "loginSuccess": "¡Inició sesión con éxito!",
+  "buttonBorrarFiltros": "Borrar Filtros"
 }

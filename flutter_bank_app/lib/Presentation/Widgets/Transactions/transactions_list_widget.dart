@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,6 +12,9 @@ class TransactionListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userId = context.read<LoginBloc>().state.user!.idUser;
+    context.read<TransactionBloc>().add(GetAllTransactions(id: userId!));
+
     return BlocBuilder<TransactionBloc, TransactionState>(
       builder: (context, transactionState) {
         if (transactionState.isLoading) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/card_color_model.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Card/models/card_color_model.dart';
 
 class CardColor {
   static const baseColors = <Color>[

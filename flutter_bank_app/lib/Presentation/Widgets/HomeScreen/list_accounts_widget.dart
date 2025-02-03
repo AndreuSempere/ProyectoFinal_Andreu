@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
-class AccountListWidget extends StatelessWidget {
-  AccountListWidget({super.key});
+class AccountListWidget extends StatefulWidget {
+  final int userId;
+  const AccountListWidget({super.key, required this.userId});
+
+  @override
+  State<AccountListWidget> createState() => _AccountListWidgetState();
+}
+
+class _AccountListWidgetState extends State<AccountListWidget> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AccountBloc>().add(GetAllAccount(userId: widget.userId));
+  }
 
   final Map<String, IconData> iconOptions = {
     'bank': Icons.account_balance,
@@ -15,6 +28,7 @@ class AccountListWidget extends StatelessWidget {
     'investment': Icons.trending_up,
     'wallet': Icons.account_balance_wallet,
   };
+
   @override
   Widget build(BuildContext context) {
     // Lista de posibles tipos de cuenta
@@ -30,7 +44,7 @@ class AccountListWidget extends StatelessWidget {
         } else if (accountState.errorMessage.isNotEmpty) {
           return Center(child: Text(accountState.errorMessage));
         } else if (accountState.accounts.isNotEmpty) {
-          final myLoginState = context.read<LoginBloc>().state;
+          final myLoginState = context.watch<LoginBloc>().state;
           final userid = myLoginState.user?.idUser;
 
           // Filtrar cuentas asociadas al usuario
@@ -106,15 +120,9 @@ class AccountListWidget extends StatelessWidget {
                           ],
                         ),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => TransactionInfoPage(
-                                accountId: account.idCuenta!,
-                                description: account.description,
-                                numeroCuenta: account.numeroCuenta!,
-                              ),
-                            ),
+                          context.go(
+                            '/transactions',
+                            extra: account,
                           );
                         },
                       ),
