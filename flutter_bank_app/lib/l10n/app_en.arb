@@ -363,5 +363,6 @@
   "biometricAuthReason": "Please authenticate using biometrics to proceed.",
   "biometricAuthFailed": "Biometric authentication failed. Please try again.",
   "loginSuccess": "Login successful",
-  "buttonBorrarFiltros": "Clear filters"
+  "buttonBorrarFiltros": "Clear filters",
+  "creaTarjeta": "Create Card"
 }

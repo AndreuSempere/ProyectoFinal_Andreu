@@ -369,5 +369,6 @@
   "biometricAuthReason": "Por favor, autentíquese usando biometría para continuar.",
   "biometricAuthFailed": "La autenticación biométrica falló. Inténtelo de nuevo.",
   "loginSuccess": "¡Inició sesión con éxito!",
-  "buttonBorrarFiltros": "Borrar Filtros"
+  "buttonBorrarFiltros": "Borrar Filtros",
+  "creaTarjeta": "Crear Tarjeta"
 }

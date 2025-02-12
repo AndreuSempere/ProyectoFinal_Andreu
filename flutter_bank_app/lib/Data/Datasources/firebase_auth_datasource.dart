@@ -122,7 +122,29 @@ class FirebaseAuthDataSource {
           "name": "$name",
           "surname": "$surname",
           "email": "$email",
-          "telf": "$telf"
+          "telf": "$telf",
+        }
+        ''',
+      );
+
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception(
+            'Error al editar usuario en el backend: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception("Error al actualizar el usuario: $e");
+    }
+  }
+
+  Future<void> updateUserToken(int idUser, String firebaseToken) async {
+    try {
+      final uri = Uri.parse('$baseUrl$usersPath/$idUser');
+      final response = await http.put(
+        uri,
+        headers: {'Content-Type': 'application/json'},
+        body: '''
+        {
+          "firebaseToken": "$firebaseToken"
         }
         ''',
       );

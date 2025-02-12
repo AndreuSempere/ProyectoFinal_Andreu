@@ -49,11 +49,5 @@ class UpdateUserEvent extends LoginEvent {
   final String email;
   final int telf;
 
-  UpdateUserEvent(
-    this.idUser,
-    this.name,
-    this.surname,
-    this.email,
-    this.telf,
-  );
+  UpdateUserEvent(this.idUser, this.name, this.surname, this.email, this.telf);
 }

@@ -4,9 +4,11 @@ import 'package:flutter_bank_app/Config/router/routes.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/credit%20card/creditCard_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_bank_app/Services/notification_service.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +17,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -27,7 +30,7 @@ Future<void> main() async {
 
   try {
     await Firebase.initializeApp(
-      // name: 'bankifyApp',
+      name: 'bankifyApp',
       options: DefaultFirebaseOptions.currentPlatform,
     );
     debugPrint('Firebase inicializado correctamente.');
@@ -37,6 +40,8 @@ Future<void> main() async {
   }
 
   await configureDependencies();
+  await NotificationService().initialize();
+
   runApp(const MyApp());
 }
 
@@ -61,6 +66,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<BiometricAuthBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<CreditCardBloc>(),
         ),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(

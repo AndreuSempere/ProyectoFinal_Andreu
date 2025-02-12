@@ -179,24 +179,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   },
                 ),
                 ListTile(
-                    leading: const Icon(
-                      Icons.payment,
-                      color: Color(0xFFF2F2F2),
-                    ),
-                    title: const Text(
-                      'Configurar tarjetas',
-                      style: TextStyle(
-                        color: Color(0xFFF2F2F2),
-                      ),
-                    ),
-                    trailing: const Icon(
-                      Icons.chevron_right,
-                      color: Color(0xFFF2F2F2),
-                    ),
-                    onTap: () async {
-                      context.go('/add_card');
-                    }),
-                ListTile(
                   leading: const Icon(
                     Icons.notifications,
                     color: Color(0xFFF2F2F2),

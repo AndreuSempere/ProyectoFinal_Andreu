@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart';
 import 'package:flutter_bank_app/Domain/Entities/user_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
+import 'package:flutter_bank_app/Services/notification_service.dart';
 import 'package:flutter_bank_app/core/failure.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,20 +21,30 @@ class SignInRepositoryImpl implements SignInRepository {
   Future<Either<Failure, Msg>> signIn(String email, String password) async {
     try {
       await dataSource.signIn(email, password);
-      await sharedPreferences.setString(
-        _userKey,
-        email,
-      );
+      await sharedPreferences.setString(_userKey, email);
+
       try {
         await secureStorage.write(key: 'user_password', value: password);
         await secureStorage.write(key: 'user_email', value: email);
-
         print('Password guardada correctamente.');
       } catch (e) {
         print('Error al guardar la contraseña: $e');
       }
 
-      return const Right(Msg());
+      final userInfoResult = await getUserInfo(email);
+      return await userInfoResult.fold(
+        (failure) {
+          print("Error obteniendo usuario");
+          return Left(failure);
+        },
+        (user) async {
+          final tokenResult = await updateUserToken(user.idUser!);
+          return tokenResult.fold(
+            (errorMsg) => Left(AuthFailure()),
+            (success) => Right(success),
+          );
+        },
+      );
     } catch (e) {
       return Left(AuthFailure());
     }
@@ -111,6 +122,23 @@ class SignInRepositoryImpl implements SignInRepository {
       return const Right(Msg());
     } catch (e) {
       return Left('Fallo al actualizar la cuenta: $e');
+    }
+  }
+
+  Future<Either<String, Msg>> updateUserToken(int idUser) async {
+    try {
+      final fetchedToken = await NotificationService().getToken();
+      final savedToken = sharedPreferences.getString('firebase_token');
+
+      if (savedToken == fetchedToken) {
+        print("El token ya está actualizado. No es necesario enviarlo.");
+        return const Right(Msg());
+      }
+      await sharedPreferences.setString('firebase_token', fetchedToken!);
+      await dataSource.updateUserToken(idUser, fetchedToken);
+      return const Right(Msg());
+    } catch (e) {
+      return Left('Fallo al añadir el token a la cuenta: $e');
     }
   }
 }

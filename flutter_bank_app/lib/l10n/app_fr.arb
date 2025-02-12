@@ -363,5 +363,6 @@
   "biometricAuthReason": "Veuillez vous authentifier à l'aide de la biométrie pour continuer.",
   "biometricAuthFailed": "L'authentification biométrique a échoué. Veuillez réessayer.",
   "loginSuccess": "Authentification réussie",
-  "buttonBorrarFiltros": "Borner les filtres"
+  "buttonBorrarFiltros": "Borner les filtres",
+  "creaTarjeta": "Créer une carte"
 }

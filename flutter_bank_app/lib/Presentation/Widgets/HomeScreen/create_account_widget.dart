@@ -3,7 +3,7 @@ import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/generate_number_account_widget.dart';
+import 'package:flutter_bank_app/core/generate_number_random_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

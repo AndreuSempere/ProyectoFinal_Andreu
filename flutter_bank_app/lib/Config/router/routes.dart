@@ -3,12 +3,14 @@ import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/Card/ui/app.dart';
+import 'package:flutter_bank_app/Presentation/Screens/creditCard_screen.dart';
 import 'package:flutter_bank_app/injection.dart';
+import 'package:flutter_bank_app/main.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
     initialLocation: '/login',
+    navigatorKey: navigatorKey,
     routes: [
       GoRoute(
         path: '/login',
@@ -18,7 +20,7 @@ final GoRouter router = GoRouter(
       GoRoute(
         path: '/transactions',
         builder: (context, state) {
-          Account account = state.extra as Account; // -> casting is important
+          Account account = state.extra as Account;
           return TransactionInfoPage(
             accountId: account.idCuenta!,
             description: account.description,
@@ -26,7 +28,13 @@ final GoRouter router = GoRouter(
           );
         },
       ),
-      GoRoute(path: '/add_card', builder: (context, state) => const App()),
+      GoRoute(
+        path: '/add_card',
+        builder: (context, state) {
+          final int accountId = state.extra as int;
+          return HomeCreditCard(accountId: accountId);
+        },
+      ),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();

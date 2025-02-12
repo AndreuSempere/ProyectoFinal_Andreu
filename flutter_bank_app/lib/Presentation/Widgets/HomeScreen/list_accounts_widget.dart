@@ -120,7 +120,7 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                           ],
                         ),
                         onTap: () {
-                          context.go(
+                          context.push(
                             '/transactions',
                             extra: account,
                           );

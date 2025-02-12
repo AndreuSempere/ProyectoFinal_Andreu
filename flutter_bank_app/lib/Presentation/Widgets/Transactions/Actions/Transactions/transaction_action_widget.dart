@@ -198,11 +198,10 @@ class _TransactionPageState extends State<TransactionPage> {
                               Text(AppLocalizations.of(context)!.fillallfields),
                         ),
                       );
-                      return;
                     }
                     final newTransaction = Transaction(
                       account: int.parse(fromAccount),
-                      targetAccount: int.parse(toAccount!),
+                      targetAccount: int.parse(targetAccount),
                       cantidad: int.parse(amount),
                       descripcion: description,
                       tipo: 'gasto',

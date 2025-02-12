@@ -52,7 +52,7 @@ class _SignInFormState extends State<SignInForm> {
   Widget build(BuildContext context) {
     context.read<LoginBloc>().stream.listen((state) {
       if (state.email != null) {
-        context.go('/home');
+        context.push('/home');
       } else if (state.message != null) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_event.dart';
 import 'package:flutter_bank_app/Presentation/Screens/graficos_screen.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/actions_account_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/filtrer_transactions_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/transactions_list_widget.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 
@@ -22,11 +26,22 @@ class TransactionInfoPage extends StatefulWidget {
 }
 
 class _TransactionInfoPageState extends State<TransactionInfoPage> {
-  // Usamos un ValueNotifier para el contador de filtros
   ValueNotifier<int> appliedFiltersCount = ValueNotifier<int>(0);
+  Map<String, dynamic> currentFilters = {
+    'descripcion': null,
+    'tipo': null,
+    'created_at': null,
+    'cantidad': null,
+  };
 
   void _updateFiltersCount(int count) {
     appliedFiltersCount.value = count;
+  }
+
+  void _updateFilters(Map<String, dynamic> filters) {
+    // setState(() {
+    //   currentFilters = filters;
+    // });
   }
 
   @override
@@ -37,6 +52,9 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userId = context.read<LoginBloc>().state.user!.idUser;
+    context.read<TransactionBloc>().add(GetAllTransactions(id: userId!));
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 143, 193, 226),
@@ -54,7 +72,7 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
             if (mounted) {
-              context.push('/home');
+              context.go('/home');
             }
           },
         ),
@@ -110,6 +128,16 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
                   },
                 ),
                 IconButton(
+                  icon: const Icon(
+                    Icons.payment,
+                    size: 32,
+                    color: Color.fromARGB(255, 154, 174, 208),
+                  ),
+                  onPressed: () {
+                    context.go('/add_card', extra: widget.accountId);
+                  },
+                ),
+                IconButton(
                   icon: ValueListenableBuilder<int>(
                     valueListenable: appliedFiltersCount,
                     builder: (context, count, child) {
@@ -127,9 +155,15 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return FilterDialog(
-                            onFiltersApplied: _updateFiltersCount);
+                          onFiltersApplied: _updateFiltersCount,
+                          currentFilters: currentFilters,
+                        );
                       },
-                    );
+                    ).then((result) {
+                      if (result != null) {
+                        _updateFilters(result);
+                      }
+                    });
                   },
                 ),
                 ValueListenableBuilder<int>(

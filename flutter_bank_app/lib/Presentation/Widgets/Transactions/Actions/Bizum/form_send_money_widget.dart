@@ -136,6 +136,7 @@ class SendMoneyPage extends StatelessWidget {
                   );
 
                   Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 child: const Text('Enviar Bizum'),
               ),

@@ -7,8 +7,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class FilterDialog extends StatefulWidget {
   final Function(int) onFiltersApplied;
+  final Map<String, dynamic> currentFilters;
 
-  const FilterDialog({super.key, required this.onFiltersApplied});
+  const FilterDialog({
+    super.key,
+    required this.onFiltersApplied,
+    required this.currentFilters,
+  });
 
   @override
   State<FilterDialog> createState() => _FilterDialogState();
@@ -25,14 +30,7 @@ class _FilterDialogState extends State<FilterDialog> {
   @override
   void initState() {
     super.initState();
-    if (filters.isEmpty) {
-      filters = {
-        'descripcion': null,
-        'tipo': null,
-        'created_at': null,
-        'cantidad': null,
-      };
-    }
+    filters = widget.currentFilters;
 
     descripcionController.text = filters['descripcion'] ?? '';
     cantidadController.text = filters['cantidad']?.toString() ?? '';
@@ -150,10 +148,24 @@ class _FilterDialogState extends State<FilterDialog> {
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
-              onPressed: _clearFilters,
+              onPressed: () {
+                _clearFilters();
+                filters.removeWhere(
+                    (key, value) => value == null || value.toString().isEmpty);
+                context
+                    .read<TransactionBloc>()
+                    .add(GetAllTransactions(id: userId, filters: filters));
+                int filterCount = filters.values
+                    .where(
+                        (value) => value != null && value.toString().isNotEmpty)
+                    .length;
+                widget.onFiltersApplied(filterCount);
+                Navigator.of(context).pop(filters);
+              },
               child: Text(AppLocalizations.of(context)!.buttonBorrarFiltros),
             ),
           ),
+        SizedBox(height: 15),
         SizedBox(
           width: double.infinity,
           child: ElevatedButton(
@@ -170,7 +182,7 @@ class _FilterDialogState extends State<FilterDialog> {
                       (value) => value != null && value.toString().isNotEmpty)
                   .length;
               widget.onFiltersApplied(filterCount);
-              Navigator.of(context).pop();
+              Navigator.of(context).pop(filters);
             },
             child: Text(AppLocalizations.of(context)!.buttonaplicar),
           ),
