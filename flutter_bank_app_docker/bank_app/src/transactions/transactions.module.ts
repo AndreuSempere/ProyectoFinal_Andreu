@@ -5,9 +5,10 @@ import { TransactionsController } from './transactions.controller';
 import { Transaction } from './transactions.entity';
 import { Accounts } from '../accounts/accounts.entity';
 import { AccountsModule } from '../accounts/accounts.module';
+import { FirebaseModule } from 'src/firebase/firebase.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Transaction, Accounts]), AccountsModule],
+  imports: [TypeOrmModule.forFeature([Transaction, Accounts]), AccountsModule, FirebaseModule],
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })

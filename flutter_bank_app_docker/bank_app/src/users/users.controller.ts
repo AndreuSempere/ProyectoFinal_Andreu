@@ -13,12 +13,16 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, description: 'Successfully retrieved all users.' })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
   getAllUser(@Query('xml') xml?: string) {
     try {
       return this.usersService.getAllUser(xml);
@@ -34,6 +38,11 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'User ID to fetch user data' })
+  @ApiResponse({ status: 200, description: 'Successfully retrieved user data.' })
+  @ApiResponse({ status: 400, description: 'Invalid user ID' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async getUser(@Param('id') id: string, @Query('xml') xml?: string) {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
@@ -47,6 +56,10 @@ export class UsersController {
   }
 
   @Get('user/:email')
+  @ApiOperation({ summary: 'Find user by email' })
+  @ApiParam({ name: 'email', type: String, description: 'Email to find the user' })
+  @ApiResponse({ status: 200, description: 'Successfully retrieved user by email.' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async findUserByEmail(@Param('email') email: string) {
     if (!email) {
       throw new HttpException('Email is required', HttpStatus.BAD_REQUEST);
@@ -59,6 +72,9 @@ export class UsersController {
   }
 
   @Post()
+  @ApiOperation({ summary: 'Create a new user' })
+  @ApiResponse({ status: 201, description: 'Successfully created a new user.' })
+  @ApiResponse({ status: 400, description: 'Failed to create user' })
   async createUser(@Body() createUserDto: CreateUserDto) {
     try {
       return await this.usersService.createUser(createUserDto);
@@ -74,6 +90,11 @@ export class UsersController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update user data by ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'User ID to update user data' })
+  @ApiResponse({ status: 200, description: 'Successfully updated user data.' })
+  @ApiResponse({ status: 400, description: 'Invalid user ID' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
@@ -96,6 +117,11 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete user by ID' })
+  @ApiParam({ name: 'id', type: Number, description: 'User ID to delete user data' })
+  @ApiResponse({ status: 200, description: 'Successfully deleted user.' })
+  @ApiResponse({ status: 400, description: 'Invalid user ID' })
+  @ApiResponse({ status: 404, description: 'User not found' })
   async deleteUser(@Param('id') id: string) {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
@@ -115,6 +141,20 @@ export class UsersController {
   }
 
   @Post('login')
+  @ApiOperation({ summary: 'User login' })
+  @ApiResponse({ status: 200, description: 'User successfully logged in.' })
+  @ApiResponse({ status: 400, description: 'Email and password are required' })
+  @ApiResponse({ status: 401, description: 'Invalid credentials' })
+  @ApiBody({
+    description: 'Login credentials',
+    type: Object,
+    schema: {
+      properties: {
+        email: { type: 'string', example: 'user@example.com' },
+        password: { type: 'string', example: 'password123' },
+      },
+    },
+  })
   async login(@Body('email') email: string, @Body('password') password: string) {
     if (!email || !password) {
       throw new HttpException(
@@ -132,7 +172,7 @@ export class UsersController {
       throw new HttpException(
         {
           status: HttpStatus.UNAUTHORIZED,
-          error: err.message || 'Unauthorized',
+          error: err.message || 'Unauthorized access',
         },
         HttpStatus.UNAUTHORIZED,
       );

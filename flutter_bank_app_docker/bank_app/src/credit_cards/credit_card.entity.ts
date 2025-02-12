@@ -18,6 +18,9 @@ export class Credit_Card {
   @Column()
   tipo_tarjeta: string;
 
+  @Column()
+  cardHolderName: string;
+
   @Column({ type: 'timestamp', nullable: true })
   fecha_expiracion: string;
 
@@ -25,7 +28,7 @@ export class Credit_Card {
   cvv: number;
 
   @Column()
-  estado: string;
+  color: number;
 
   @ManyToOne(
     () => Accounts,

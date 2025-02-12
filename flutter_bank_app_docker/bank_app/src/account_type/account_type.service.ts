@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UtilsService } from '../utils/utils.service';
 import { Accounts_type } from './account_type.entity';
+import { CreateAccounts_typeDto, UpdateAccounts_typeDto } from './account_type.dto';
 
 @Injectable()
 export class AccountTypeService {
@@ -42,36 +43,36 @@ export class AccountTypeService {
 
     return accountType;
   }
+
   async createAccountType(
-    account_type: Partial<Accounts_type>,
+    createAccountTypeDto: CreateAccounts_typeDto,
   ): Promise<{ message: string }> {
-    const newAccountType =
-      this.accountTypeRepository.create(account_type);
+    const { description } = createAccountTypeDto;
+  
+    const newAccountType = this.accountTypeRepository.create({
+      description, 
+    });
+  
     await this.accountTypeRepository.save(newAccountType);
     return { message: 'Tipo de cuenta creado satisfactoriamente' };
   }
+  
+ async updateAccountType(updateAccountTypeDto: UpdateAccounts_typeDto): Promise<Accounts_type> {
+  const accountType = await this.accountTypeRepository.findOne({
+    where: { id_type: updateAccountTypeDto.id_type },
+  });
 
-  async updateAccountType(
-    id_type: number,
-    accountTypeUpdated: Partial<Accounts_type>,
-  ): Promise<Accounts_type> {
-    const accountType = await this.accountTypeRepository.findOne({
-      where: { id_type: id_type },
-    });
-
-    if (!accountType) {
-      throw new HttpException(
-        'Tipo de cuenta no encontrado',
-        HttpStatus.NOT_FOUND,
-      );
-    }
-
-    await this.accountTypeRepository.update(id_type, accountTypeUpdated);
-
-    return this.accountTypeRepository.findOne({
-      where: { id_type: id_type },
-    });
+  if (!accountType) {
+    throw new HttpException(
+      'Tipo de cuenta no encontrado',
+      HttpStatus.NOT_FOUND,
+    );
   }
+
+  await this.accountTypeRepository.update(accountType.id_type, updateAccountTypeDto);
+  return this.accountTypeRepository.findOne({ where: { id_type: updateAccountTypeDto.id_type } });
+  
+}
 
   async deleteAccountType(id_type: number): Promise<{ message: string }> {
     const result = await this.accountTypeRepository.delete(id_type);

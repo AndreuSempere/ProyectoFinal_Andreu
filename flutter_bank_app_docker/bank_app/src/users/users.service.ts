@@ -5,10 +5,12 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { UtilsService } from '../utils/utils.service';
+import { FirebaseService } from '../firebase/firebase.service';
 @Injectable()
 export class UsersService {
   constructor(
     private readonly utilsService: UtilsService,
+    private firebaseService: FirebaseService,
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
@@ -45,20 +47,38 @@ export class UsersService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
   }
-
+  
   async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id_user: updateUserDto.id_user },
     });
-
+  
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-
+  
+    const oldTelf = user.telf;
+    const newTelf = updateUserDto.telf;
+    const hasTelfChanged = newTelf && oldTelf !== newTelf;
     this.usersRepository.merge(user, updateUserDto);
-    return this.usersRepository.save(user);
+    const updatedUser = await this.usersRepository.save(user);
+  
+    if (hasTelfChanged && user.firebaseToken) {
+      try {
+        await this.firebaseService.sendPushNotification(
+          user.firebaseToken,
+          'Has añadido tu número de telefono',
+          `El numero añadido es ${newTelf}`
+        );
+        console.log("Notificación enviada por cambio de teléfono.");
+      } catch (error) {
+        console.error("Error al enviar la notificación:", error);
+      }
+    }
+  
+    return updatedUser;
   }
-
+  
   async deleteUser(id_user: number): Promise<void> {
     await this.usersRepository.delete(id_user);
   }

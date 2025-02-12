@@ -30,7 +30,10 @@ export class User {
   dni: string | null;
 
   @Column()
-  age: string;
+  edad: string;
+
+  @Column({ nullable: true })
+  firebaseToken?: string | null;
 
   @OneToMany(() => Accounts, (accounts) => accounts.id_user)
   accounts: Accounts[];

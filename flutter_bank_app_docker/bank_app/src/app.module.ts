@@ -13,6 +13,7 @@ import { Credit_Card } from './credit_cards/credit_card.entity';
 import { Credit_CardModule } from './credit_cards/credit_card.module';
 import { TransactionsModule } from './transactions/transactions.module';
 import { Transaction } from './transactions/transactions.entity';
+import { FirebaseModule } from './firebase/firebase.module';
 
 
 @Module({
@@ -23,6 +24,10 @@ import { Transaction } from './transactions/transactions.entity';
     Credit_CardModule,
     TransactionsModule,
     UtilsModule,
+    FirebaseModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
