@@ -1,0 +1,111 @@
+version: "3.8"
+
+services:
+  web_server:
+    build: .
+    ports:
+      - ${WEB_SERVER_PORT}:3000
+    depends_on:
+      - database
+    container_name: bank_app-webserver
+    working_dir: /web
+    command: pm2-runtime start pm2.json
+    volumes:
+      - ./bank_app:/web
+    environment:
+      WEB_SERVER_PORT: ${WEB_SERVER_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  database:
+    image: yobasystems/alpine-mariadb:10.11.8
+    container_name: bank_app-db
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - TZ=UTC
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./data/db/mysql:/var/lib/mysql
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "mysqladmin ping -h 127.0.0.1 -u${MYSQL_USER} -p${MYSQL_PASSWORD} || exit 1",
+        ]
+      interval: 10s
+      retries: 5
+      start_period: 20s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: bank_app-db-phpmyadmin
+    environment:
+      - PMA_HOST=database
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_USER=${MYSQL_USER}
+    ports:
+      - "8081:80"
+    depends_on:
+      - database
+
+  db:
+    image: postgres:15
+    container_name: bank_app-odoo-db
+    environment:
+      - POSTGRES_USER=${ODOO_DB_USER}
+      - POSTGRES_PASSWORD=${ODOO_DB_PASSWORD}
+      - POSTGRES_DB=${ODOO_DB_NAME}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./volumesOdoo/dataPostgreSql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${ODOO_DB_USER}"]
+      interval: 10s
+      retries: 5
+
+  web:
+    image: odoo:17
+    container_name: bank_app-odoo
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 8070:8069
+    volumes:
+      - ./volumesOdoo/addons:/mnt/extra-addons
+      - ./volumesOdoo/filestore:/var/lib/odoo/filestore
+      - ./volumesOdoo/sessions:/var/lib/odoo/sessions
+      - ./odoo.conf:/etc/odoo/odoo.conf
+    environment:
+      - HOST=db
+      - USER=${ODOO_DB_USER}
+      - PASSWORD=${ODOO_DB_PASSWORD}
+      - PORT=5432
+      - ODOO_DEV_MODE=all
+
+  bank_app_spring:
+    build:
+      context: ./Spring_proyect-1
+      dockerfile: Dockerfile-spring
+    container_name: bank_app-spring
+    ports:
+      - "8085:8085"
+    depends_on:
+      - database
+    environment:
+      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 30s
+      retries: 3
+      start_period: 10s

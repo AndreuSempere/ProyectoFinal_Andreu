@@ -1,0 +1,1 @@
+docker exec -it odoodev-web-1 odoo --config=/etc/odoo/odoo.conf --update=estate -d odoo_dev_db

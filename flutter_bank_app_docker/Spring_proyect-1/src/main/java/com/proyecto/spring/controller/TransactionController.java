@@ -7,6 +7,8 @@ import com.proyecto.spring.dto.CreateTransactionDto;
 import com.proyecto.spring.entity.Transaction;
 import com.proyecto.spring.service.TransactionService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.List;
@@ -22,11 +24,15 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    @Operation(summary = "Obtener todas las transacciones", description = "Devuelve la lista de todas las transacciones")
+    @ApiResponse(responseCode = "200", description = "Transacciones obtenidos con éxito")
     @GetMapping("/all")
     public List<Transaction> getTransactionAll() {
         return transactionService.getTransactionAll();
     }
 
+    @Operation(summary = "Crear un nueva transaccion", description = "Crea una nueva transacciones en el sistema")
+    @ApiResponse(responseCode = "201", description = "Transaccion creado con éxito")
     @PostMapping
     public CompletableFuture<ResponseEntity<String>> createTransaction(
             @RequestBody CreateTransactionDto dto) {
@@ -34,6 +40,8 @@ public class TransactionController {
                 .thenApply(ResponseEntity::ok);
     }
 
+    @Operation(summary = "Crear un bizum", description = "Crea un nuevo bizum en el sistema")
+    @ApiResponse(responseCode = "201", description = "Bizum creado con éxito")
     @PostMapping("/bizum")
     public CompletableFuture<ResponseEntity<String>> bizumTransaction(
             @RequestBody CreateTransactionDto dto) {
