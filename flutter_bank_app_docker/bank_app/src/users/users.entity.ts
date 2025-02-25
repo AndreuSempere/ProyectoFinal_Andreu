@@ -24,13 +24,13 @@ export class User {
   email: string;
 
   @Column({ unique: true, nullable: true }) 
-  telf?: number | null;  
+  telf?: string | null;  
 
   @Column({ unique: true, nullable: true })
   dni: string | null;
 
   @Column()
-  edad: string;
+  fecha_nacimiento: string;
 
   @Column({ nullable: true })
   firebaseToken?: string | null;

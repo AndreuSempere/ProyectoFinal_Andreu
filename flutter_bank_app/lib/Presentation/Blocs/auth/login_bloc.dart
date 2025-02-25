@@ -33,12 +33,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       if (result.isRight()) {
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('user_email', event.email);
+        final datosUser = await getCurrentUserUseCase(event.email);
+        datosUser.fold(
+          (failure) =>
+              emit(LoginState.failure("Fallo al obtener datos del usuario")),
+          (user) => emit(
+              state.copyWith(isLoading: false, user: user, email: event.email)),
+        );
+      } else {
+        emit(LoginState.failure("Fallo al realizar el login"));
       }
 
-      result.fold(
-        (failure) => emit(LoginState.failure("Fallo al realizar el login")),
-        (user) => emit(LoginState.success(email: event.email)),
-      );
+      // result.fold(
+      //   (failure) => emit(LoginState.failure("Fallo al realizar el login")),
+      //   (user) => emit(LoginState.success(email: event.email)),
+      // );
     });
 
     on<RegisterButtonPressed>((event, emit) async {

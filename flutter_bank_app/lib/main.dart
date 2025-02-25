@@ -41,7 +41,6 @@ Future<void> main() async {
 
   await configureDependencies();
   await NotificationService().initialize();
-
   runApp(const MyApp());
 }
 
