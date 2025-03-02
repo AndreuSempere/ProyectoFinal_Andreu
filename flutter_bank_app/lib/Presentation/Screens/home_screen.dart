@@ -3,6 +3,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/drawer_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/create_account_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/list_accounts_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -40,31 +41,36 @@ class HomePage extends StatelessWidget {
                 ),
               );
             } else if (state.user != null) {
-              return Column(
-                children: [
-                  SizedBox(height: 23),
-                  Text(
-                    AppLocalizations.of(context)!
-                        .titleHomeScreen(state.user!.name),
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(height: 30),
-                  FloatingActionButton.extended(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const CrearCuentaWidget();
-                        },
-                      );
-                    },
-                    label: Text(
-                      AppLocalizations.of(context)!.creaCuenta,
+              return Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: 23),
+                    Text(
+                      AppLocalizations.of(context)!
+                          .titleHomeScreen(state.user!.name),
                       style: const TextStyle(fontSize: 16),
                     ),
-                    icon: const Icon(Icons.add),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                    FloatingActionButton.extended(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const CrearCuentaWidget();
+                          },
+                        );
+                      },
+                      label: Text(
+                        AppLocalizations.of(context)!.creaCuenta,
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      icon: const Icon(Icons.add),
+                    ),
+                    const SizedBox(height: 30),
+                    Expanded(
+                        child: AccountListWidget(userId: state.user!.idUser!)),
+                  ],
+                ),
               );
             } else {
               return const Center(

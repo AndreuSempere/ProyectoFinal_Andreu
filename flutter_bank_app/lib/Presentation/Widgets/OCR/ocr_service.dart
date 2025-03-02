@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 
-/// Valida el DNI español
 bool _isValidDNIES(String dni) {
   const String validLetters = "TRWAGMYFPDXBNJZSQVHLCKE";
 
@@ -10,8 +9,8 @@ bool _isValidDNIES(String dni) {
   Match? match = dniRegExp.firstMatch(dni);
 
   if (match != null) {
-    String numberPart = match.group(1)!; // Los 8 dígitos
-    String letterPart = match.group(2)!; // La letra
+    String numberPart = match.group(1)!;
+    String letterPart = match.group(2)!;
 
     // Calcular la letra esperada
     int number = int.parse(numberPart);
@@ -22,13 +21,12 @@ bool _isValidDNIES(String dni) {
   return false;
 }
 
-/// Limpia y estandariza el texto para validar el DNI
 String _sanitizeDNIES(String text) {
   return text
-      .replaceAll('O', '0') // Cambia "O" (letra) por "0"
-      .replaceAll('I', '1') // Cambia "I" (letra) por "1"
-      .replaceAll('B', '8') // Cambia "B" (letra) por "8"
-      .toUpperCase(); // Asegúrate de que todo esté en mayúsculas.
+      .replaceAll('O', '0')
+      .replaceAll('I', '1')
+      .replaceAll('B', '8')
+      .toUpperCase();
 }
 
 /// Extrae y valida el DNI del texto

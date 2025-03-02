@@ -253,7 +253,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                     elevation: 5,
                   ),
                   child: Text(
@@ -272,7 +272,7 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                     elevation: 5,
                   ),
                   child: Text(
