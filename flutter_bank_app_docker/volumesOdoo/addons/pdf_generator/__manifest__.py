@@ -5,6 +5,7 @@
     'summary': 'Genera un PDF a partir de transacciones enviadas por JSON',
     'description': 'Este módulo recibe datos de transacciones y genera un PDF justificante.',
     'author': 'Andreu Sempere Mico',
+    "license": "LGPL-3",
     'website': 'https://bankify.blog',
     'depends': ['base'],
     'data': [],

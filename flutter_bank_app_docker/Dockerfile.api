@@ -1,0 +1,32 @@
+FROM python:3.9-bullseye
+
+WORKDIR /app
+
+COPY Trading_API_py/main.py /app/
+COPY Trading_API_py/requirements.api.txt /app/requirements.txt
+
+# Instalar dependencias del sistema necesarias para yfinance y diagnóstico
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    gcc \
+    libc6-dev \
+    libffi-dev \
+    ca-certificates \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Configurar certificados
+RUN update-ca-certificates
+
+# Instalar dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Configurar variables de entorno para yfinance
+ENV PYTHONIOENCODING=utf-8
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONHTTPSVERIFY=0
+
+EXPOSE 8000
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

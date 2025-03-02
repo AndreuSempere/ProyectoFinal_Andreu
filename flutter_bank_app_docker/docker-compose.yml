@@ -109,3 +109,24 @@ services:
       interval: 30s
       retries: 3
       start_period: 10s
+
+  financial_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: bank_app-financial-api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./volumesOdoo/addons/valores_bolsa:/app/valores_bolsa
+    restart: always
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+    environment:
+      - PYTHONHTTPSVERIFY=0
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/test-connection"]
+      interval: 30s
+      retries: 3
+      start_period: 10s
