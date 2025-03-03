@@ -176,30 +176,28 @@ def get_yahoo_direct(symbol: str):
     return None, None
 
 def get_price(symbol: str):
-    """Obtiene el precio de un activo desde Yahoo Finance con múltiples intentos y períodos"""
-    # Si estamos en Docker, es posible que tengamos problemas de red, así que usamos datos de fallback
-    if symbol in FALLBACK_DATA:
-        logger.info(f"Usando datos de fallback para {symbol}")
-        return FALLBACK_DATA[symbol]["price"], FALLBACK_DATA[symbol]["date"]
-    
-    # Si no tenemos datos de fallback, intentamos obtener datos reales (esto no debería ocurrir)
-    logger.warning(f"No hay datos de fallback para {symbol}, intentando obtener datos reales")
-    
-    # Intentar con yfinance (probablemente fallará en Docker)
+    logger.info(f"Intentando obtener datos para {symbol}")
+
+    # Intentar obtener datos de Yahoo directamente
+    price, date = get_yahoo_direct(symbol)
+    if price is not None:
+        logger.info(f"Datos obtenidos de Yahoo Directo: {price} en {date}")
+        return price, date
+
+    # Intentar con yfinance
     try:
-        logger.info(f"Obteniendo datos para {symbol}")
-        stock = yf.Ticker(symbol, session=session)
+        stock = yf.Ticker(symbol)
         data = stock.history(period="1d")
-        
         if not data.empty:
             last_date = data.index[-1].strftime('%Y-%m-%d')
             last_price = round(data["Close"].iloc[-1], 2)
-            logger.info(f"{symbol}: Precio {last_price} en fecha {last_date}")
+            logger.info(f"Datos obtenidos de yfinance: {last_price} en {last_date}")
             return last_price, last_date
     except Exception as e:
-        logger.error(f"Error al obtener datos para {symbol}: {str(e)}")
-    
-    return None, None
+        logger.error(f"Error al obtener datos con yfinance para {symbol}: {str(e)}")
+
+    logger.warning(f"Falling back a datos predefinidos para {symbol}")
+    return FALLBACK_DATA.get(symbol, {"price": None, "date": None})["price"], FALLBACK_DATA.get(symbol, {"price": None, "date": None})["date"]
 
 @app.get("/stock/{company}")
 def get_stock_price(company: str):

@@ -16,6 +16,8 @@ import { Transaction } from './transactions/transactions.entity';
 import { FirebaseModule } from './firebase/firebase.module';
 import { TradingEntity } from './trading/trading.entity';
 import { TradingModule } from './trading/trading.module';
+import { Investment } from './investments/investments.entity';
+import { InvestmentsModule } from './investments/investments.module';
 
 
 @Module({
@@ -26,6 +28,7 @@ import { TradingModule } from './trading/trading.module';
     Credit_CardModule,
     TransactionsModule,
     TradingModule,
+    InvestmentsModule,
     UtilsModule,
     FirebaseModule,
     ConfigModule.forRoot({
@@ -47,6 +50,7 @@ import { TradingModule } from './trading/trading.module';
           Credit_Card,
           Transaction,
           TradingEntity,
+          Investment,
         ],
         synchronize: true,
       }),

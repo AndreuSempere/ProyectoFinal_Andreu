@@ -2,6 +2,7 @@ import { Credit_Card } from '../credit_cards/credit_card.entity';
 import { Accounts_type } from '../account_type/account_type.entity';
 import { User } from '../users/users.entity';
 import { Transaction } from '../transactions/transactions.entity';
+import { Investment } from '../investments/investments.entity';
 import {
   Entity,
   Column,
@@ -56,4 +57,10 @@ export class Accounts {
     onDelete: 'CASCADE',
   })
   transactions: Transaction[];
+
+  @OneToMany(() => Investment, (investment) => investment.account, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  investments: Investment[];
 }
