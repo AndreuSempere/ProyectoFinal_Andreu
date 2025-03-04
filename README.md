@@ -13,7 +13,7 @@ El sistema está completamente dockerizado para facilitar su despliegue y cuenta
 - **Transacciones**: Realizar y visualizar historial de transacciones
 - **Tarjetas de crédito**: Gestión de tarjetas de crédito
 - **Análisis financiero**: Gráficos y estadísticas de gastos e ingresos
-- **Soporte multiidioma**: Disponible en español, inglés y francés
+- **Soporte multidioma**: Disponible en español, inglés y francés
 - **Integración con servicios financieros**: API de cotizaciones bursátiles en tiempo real
 - **Notificaciones**: Sistema de notificaciones para transacciones y alertas
 
