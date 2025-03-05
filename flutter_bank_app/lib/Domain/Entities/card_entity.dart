@@ -4,9 +4,9 @@ class CreditCardEntity {
   final String numero_tarjeta;
   final String tipo_tarjeta;
   final String? fecha_expiracion;
-  final int? cardCvv; // Cambiar a int? para permitir null
-  final int? cardColor; // Cambiar a int? para permitir null
-  final int? id_cuenta; // Cambiar a int? para permitir null
+  final int? cardCvv;
+  final int? cardColor;
+  final int? id_cuenta;
 
   CreditCardEntity({
     this.id_tarjeta,
@@ -14,9 +14,9 @@ class CreditCardEntity {
     required this.numero_tarjeta,
     required this.tipo_tarjeta,
     this.fecha_expiracion,
-    this.cardCvv, // Cambiar a tipo nullable
-    this.cardColor, // Cambiar a tipo nullable
-    this.id_cuenta, // Cambiar a tipo nullable
+    this.cardCvv,
+    this.cardColor,
+    this.id_cuenta,
   });
 
   CreditCardEntity copyWith({

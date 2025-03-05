@@ -7,6 +7,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_blo
 import 'package:flutter_bank_app/Presentation/Blocs/credit%20card/creditCard_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_state.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Services/notification_service.dart';
 import 'package:flutter_bank_app/injection.dart';
@@ -30,7 +31,7 @@ Future<void> main() async {
 
   try {
     await Firebase.initializeApp(
-      // name: 'bankifyApp',
+      name: 'bankifyApp',
       options: DefaultFirebaseOptions.currentPlatform,
     );
     debugPrint('Firebase inicializado correctamente.');
@@ -68,6 +69,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<CreditCardBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<TradingBloc>(),
         ),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(

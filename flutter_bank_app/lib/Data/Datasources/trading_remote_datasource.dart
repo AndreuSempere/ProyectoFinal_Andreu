@@ -1,0 +1,34 @@
+import 'dart:convert';
+import 'package:flutter_bank_app/Data/Models/trading_model.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
+abstract class TradingRemoteDataSource {
+  Future<List<TradingModel>> getAllTrading();
+}
+
+class TradingRemoteDataSourceImpl implements TradingRemoteDataSource {
+  final http.Client client;
+  final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
+  final String tradingPath = dotenv.env['API_TRADING_PATH'] ?? '';
+
+  TradingRemoteDataSourceImpl(this.client);
+
+  @override
+  Future<List<TradingModel>> getAllTrading() async {
+    try {
+      final uri = Uri.parse('$baseUrl$tradingPath/');
+      final response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> tradingJson = json.decode(response.body);
+        return tradingJson.map((json) => TradingModel.fromJson(json)).toList();
+      } else {
+        throw Exception(
+            'Error al cargar los valores de bolsa: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Fallo al obtener los valores de bolsa: $e');
+    }
+  }
+}

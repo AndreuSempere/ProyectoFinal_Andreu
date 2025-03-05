@@ -82,29 +82,31 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                 ),
               ),
               const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.accountType,
-                    labelStyle: TextStyle(fontSize: 11)),
-                value: _selectedAccountType,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedAccountType = newValue;
-                  });
-                },
-                items:
-                    accountTypes.entries.map<DropdownMenuItem<String>>((entry) {
-                  return DropdownMenuItem<String>(
-                    value: entry.key,
-                    child: Text(entry.value, style: TextStyle(fontSize: 11)),
-                  );
-                }).toList(),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Seleccione un tipo de cuenta';
-                  }
-                  return null;
-                },
+              Flexible(
+                child: DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context)!.accountType,
+                      labelStyle: TextStyle(fontSize: 11)),
+                  value: _selectedAccountType,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      _selectedAccountType = newValue;
+                    });
+                  },
+                  items: accountTypes.entries
+                      .map<DropdownMenuItem<String>>((entry) {
+                    return DropdownMenuItem<String>(
+                      value: entry.key,
+                      child: Text(entry.value, style: TextStyle(fontSize: 11)),
+                    );
+                  }).toList(),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Seleccione un tipo de cuenta';
+                    }
+                    return null;
+                  },
+                ),
               ),
               const SizedBox(height: 16),
               TextFormField(

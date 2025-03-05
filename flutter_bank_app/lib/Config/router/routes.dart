@@ -2,6 +2,7 @@ import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
+import 'package:flutter_bank_app/Presentation/Screens/trading_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/creditCard_screen.dart';
 import 'package:flutter_bank_app/injection.dart';
@@ -35,6 +36,7 @@ final GoRouter router = GoRouter(
           return HomeCreditCard(accountId: accountId);
         },
       ),
+      GoRoute(path: '/trading', builder: (context, state) => TradingScreen()),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();

@@ -2,14 +2,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bank_app/Data/Datasources/accounts_remote_datasource.dart';
 import 'package:flutter_bank_app/Data/Datasources/credit_card_remote_datasource.dart';
 import 'package:flutter_bank_app/Data/Datasources/firebase_auth_datasource.dart';
+import 'package:flutter_bank_app/Data/Datasources/trading_remote_datasource.dart';
 import 'package:flutter_bank_app/Data/Datasources/transactions_remote_datasource.dart';
 import 'package:flutter_bank_app/Data/Repositories/accounts_repository_impl.dart';
 import 'package:flutter_bank_app/Data/Repositories/credit_card_repository_impl.dart';
 import 'package:flutter_bank_app/Data/Repositories/sign_in_repository_impl.dart';
+import 'package:flutter_bank_app/Data/Repositories/trading_repository_impl.dart';
 import 'package:flutter_bank_app/Data/Repositories/transactions_repository_impl.dart';
 import 'package:flutter_bank_app/Domain/Repositories/accounts_repository.dart';
 import 'package:flutter_bank_app/Domain/Repositories/credit_card_repository.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
+import 'package:flutter_bank_app/Domain/Repositories/trading_repository.dart';
 import 'package:flutter_bank_app/Domain/Repositories/transactions_repository.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/create_account_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Accounts/delete_account_usecase.dart';
@@ -23,6 +26,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Auth/update_user_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/create_creditCard_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/delete_creditCard_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/get_all_creditCard_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Trading/get_all_trading_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_bizum_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_transaction_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/get_transactions_usecase.dart';
@@ -31,6 +35,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/credit%20card/creditCard_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
@@ -66,6 +71,8 @@ Future<void> configureDependencies() async {
       () => TransactionsRemoteDataSourceImpl(sl()));
   sl.registerLazySingleton<CreditCardRemoteDataSource>(
       () => CreditCardRemoteDataSourceImpl(sl()));
+  sl.registerLazySingleton<TradingRemoteDataSource>(
+      () => TradingRemoteDataSourceImpl(sl()));
 
   // Repository
   sl.registerLazySingleton<SignInRepository>(() => SignInRepositoryImpl(
@@ -78,6 +85,8 @@ Future<void> configureDependencies() async {
       () => TransactionsRepositoryImpl(sl()));
   sl.registerLazySingleton<CreditCardRepository>(
       () => CreditCardRepositoryImpl(sl()));
+  sl.registerLazySingleton<TradingRepository>(
+      () => TradingRepositoryImpl(sl()));
 
   // Use Cases
   sl.registerLazySingleton<SigninUserUseCase>(() => SigninUserUseCase(sl()));
@@ -108,6 +117,7 @@ Future<void> configureDependencies() async {
       () => CreateCreditCardUseCase(sl()));
   sl.registerLazySingleton<DeleteCreditCardUseCase>(
       () => DeleteCreditCardUseCase(sl()));
+  sl.registerLazySingleton(() => GetAllTradingUseCase(sl()));
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
@@ -142,5 +152,8 @@ Future<void> configureDependencies() async {
         createCreditCardUseCase: sl<CreateCreditCardUseCase>(),
         getAllCreditCardsUseCase: sl<GetAllCreditCardsUseCase>(),
         deleteCreditCardUseCase: sl<DeleteCreditCardUseCase>(),
+      ));
+  sl.registerFactory<TradingBloc>(() => TradingBloc(
+        getTradingUsecase: sl<GetAllTradingUseCase>(),
       ));
 }

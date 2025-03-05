@@ -113,17 +113,20 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                                       fontSize: 24),
                                 ),
                                 Text(
-                                  'Fecha creada ${account.createdAt}',
-                                ),
+                                    'Fecha creada ${account.createdAt}${account.accountType}'),
                               ],
                             ),
                           ],
                         ),
                         onTap: () {
-                          context.push(
-                            '/transactions',
-                            extra: account,
-                          );
+                          if (account.accountType != 3) {
+                            context.push(
+                              '/transactions',
+                              extra: account,
+                            );
+                          } else {
+                            context.push('/trading');
+                          }
                         },
                       ),
                     );
