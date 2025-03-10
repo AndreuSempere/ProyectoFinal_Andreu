@@ -199,59 +199,6 @@ def get_price(symbol: str):
     logger.warning(f"Falling back a datos predefinidos para {symbol}")
     return FALLBACK_DATA.get(symbol, {"price": None, "date": None})["price"], FALLBACK_DATA.get(symbol, {"price": None, "date": None})["date"]
 
-@app.get("/stock/{company}")
-def get_stock_price(company: str):
-    company = company.lower()
-    if company not in STOCKS:
-        return {"error": "Acción no encontrada"}
-    
-    price, date = get_price(STOCKS[company])
-    if price is None:
-        return {"error": "No se pudieron obtener datos"}
-
-    return {
-        "type": "Acción",
-        "company": company.capitalize(),
-        "symbol": STOCKS[company],
-        "price": price,
-        "last_updated": date
-    }
-
-@app.get("/crypto/{coin}")
-def get_crypto_price(coin: str):
-    coin = coin.lower()
-    if coin not in CRYPTO:
-        return {"error": "Criptomoneda no encontrada"}
-
-    price, date = get_price(CRYPTO[coin])
-    if price is None:
-        return {"error": "No se pudieron obtener datos"}
-
-    return {
-        "type": "Criptomoneda",
-        "crypto": coin.capitalize(),
-        "symbol": CRYPTO[coin],
-        "price": price,
-        "last_updated": date
-    }
-
-@app.get("/commodity/{commodity}")
-def get_commodity_price(commodity: str):
-    commodity = commodity.lower()
-    if commodity not in COMMODITIES:
-        return {"error": "Materia prima no encontrada"}
-
-    price, date = get_price(COMMODITIES[commodity])
-    if price is None:
-        return {"error": "No se pudieron obtener datos"}
-
-    return {
-        "type": "Materia Prima",
-        "commodity": commodity.capitalize(),
-        "symbol": COMMODITIES[commodity],
-        "price": price,
-        "last_updated": date
-    }
 
 @app.get("/all")
 def get_all_prices():
