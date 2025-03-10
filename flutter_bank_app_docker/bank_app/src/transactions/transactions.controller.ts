@@ -44,13 +44,13 @@ export class TransactionsController {
   @ApiOperation({ summary: 'Retrieve transactions by user ID', description: 'Fetches all transactions associated with a user ID.' })
   @ApiResponse({ status: 200, description: 'Successfully fetched the user transactions.' })
   @ApiResponse({ status: 404, description: 'User not found or no transactions available.' })
-  async getTransactionsByUserId(@Param('id') id: string) {
+  async getTransactionsByAccountId(@Param('id') id: string) {
     const userId = parseInt(id);
     if (isNaN(userId)) {
       throw new BadRequestException('Invalid user ID');
     }
 
-    const transactions = await this.transactionsService.getTransactionsByUserId(userId);
+    const transactions = await this.transactionsService.getTransactionsByAccountId(userId);
     if (!transactions || transactions.length === 0) {
       throw new NotFoundException('User not found or no transactions available');
     }

@@ -32,12 +32,11 @@ export class TransactionsService {
     return result;
   }
 
-  async getTransactionsByUserId(userId: number): Promise<any> {
+  async getTransactionsByAccountId(accountId: number): Promise<any> {
     const result = await this.transactionsRepository
       .createQueryBuilder('transaction')
       .innerJoinAndSelect('transaction.account', 'account')
-      .innerJoinAndSelect('account.id_user', 'user')
-      .where('account.id_user = :userId', { userId })
+      .where('account.id_cuenta = :accountId', { accountId })
       .getMany();
   
     return result;
