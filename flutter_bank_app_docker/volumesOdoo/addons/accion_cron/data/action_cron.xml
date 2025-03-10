@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- hacer un cron que haga una solicitud GET a un endpoint y luego haga un POST a otro endpoint  -->
-    <!-- el cron se ejecutará cada dia a las 0:00 de la noche-->
     <record id="ir_cron_action_update" model="ir.cron">
         <field name="name">Action: update tradding</field>
         <field name="interval_number">1</field>

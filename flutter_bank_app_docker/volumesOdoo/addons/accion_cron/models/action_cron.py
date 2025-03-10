@@ -51,7 +51,6 @@ class AccionCron(models.Model):
                     "price": commodity.get("price")
                 })
             
-            # Enviar cada registro individualmente al endpoint /trading
             success_count = 0
             error_count = 0
             
