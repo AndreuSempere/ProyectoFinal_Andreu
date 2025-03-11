@@ -32,24 +32,18 @@ class TransactionListWidget extends StatelessWidget {
                     final transaction = transactionAccounts[index];
                     return Card(
                       margin: const EdgeInsets.all(8.0),
-                      child: ListTile(
-                        title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '${transaction.descripcion}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                          ],
+                      child: ExpansionTile(
+                        title: Text(
+                          '${transaction.descripcion}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        subtitle: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '${transaction.tipo == 'ingreso' ? '+' : '-'}${transaction.cantidad}€',
@@ -61,14 +55,15 @@ class TransactionListWidget extends StatelessWidget {
                                         : Colors.red,
                                   ),
                                 ),
+                                const SizedBox(height: 4),
                                 Text(
                                   'Fecha: ${transaction.created_at}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     );
                   },

@@ -9,8 +9,9 @@ class SendMoneyPage extends StatelessWidget {
   final TextEditingController _targetPhoneController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _conceptController = TextEditingController();
+  final int accountId;
 
-  SendMoneyPage({super.key});
+  SendMoneyPage({super.key, required this.accountId});
 
   @override
   Widget build(BuildContext context) {
@@ -120,14 +121,13 @@ class SendMoneyPage extends StatelessWidget {
                     descripcion: concept,
                     tipo: 'gasto',
                   );
-                  final userId = context.read<LoginBloc>().state.user!.idUser;
 
                   context
                       .read<TransactionBloc>()
                       .add(CreateTransactionsBizum(newBizum));
                   context
                       .read<TransactionBloc>()
-                      .add(GetAllTransactions(id: userId!));
+                      .add(GetAllTransactions(id: accountId));
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(

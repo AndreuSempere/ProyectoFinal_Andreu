@@ -5,7 +5,9 @@ import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/Bizum
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BizumPage extends StatelessWidget {
-  const BizumPage({super.key});
+  final int accountId;
+
+  const BizumPage({super.key, required this.accountId});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,8 @@ class BizumPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => RegisterPhonePage(),
+                      builder: (context) =>
+                          RegisterPhonePage(accountId: accountId),
                     ),
                   );
                 },
@@ -64,7 +67,7 @@ class BizumPage extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => SendMoneyPage(),
+                      builder: (context) => SendMoneyPage(accountId: accountId),
                     ),
                   );
                 },

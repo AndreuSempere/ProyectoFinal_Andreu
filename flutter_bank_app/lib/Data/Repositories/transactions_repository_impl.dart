@@ -3,19 +3,18 @@ import 'package:flutter_bank_app/Data/Datasources/transactions_remote_datasource
 import 'package:flutter_bank_app/Data/Models/transaction_model.dart';
 import 'package:flutter_bank_app/Domain/Entities/transaction_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/transactions_repository.dart';
-import 'package:flutter_bank_app/core/failure.dart';
 
 class TransactionsRepositoryImpl implements TransactionsRepository {
   final TransactionsRemoteDataSource remoteDataSource;
   TransactionsRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<Transaction>>> getTransactions(int id) async {
+  Future<Either<String, List<Transaction>>> getTransactions(int id) async {
     try {
       final transactionModels = await remoteDataSource.getAllTransactions(id);
       return Right(transactionModels.map((model) => model.toEntity()).toList());
     } catch (e) {
-      return Left(AuthFailure());
+      return Left('Fallo al obtener todas las transacciones: $e');
     }
   }
 

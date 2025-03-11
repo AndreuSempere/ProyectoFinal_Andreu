@@ -6,8 +6,9 @@ import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
 
 class RegisterPhonePage extends StatelessWidget {
   final TextEditingController _phoneController = TextEditingController();
+  final int accountId;
 
-  RegisterPhonePage({super.key});
+  RegisterPhonePage({super.key, required this.accountId});
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,10 @@ class RegisterPhonePage extends StatelessWidget {
 
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SendMoneyPage()),
+                    MaterialPageRoute(
+                        builder: (context) => SendMoneyPage(
+                              accountId: accountId,
+                            )),
                   );
                 },
                 child: const Text('Registrar'),

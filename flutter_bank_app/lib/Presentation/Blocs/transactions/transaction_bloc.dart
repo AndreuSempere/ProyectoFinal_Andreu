@@ -23,7 +23,7 @@ class TransactionBloc extends Bloc<TransactionsEvent, TransactionState> {
       result.fold(
         (error) => emit(state.copyWith(
             isLoading: false,
-            errorMessage: error.toString(),
+            errorMessage: "Error al obtener las transacciones",
             transactions: [])),
         (transactions) {
           final filteredTransactions = transactions.where((transaction) {

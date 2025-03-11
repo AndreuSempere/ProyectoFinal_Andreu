@@ -31,7 +31,7 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
         throw Exception('Error al cargar las transacciones: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Fallo al obtener las transacciones: $e');
+      throw Exception('Fallo al obtener las transacciones datasource: $e');
     }
   }
 
