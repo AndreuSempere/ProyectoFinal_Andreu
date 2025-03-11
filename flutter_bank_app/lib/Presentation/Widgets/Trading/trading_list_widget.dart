@@ -26,44 +26,52 @@ class TradingListWidget extends StatelessWidget {
                     final transaction = tradingState.tradings[index];
                     return Card(
                       margin: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                      onTap: () {
+                         context.push(
+                            '/worth_trading',
+                            extra: transaction.name,
+                          );
+                      },
                       child: ListTile(
                         title: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              transaction.name ?? 'N/A',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Symbol: ${transaction.symbol ?? 'N/A'}',
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                          ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                          transaction.name ?? 'N/A',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                          'Symbol: ${transaction.symbol ?? 'N/A'}',
+                          style: const TextStyle(fontSize: 16),
+                          ),
+                        ],
                         ),
                         subtitle: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 5),
-                            Text(
-                              'Type: ${transaction.type ?? 'N/A'}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Precio: \$${transaction.price?.toString() ?? 'N/A'}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Fecha: ${transaction.recordedAt != null ? DateFormat.yMMMd().format(transaction.recordedAt!) : 'N/A'}',
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 5),
+                          Text(
+                          'Type: ${transaction.type ?? 'N/A'}',
+                          style: const TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                          'Precio: \$${transaction.price?.toString() ?? 'N/A'}',
+                          style: const TextStyle(fontSize: 14),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                          'Fecha: ${transaction.recordedAt != null ? DateFormat.yMMMd().format(transaction.recordedAt!) : 'N/A'}',
+                          style: const TextStyle(fontSize: 14),
+                          ),
+                        ],
                         ),
+                      ),
                       ),
                     );
                   },

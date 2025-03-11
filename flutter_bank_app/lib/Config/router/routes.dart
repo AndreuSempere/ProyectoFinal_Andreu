@@ -37,6 +37,13 @@ final GoRouter router = GoRouter(
         },
       ),
       GoRoute(path: '/trading', builder: (context, state) => TradingScreen()),
+      GoRoute(
+        path: '/worth_trading',
+        builder: (context, state) {
+          final String name = state.extra as String;
+          return WorthTrading(name: name);
+        },
+      ),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();
