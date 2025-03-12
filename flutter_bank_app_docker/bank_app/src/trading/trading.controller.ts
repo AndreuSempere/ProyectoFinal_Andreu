@@ -28,26 +28,18 @@ import { CreateTradingDto } from './trading.dto';
       const data = await this.tradingService.getAllLatestTradingRecords();
       return res ? res.json(data) : data;
     }
-  
-    @Get(':id')
-    @ApiOperation({ summary: 'Get trading record by ID' })
-    @ApiParam({ name: 'id', type: Number, description: 'Trading record ID' })
+
+    @Get(':name')
+    @ApiOperation({ summary: 'Get trading record by name' })
     @ApiResponse({ status: 200, description: 'Successfully retrieved trading record.' })
     @ApiResponse({ status: 404, description: 'Trading record not found' })
     @ApiResponse({ status: 500, description: 'Internal server error' })
-    async getTradingRecord(@Param('id') id: string, @Query('format') format?: string, @Res() res?: Response) {
-      const data = await this.tradingService.getTradingRecord(parseInt(id), format);
-  
-      if (!data) {
-        throw new HttpException('Trading record not found', HttpStatus.NOT_FOUND);
+    async getTradingRecord(@Param('name') name: string) {
+      const worthtrading = await this.tradingService.getTradingRecordsByName(name);
+      if (!worthtrading || worthtrading.length === 0) {
+      throw new HttpException('Trading record not found', HttpStatus.NOT_FOUND);
       }
-  
-      if (format === 'xml' && res) {
-        res.set('Content-Type', 'application/xml');
-        return res.send(data);
-      }
-  
-      return res ? res.json(data) : data;
+      return worthtrading;
     }
   
     @Post()

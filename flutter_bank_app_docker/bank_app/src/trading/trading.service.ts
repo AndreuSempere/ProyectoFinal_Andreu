@@ -22,20 +22,16 @@ export class TradingService {
     return tradingRecords;
   }
 
-  async getTradingRecord(id: number, format?: string): Promise<any> {
-    const tradingRecord = await this.tradingRepository.findOne({
-      where: { id },
-    });
+  async getTradingRecordsByName(name: string): Promise<any> {
+    const query = this.tradingRepository.createQueryBuilder('trading')
+      .where('trading.name LIKE :name', { name: `%${name}%` });
 
-    if (!tradingRecord) {
-      throw new HttpException('Registro de trading no encontrado', HttpStatus.NOT_FOUND);
+    const tradingRecords = await query.getMany();
+    if (!tradingRecords.length) {
+      throw new HttpException('No se encontraron registros de trading con ese nombre', HttpStatus.NOT_FOUND);
     }
 
-    if (format === 'xml') {
-      const jsonForXml = JSON.stringify({ TradingRecord: tradingRecord });
-      return this.utilsService.convertJSONtoXML(jsonForXml);
-    }
-    return tradingRecord;
+    return tradingRecords;
   }
 
   async createTradingRecord(createTradingDto: CreateTradingDto): Promise<{ message: string }> {
