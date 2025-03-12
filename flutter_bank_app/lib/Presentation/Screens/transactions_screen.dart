@@ -203,6 +203,16 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
                     );
                   },
                 ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.qr_code,
+                    size: 32,
+                    color: Color.fromARGB(255, 154, 174, 208),
+                  ),
+                  onPressed: () {
+                    context.push('/qr_page');
+                  },
+                ),
               ],
             ),
             const SizedBox(height: 20),
