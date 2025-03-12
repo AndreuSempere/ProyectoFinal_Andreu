@@ -220,6 +220,101 @@ export class TransactionsService {
     
       return { message: 'Bizum procesado con éxito' };
     }
+
+
+    async qrTransaction(
+      createTransactionDto: CreateTransactionDto,
+    ): Promise<{ message: string }> {
+      const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
+      const origen_Account = await this.accountsRepository.findOne({
+        where: { id_cuenta: accountId },
+      });
+      
+      if (!origen_Account) {
+        throw new Error('Cuenta origen no encontrada');
+      }
+      
+      if (tipo === 'ingreso') {
+        origen_Account.saldo += cantidad;
+      } else if (tipo === 'gasto' && origen_Account.saldo < cantidad) {
+        throw new Error('Fondos insuficientes en la cuenta origen');
+      } else if (tipo === 'gasto') {
+        origen_Account.saldo -= cantidad;
+      } else {
+        throw new Error('Tipo de transacción inválido');
+      }
+      
+      let destinoAccount = null;
+      if (targetAccountId) {
+        destinoAccount = await this.accountsRepository.findOne({
+          where: { id_cuenta: targetAccountId },
+        });
+      
+        if (!destinoAccount) {
+          throw new Error('Cuenta destino no encontrada');
+        }
+      
+        if (tipo === 'gasto') {
+          destinoAccount.saldo += cantidad;
+        } else if (tipo === 'ingreso') {
+          origen_Account.saldo -= cantidad;
+        }
+      }
+      
+      const sourceTransaction = this.transactionsRepository.create({
+        account: { id_cuenta: accountId },
+        cantidad,
+        tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
+        descripcion: descripcion || 'Transferencia',
+      });
+      
+      let targetTransaction = null;
+      if (destinoAccount) {
+        targetTransaction = this.transactionsRepository.create({
+        account: { id_cuenta: targetAccountId },
+        cantidad,
+        tipo: 'ingreso',
+        descripcion: descripcion || 'Transferencia recibida',
+        });
+      }
+      
+      await this.transactionsRepository.save(sourceTransaction);
+      if (targetTransaction) {
+        await this.transactionsRepository.save(targetTransaction);
+      }
+      
+      await this.accountsRepository.save(origen_Account);
+      if (destinoAccount) {
+        await this.accountsRepository.save(destinoAccount);
+      }
+    
+      if (destinoAccount) {
+      console.log("ID de la cuenta destino:", destinoAccount.id_cuenta);
+      
+      const targetUser = await this.accountsRepository
+        .createQueryBuilder('account')
+        .innerJoinAndSelect('account.id_user', 'user')  
+        .where('account.id_cuenta = :id_cuenta', { id_cuenta: destinoAccount.id_cuenta })
+        .getOne();
+    
+      console.log("Resultado de la consulta:", targetUser);
+      console.log("Firebase Token encontrado:", targetUser?.id_user?.firebaseToken);
+    
+      if (targetUser?.id_user?.firebaseToken) {
+        try {
+        await this.firebaseService.sendPushNotification(
+          targetUser.id_user.firebaseToken,
+          `Has recibido una transferencia`,
+          `Te han enviado ${cantidad}€ por ${descripcion || 'Transferencia'}`
+        );
+        console.log("Notificación enviada desde transaction:");
+        } catch (error) {
+        console.error("Error al enviar la notificación:", error);
+        }
+      }
+      }
+      return { message: 'Transacción procesada con éxito' };
+      }
     
     async deleteTransaction(id: number): Promise<{ message: string }> {
       const result = await this.transactionsRepository.delete(id);
