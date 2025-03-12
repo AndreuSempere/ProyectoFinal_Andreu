@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { User } from './users/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -18,6 +23,8 @@ import { TradingEntity } from './trading/trading.entity';
 import { TradingModule } from './trading/trading.module';
 import { Investment } from './investments/investments.entity';
 import { InvestmentsModule } from './investments/investments.module';
+import { AuthorizationMiddleware } from './authorization.middleware';
+import { AuthService } from './Autentication/auth.service';
 
 
 @Module({
@@ -58,8 +65,15 @@ import { InvestmentsModule } from './investments/investments.module';
     }),
   ],
   controllers: [],
-  providers: [],
+  providers: [AuthorizationMiddleware, AuthService],
 })
-export class AppModule {
+export class AppModule implements NestModule {
   constructor(private dataSource: DataSource) {}
+
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthorizationMiddleware)
+      .exclude({ path: 'users/login', method: RequestMethod.POST })
+      .forRoutes('*');
+  }
 }

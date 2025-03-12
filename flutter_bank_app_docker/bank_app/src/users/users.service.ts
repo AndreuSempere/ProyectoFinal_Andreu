@@ -14,18 +14,6 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
-  async getAllUser(xml?: string): Promise<User[] | string> {
-    const users = await this.usersRepository.find();
-    if (xml === 'true') {
-      const jsonformatted = JSON.stringify({
-        users,
-      });
-      return this.utilsService.convertJSONtoXML(jsonformatted);
-    } else {
-      return users;
-    }
-  }
-
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const usuario = this.usersRepository.create(createUserDto);
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
