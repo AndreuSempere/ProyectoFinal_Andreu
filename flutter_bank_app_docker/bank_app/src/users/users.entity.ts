@@ -32,6 +32,12 @@ export class User {
   @Column()
   fecha_nacimiento: string;
 
+  @Column({ type: 'timestamp', nullable: true })
+  tokenExpiration: Date;
+
+  @Column({ nullable: true })
+  token: string;
+
   @Column({ nullable: true })
   firebaseToken?: string | null;
 

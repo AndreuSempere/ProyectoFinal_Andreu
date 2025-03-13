@@ -9,15 +9,19 @@ export class AuthorizationMiddleware implements NestMiddleware {
 
   async use(req: Request, res: Response, next: NextFunction) {
     if (process.env.ENABLE_TOKEN_VALIDATION === 'true') {
-      const token = req.headers['authorization'];
+      const authHeader = req.headers['authorization'];
 
-      if (!token) {
+      if (!authHeader) {
         throw new UnauthorizedException('Token no encontrado');
       }
 
-      const tokenSplit = token!.split(' ')[1];
+      // Extraer el token del encabezado de autorización (Bearer token)
+      const token = authHeader.split(' ')[1];
+      if (!token) {
+        throw new UnauthorizedException('Formato de token inválido');
+      }
 
-      const isValid = await this.authService.validateToken(tokenSplit);
+      const isValid = await this.authService.validateToken(token);
       if (!isValid) {
         throw new UnauthorizedException('Token inválido o expirado');
       }

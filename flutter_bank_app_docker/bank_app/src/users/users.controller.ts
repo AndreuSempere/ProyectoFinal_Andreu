@@ -14,10 +14,14 @@ import {
 import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
+import { AuthService } from '../Autentication/auth.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by ID' })
@@ -149,7 +153,10 @@ export class UsersController {
       if (!user) {
         throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
       }
-      return user;
+      
+      const token = await this.authService.generateToken(user.id_user);
+      return { token };
+
     } catch (err) {
       throw new HttpException(
         {

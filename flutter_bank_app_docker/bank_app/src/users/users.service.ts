@@ -70,6 +70,7 @@ export class UsersService {
   async deleteUser(id_user: number): Promise<void> {
     await this.usersRepository.delete(id_user);
   }
+  
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
