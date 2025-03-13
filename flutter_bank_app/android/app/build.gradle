@@ -1,14 +1,14 @@
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services' // Para Firebase si es necesario
+    id 'com.google.gms.google-services'
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
 
 android {
     namespace = "com.bank.app"
-    compileSdk = 35 // Actualizado a 35
-    ndkVersion = "25.1.8937393" // Versión del NDK
+    compileSdk = 35
+    ndkVersion = "25.1.8937393"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId "com.bank.app"
-        minSdk = 25 // Compatible con la biblioteca NFC
+        minSdk = 25 
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"

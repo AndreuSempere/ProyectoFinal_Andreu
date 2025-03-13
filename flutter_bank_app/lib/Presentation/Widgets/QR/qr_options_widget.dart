@@ -1,4 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/QR/generate_qr_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/QR/scan_qr_widget.dart';
+
 class QrOptionsPage extends StatelessWidget {
+  const QrOptionsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +18,8 @@ class QrOptionsPage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => GenerateQrPage(accountId: "usuario_id_123"),
+                  builder: (context) =>
+                      GenerateQrPage(accountId: "usuario_id_123"),
                 ),
               );
             },

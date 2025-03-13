@@ -5,6 +5,8 @@ import 'package:flutter_bank_app/Presentation/Screens/login_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/trading_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/transactions_screen.dart';
 import 'package:flutter_bank_app/Presentation/Screens/creditCard_screen.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/QR/qr_options_widget.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Trading/trading_worth_widget.dart';
 import 'package:flutter_bank_app/injection.dart';
 import 'package:flutter_bank_app/main.dart';
 import 'package:go_router/go_router.dart';
@@ -45,7 +47,6 @@ final GoRouter router = GoRouter(
         },
       ),
       GoRoute(path: '/qr_page', builder: (context, state) => QrOptionsPage()),
-
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();
