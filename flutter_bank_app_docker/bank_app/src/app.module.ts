@@ -8,7 +8,6 @@ import { UsersModule } from './users/users.module';
 import { User } from './users/users.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
 import { UtilsModule } from './utils/utils.module';
 import { AccountsModule } from './accounts/accounts.module';
 import { AccountTypeModule } from './account_type/account_type.module';
@@ -69,12 +68,12 @@ import { AuthService } from './Autentication/auth.service';
   providers: [AuthorizationMiddleware, AuthService],
 })
 export class AppModule implements NestModule {
-  constructor(private dataSource: DataSource) {}
-
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthorizationMiddleware)
-      .exclude({ path: 'users/login', method: RequestMethod.POST })
+      .exclude(
+        { path: 'users/login', method: RequestMethod.POST },
+      )
       .forRoutes('*');
   }
 }

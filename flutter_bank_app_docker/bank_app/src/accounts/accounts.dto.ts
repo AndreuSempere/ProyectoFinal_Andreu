@@ -11,13 +11,12 @@ import { ApiProperty } from '@nestjs/swagger';
 export class CreateAccoutDto {
   @ApiProperty({
     example: 123456789,
-    description: 'Account number (optional, max 16 digits)',
+    description: 'Account number (16 digits)',
   })
-  @IsOptional()
   @IsInt()
-  @Min(1)
+  @Min(1000000000000000)
   @Max(9999999999999999)
-  numero_cuenta?: number;
+  numero_cuenta: number;
 
   @ApiProperty({
     example: 1000,
