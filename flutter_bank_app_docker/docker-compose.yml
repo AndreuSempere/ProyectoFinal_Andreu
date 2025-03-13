@@ -62,8 +62,8 @@ services:
       - POSTGRES_DB=${ODOO_DB_NAME}
     ports:
       - "5433:5432"
-    volumes:
-      - ./volumesOdoo/dataPostgreSql:/var/lib/postgresql/data
+    # volumes:
+    #   - ./volumesOdoo/dataPostgreSql:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${ODOO_DB_USER}"]
       interval: 10s
