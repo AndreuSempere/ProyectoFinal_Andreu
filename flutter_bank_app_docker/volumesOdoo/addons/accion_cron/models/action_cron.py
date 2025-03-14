@@ -53,17 +53,21 @@ class AccionCron(models.Model):
             
             success_count = 0
             error_count = 0
+            bearer_token = "93525b78-194e-4f60-a1b2-8fe9b102c699"
             
             for item in transformed_data:
                 try:
-                    headers = {"Content-Type": "application/json"}
+                    headers = {
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {bearer_token}"
+                    }
                     response_post = requests.post(url_post, data=json.dumps(item), headers=headers, timeout=10)
                     
                     if response_post.status_code in [200, 201]:
                         success_count += 1
                     else:
                         error_count += 1
-                        self.env.cr.commit()  # Confirmar transacción para guardar los éxitos hasta ahora
+                        self.env.cr.commit()
                 except Exception as e:
                     error_count += 1
                     self.env.cr.commit()  # Confirmar transacción para guardar los éxitos hasta ahora
