@@ -15,67 +15,78 @@ class TradingListWidget extends StatelessWidget {
         if (tradingState.isLoading) {
           return const Center(child: CircularProgressIndicator());
         } else if (tradingState.tradings.isNotEmpty) {
+          final Map<String, List<dynamic>> groupedTrades = {};
+          for (var trade in tradingState.tradings) {
+            final type = trade.type ?? 'Otros';
+            groupedTrades.putIfAbsent(type, () => []).add(trade);
+          }
+
           return Column(
             children: [
               const Padding(
                 padding: EdgeInsets.all(5.0),
               ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: tradingState.tradings.length,
-                  itemBuilder: (context, index) {
-                    final transaction = tradingState.tradings[index];
-                    return Card(
-                      margin: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: () {
-                          context.push(
-                            '/worth_trading',
-                            extra: transaction.name,
-                          );
-                        },
-                        child: ListTile(
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
+                child: ListView(
+                  children: groupedTrades.entries.expand((entry) {
+                    return [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 8),
+                        child: Text(
+                          entry.key,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                      ...entry.value.map((transaction) {
+                        return Card(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          child: InkWell(
+                            onTap: () {
+                              context.push(
+                                '/worth_trading',
+                                extra: transaction.name,
+                              );
+                            },
+                            child: ListTile(
+                              title: Text(
                                 transaction.name ?? 'N/A',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
                                 ),
                               ),
-                              const SizedBox(height: 5),
-                              Text(
-                                'Symbol: ${transaction.symbol ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 16),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Symbol: ${transaction.symbol ?? 'N/A'}',
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Precio: \$${transaction.price?.toString() ?? 'N/A'}',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Text(
+                                    'Fecha: ${transaction.recordedAt != null ? DateFormat.yMMMd().format(transaction.recordedAt!) : 'N/A'}',
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 5),
-                              Text(
-                                'Type: ${transaction.type ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                'Precio: \$${transaction.price?.toString() ?? 'N/A'}',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                'Fecha: ${transaction.recordedAt != null ? DateFormat.yMMMd().format(transaction.recordedAt!) : 'N/A'}',
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                        );
+                      }),
+                    ];
+                  }).toList(),
                 ),
               ),
             ],

@@ -3,4 +3,5 @@ import 'package:flutter_bank_app/Domain/Entities/trading_entity.dart';
 
 abstract class TradingRepository {
   Future<Either<String, List<TradingEntity>>> getAllTrading();
+  Future<Either<String, List<TradingEntity>>> getTradingRecord(String name);
 }

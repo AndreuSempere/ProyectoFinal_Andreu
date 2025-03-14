@@ -9,3 +9,8 @@ abstract class TradingEvent extends Equatable {
 class GetAllTrading extends TradingEvent {
   GetAllTrading();
 }
+
+class GetRecordTrading extends TradingEvent {
+  final String name;
+  GetRecordTrading({required this.name});
+}

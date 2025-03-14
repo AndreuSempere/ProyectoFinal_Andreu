@@ -24,6 +24,12 @@ class _TransactionPageState extends State<TransactionPage> {
   String? _fromAccount;
   String? _toAccount;
 
+  final Map<int, String> tipoCuenta = {
+    1: "Cuenta corriente",
+    2: "Cuenta de ahorro",
+    3: "Cuenta de inversión",
+  };
+
   @override
   Widget build(BuildContext context) {
     final myAccountState = context.read<AccountBloc>().state;
@@ -117,7 +123,8 @@ class _TransactionPageState extends State<TransactionPage> {
                   items: accounts.map((account) {
                     return DropdownMenuItem<String>(
                       value: account.idCuenta.toString(),
-                      child: Text(account.numeroCuenta!),
+                      child: Text(
+                          '${tipoCuenta[account.accountType] ?? "Desconocido"} - ${account.numeroCuenta!}'),
                     );
                   }).toList(),
                 ),
@@ -201,7 +208,9 @@ class _TransactionPageState extends State<TransactionPage> {
                     }
                     final newTransaction = Transaction(
                       account: int.parse(fromAccount),
-                      targetAccount: int.parse(targetAccount),
+                      targetAccount: _transactionType == 'other'
+                          ? int.parse(targetAccount)
+                          : int.parse(toAccount!),
                       cantidad: int.parse(amount),
                       descripcion: description,
                       tipo: 'gasto',
@@ -218,6 +227,7 @@ class _TransactionPageState extends State<TransactionPage> {
                       ),
                     );
 
+                    Navigator.pop(context);
                     Navigator.pop(context);
                   },
                   child: Text(AppLocalizations.of(context)!.buttonconfirm),

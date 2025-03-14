@@ -27,6 +27,7 @@ import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/create_creditCard
 import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/delete_creditCard_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Credit%20Card/get_all_creditCard_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Trading/get_all_trading_usecase.dart';
+import 'package:flutter_bank_app/Domain/Usecases/Trading/get_record_trading_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_bizum_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/create_transaction_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Transactions/get_transactions_usecase.dart';
@@ -118,6 +119,7 @@ Future<void> configureDependencies() async {
   sl.registerLazySingleton<DeleteCreditCardUseCase>(
       () => DeleteCreditCardUseCase(sl()));
   sl.registerLazySingleton(() => GetAllTradingUseCase(sl()));
+  sl.registerLazySingleton(() => GetRecordTradingUseCase(sl()));
 
   // Bloc
   sl.registerFactory<LoginBloc>(() => LoginBloc(
@@ -155,5 +157,6 @@ Future<void> configureDependencies() async {
       ));
   sl.registerFactory<TradingBloc>(() => TradingBloc(
         getTradingUsecase: sl<GetAllTradingUseCase>(),
+        getRecordTradingUsecase: sl<GetRecordTradingUseCase>(),
       ));
 }

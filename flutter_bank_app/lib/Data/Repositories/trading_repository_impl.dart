@@ -16,4 +16,15 @@ class TradingRepositoryImpl implements TradingRepository {
       return Left('Fallo al obtener los datos de trading: $e');
     }
   }
+
+  @override
+  Future<Either<String, List<TradingEntity>>> getTradingRecord(
+      String name) async {
+    try {
+      final tradingModels = await remoteDataSource.getTradingRecord(name);
+      return Right(tradingModels.map((model) => model.toEntity()).toList());
+    } catch (e) {
+      return Left('Fallo al obtener los datos de valor Trading: $e');
+    }
+  }
 }

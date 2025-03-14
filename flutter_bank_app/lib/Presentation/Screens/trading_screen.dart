@@ -3,6 +3,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_event.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Trading/trading_list_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class TradingAsset {
   TradingAsset();
@@ -45,6 +46,19 @@ class TradingScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
+          SizedBox(height: 15),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            FloatingActionButton.extended(
+              onPressed: () {
+                context.push('/investment_screen');
+              },
+              label: Text(
+                'Mis inversiones',
+                style: const TextStyle(fontSize: 16),
+              ),
+              icon: const Icon(Icons.show_chart),
+            ),
+          ]),
           Expanded(child: TradingListWidget()),
         ],
       ),

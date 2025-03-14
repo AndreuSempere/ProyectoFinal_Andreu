@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 abstract class TradingRemoteDataSource {
   Future<List<TradingModel>> getAllTrading();
+  Future<List<TradingModel>> getTradingRecord(String name);
 }
 
 class TradingRemoteDataSourceImpl implements TradingRemoteDataSource {
@@ -29,6 +30,24 @@ class TradingRemoteDataSourceImpl implements TradingRemoteDataSource {
       }
     } catch (e) {
       throw Exception('Fallo al obtener los valores de bolsa: $e');
+    }
+  }
+
+  @override
+  Future<List<TradingModel>> getTradingRecord(String name) async {
+    try {
+      final uri = Uri.parse('$baseUrl$tradingPath/$name');
+      final response = await client.get(uri);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> tradingJson = json.decode(response.body);
+        return tradingJson.map((json) => TradingModel.fromJson(json)).toList();
+      } else {
+        throw Exception(
+            'Error al cargar los datos del record: ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Fallo al obtener los datos del record: $e');
     }
   }
 }
