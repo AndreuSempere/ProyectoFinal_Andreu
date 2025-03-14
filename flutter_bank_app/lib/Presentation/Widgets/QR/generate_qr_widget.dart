@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class GenerateQrPage extends StatelessWidget {
-  final String accountId;
+  final int accountId;
 
   const GenerateQrPage({super.key, required this.accountId});
 
@@ -12,7 +12,7 @@ class GenerateQrPage extends StatelessWidget {
       appBar: AppBar(title: Text("Generar QR")),
       body: Center(
         child: QrImageView(
-          data: accountId, // Aquí usas el accountId del usuario
+          data: accountId.toString(),
           size: 200.0,
           backgroundColor: Colors.white,
         ),

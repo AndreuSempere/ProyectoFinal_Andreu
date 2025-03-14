@@ -210,7 +210,7 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
                     color: Color.fromARGB(255, 154, 174, 208),
                   ),
                   onPressed: () {
-                    context.push('/qr_page');
+                    context.push('/qr_page', extra: widget.accountId);
                   },
                 ),
               ],

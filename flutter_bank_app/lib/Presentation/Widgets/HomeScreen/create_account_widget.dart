@@ -64,11 +64,15 @@ class _CrearCuentaState extends State<CrearCuentaWidget> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        _selectedIcon != null
-                            ? '${AppLocalizations.of(context)!.iconselected} ${_selectedIcon!.capitalize()}'
-                            : AppLocalizations.of(context)!.selectedIcon,
-                        style: TextStyle(fontSize: 11),
+                      Expanded(
+                        child: Text(
+                          _selectedIcon != null
+                              ? '${AppLocalizations.of(context)!.iconselected} ${_selectedIcon!.capitalize()}'
+                              : AppLocalizations.of(context)!.selectedIcon,
+                          style: TextStyle(fontSize: 11),
+                          overflow: TextOverflow
+                              .ellipsis, // Evita desbordamiento de texto
+                        ),
                       ),
                       Icon(
                         _selectedIcon != null

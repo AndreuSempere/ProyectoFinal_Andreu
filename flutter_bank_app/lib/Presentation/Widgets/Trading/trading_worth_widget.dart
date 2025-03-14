@@ -1,86 +1,129 @@
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Domain/Entities/trading_entity.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 
 class WorthTrading extends StatelessWidget {
-  const WorthTrading({super.key, required String name});
+  final String name;
+
+  const WorthTrading({
+    super.key,
+    required this.name,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TradingBloc, TradingState>(
-      builder: (context, tradingState) {
-        if (tradingState.isLoading) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (tradingState.tradings.isNotEmpty) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 300,
-              child: LineChart(
-                LineChartData(
-                  gridData: FlGridData(show: false),
-                  titlesData: FlTitlesData(
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          final date = DateTime.fromMillisecondsSinceEpoch(
-                              value.toInt());
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              DateFormat('MM/dd').format(date),
-                              style: const TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
+    return Center(
+      child: BlocBuilder<TradingBloc, TradingState>(
+        builder: (context, tradingState) {
+          if (tradingState.isLoading) {
+            return const CircularProgressIndicator();
+          } else if (tradingState.tradings.isNotEmpty) {
+            // Ordenar datos por fecha
+            final List<TradingEntity> sortedTradings = [
+              ...tradingState.tradings
+            ]..sort((a, b) => (a.recordedAt ?? DateTime.now())
+                .compareTo(b.recordedAt ?? DateTime.now()));
+
+            // Calcular precio actual
+            final double currentPrice = sortedTradings.last.price ?? 0.0;
+
+            // Formatear precio con separador de miles
+            final currencyFormatter = NumberFormat.currency(
+              locale: 'en_US',
+              symbol: '\$',
+              decimalDigits: 2,
+            );
+
+            return Card(
+              elevation: 6,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              margin: const EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Título y precio actual
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          sortedTradings.last.symbol ?? name,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blueGrey,
+                          ),
+                        ),
+                        Text(
+                          currencyFormatter.format(currentPrice),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 24),
+
+                    // Gráfico
+                    SizedBox(
+                      height: 200,
+                      width: double.infinity,
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: false),
+                          titlesData: const FlTitlesData(show: false),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                              color: Colors.blueGrey.withOpacity(0.2),
+                            ),
+                          ),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: sortedTradings.map((transaction) {
+                                return FlSpot(
+                                  transaction.recordedAt!.millisecondsSinceEpoch
+                                      .toDouble(),
+                                  transaction.price ?? 0.0,
+                                );
+                              }).toList(),
+                              isCurved: true,
+                              color: Colors.blueAccent,
+                              barWidth: 3,
+                              isStrokeCapRound: true,
+                              dotData: const FlDotData(show: false),
+                              belowBarData: BarAreaData(
+                                show: true,
+                                color: Colors.blue.withOpacity(0.2),
                               ),
                             ),
-                          );
-                        },
-                        reservedSize: 30,
+                          ],
+                        ),
                       ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            value.toStringAsFixed(2),
-                            style: const TextStyle(fontSize: 10),
-                          );
-                        },
-                        reservedSize: 40,
-                      ),
-                    ),
-                  ),
-                  borderData: FlBorderData(show: true),
-                  lineBarsData: [
-                    LineChartBarData(
-                      spots: tradingState.tradings.map((transaction) {
-                        return FlSpot(
-                          (transaction.recordedAt?.millisecondsSinceEpoch ?? 0)
-                              .toDouble(),
-                          transaction.price ?? 0.0,
-                        );
-                      }).toList(),
-                      isCurved: true,
-                      color: Colors.blue,
-                      barWidth: 2,
-                      dotData: FlDotData(show: false),
-                      belowBarData: BarAreaData(show: false),
                     ),
                   ],
                 ),
               ),
-            ),
-          );
-        } else {
-          return const Center(child: Text('No transactions found'));
-        }
-      },
+            );
+          } else {
+            return const Text(
+              'No trading data available',
+              style: TextStyle(fontSize: 16, color: Colors.blueGrey),
+            );
+          }
+        },
+      ),
     );
   }
 }

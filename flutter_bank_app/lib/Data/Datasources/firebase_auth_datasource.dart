@@ -16,7 +16,7 @@ class FirebaseAuthDataSource {
   FirebaseAuthDataSource({required this.auth});
 
   Future<bool> registerInBackend(String name, String surname, String email,
-      String password, String dni, String age) async {
+      String password, String dni, String fecha_nacimiento) async {
     try {
       final response = await http.post(
         Uri.parse('$baseUrl$usersPath'),
@@ -28,7 +28,7 @@ class FirebaseAuthDataSource {
           "email": "$email",
           "password": "$password",
           "dni": "$dni",
-          "age": "$age"
+          "fecha_nacimiento": "$fecha_nacimiento"
         }
         ''',
       );

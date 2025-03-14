@@ -1,5 +1,5 @@
-import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class ScanQrPage extends StatefulWidget {
   const ScanQrPage({super.key});
@@ -9,25 +9,20 @@ class ScanQrPage extends StatefulWidget {
 }
 
 class _ScanQrPageState extends State<ScanQrPage> {
-  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
-  QRViewController? controller;
   String? scannedAccountId;
   bool isProcessing = false;
 
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
-  void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
-    controller.scannedDataStream.listen((scanData) {
-      if (!isProcessing) {
-        setState(() {
-          isProcessing = true;
-          scannedAccountId = scanData.code;
-        });
-        _showTransactionForm(scanData.code);
-      }
-    });
+  void _onDetect(BarcodeCapture capture) {
+    if (!isProcessing && capture.barcodes.isNotEmpty) {
+      setState(() {
+        isProcessing = true;
+        scannedAccountId = capture.barcodes.first.rawValue;
+      });
+      _showTransactionForm(scannedAccountId);
+    }
   }
 
   void _showTransactionForm(String? accountId) {
@@ -88,7 +83,6 @@ class _ScanQrPageState extends State<ScanQrPage> {
 
   @override
   void dispose() {
-    controller?.dispose();
     _amountController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -102,9 +96,8 @@ class _ScanQrPageState extends State<ScanQrPage> {
         children: <Widget>[
           Expanded(
             flex: 5,
-            child: QRView(
-              key: qrKey,
-              onQRViewCreated: _onQRViewCreated,
+            child: MobileScanner(
+              onDetect: _onDetect,
             ),
           ),
         ],

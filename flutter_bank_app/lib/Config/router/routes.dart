@@ -46,7 +46,13 @@ final GoRouter router = GoRouter(
           return WorthTrading(name: name);
         },
       ),
-      GoRoute(path: '/qr_page', builder: (context, state) => QrOptionsPage()),
+      GoRoute(
+        path: '/qr_page',
+        builder: (context, state) {
+          final int accountId = state.extra as int;
+          return QrOptionsPage(accountId: accountId);
+        },
+      ),
     ],
     redirect: (context, state) async {
       final isLoggedIn = await sl<SignInRepository>().isLoggedIn();
