@@ -122,7 +122,7 @@ class FirebaseAuthDataSource {
           "name": "$name",
           "surname": "$surname",
           "email": "$email",
-          "telf": "$telf",
+          "telf": "$telf"
         }
         ''',
       );

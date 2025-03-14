@@ -5,6 +5,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/accounts/account_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/biometric/biometric_auth_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/credit%20card/creditCard_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/language/language_state.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
@@ -72,6 +73,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => sl<TradingBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<InvestmentsBloc>(),
         ),
       ],
       child: BlocBuilder<LanguageBloc, LanguageState>(

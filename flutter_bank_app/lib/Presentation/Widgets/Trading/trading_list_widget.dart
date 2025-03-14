@@ -66,11 +66,6 @@ class TradingListWidget extends StatelessWidget {
                                 children: [
                                   const SizedBox(height: 5),
                                   Text(
-                                    'Symbol: ${transaction.symbol ?? 'N/A'}',
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  const SizedBox(height: 5),
-                                  Text(
                                     'Precio: \$${transaction.price?.toString() ?? 'N/A'}',
                                     style: const TextStyle(fontSize: 14),
                                   ),

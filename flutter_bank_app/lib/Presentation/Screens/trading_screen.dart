@@ -1,21 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_event.dart';
+import 'package:flutter_bank_app/Presentation/Widgets/Investments/investments_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Trading/trading_list_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-class TradingAsset {
-  TradingAsset();
+class TradingScreen extends StatefulWidget {
+  final int accountid;
+  const TradingScreen({super.key, required this.accountid});
+
+  @override
+  State<TradingScreen> createState() => _TradingScreenState();
 }
 
-class TradingScreen extends StatelessWidget {
-  const TradingScreen({super.key});
+class _TradingScreenState extends State<TradingScreen> {
+  int _selectedIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<TradingBloc>().add(GetAllTrading());
+    context
+        .read<InvestmentsBloc>()
+        .add(GetAllInvestments(accountid: widget.accountid));
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    context.read<TradingBloc>().add(GetAllTrading());
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(80),
@@ -33,9 +52,9 @@ class TradingScreen extends StatelessWidget {
               ),
             ),
           ),
-          title: const Text(
-            'Trading Market',
-            style: TextStyle(
+          title: Text(
+            _selectedIndex == 0 ? 'Trading Market' : 'Mis Inversiones',
+            style: const TextStyle(
               fontWeight: FontWeight.bold,
               color: Colors.white,
               fontSize: 22,
@@ -44,22 +63,28 @@ class TradingScreen extends StatelessWidget {
           centerTitle: true,
         ),
       ),
-      body: Column(
+      body: IndexedStack(
+        index: _selectedIndex,
         children: [
-          SizedBox(height: 15),
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            FloatingActionButton.extended(
-              onPressed: () {
-                context.push('/investment_screen');
-              },
-              label: Text(
-                'Mis inversiones',
-                style: const TextStyle(fontSize: 16),
-              ),
-              icon: const Icon(Icons.show_chart),
-            ),
-          ]),
-          Expanded(child: TradingListWidget()),
+          // Trading tab
+          TradingListWidget(),
+          InvestmentsWidget(),
+        ],
+      ),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        backgroundColor: Colors.white,
+        elevation: 10,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.candlestick_chart),
+            label: 'Trading',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.show_chart),
+            label: 'Mis Inversiones',
+          ),
         ],
       ),
     );

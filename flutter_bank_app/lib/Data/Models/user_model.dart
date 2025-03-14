@@ -8,7 +8,7 @@ class UserModel {
   final String surname;
   final String? dni;
   final String? age;
-  final int? telf;
+  final String? telf;
 
   UserModel({
     this.id_user,
@@ -36,7 +36,7 @@ class UserModel {
       surname: json['surname'] as String,
       dni: json['dni'] as String?,
       age: json['age'] as String?,
-      telf: json['telf'] as int?,
+      telf: json['telf'] as String?,
     );
   }
 

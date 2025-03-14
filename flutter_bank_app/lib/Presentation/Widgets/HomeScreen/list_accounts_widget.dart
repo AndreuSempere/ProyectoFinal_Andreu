@@ -125,7 +125,7 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                               extra: account,
                             );
                           } else {
-                            context.push('/trading');
+                            context.push('/trading', extra: account.idCuenta);
                           }
                         },
                       ),

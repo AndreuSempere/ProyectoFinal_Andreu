@@ -39,7 +39,12 @@ final GoRouter router = GoRouter(
           return HomeCreditCard(accountId: accountId);
         },
       ),
-      GoRoute(path: '/trading', builder: (context, state) => TradingScreen()),
+      GoRoute(
+          path: '/trading',
+          builder: (context, state) {
+            final int accountId = state.extra as int;
+            return TradingScreen(accountid: accountId);
+          }),
       GoRoute(
         path: '/worth_trading',
         builder: (context, state) {

@@ -115,7 +115,7 @@ class SendMoneyPage extends StatelessWidget {
                   }
 
                   final newBizum = Transaction(
-                    account: telfUser!,
+                    account: int.parse(telfUser!),
                     targetAccount: targetPhone,
                     cantidad: amount,
                     descripcion: concept,

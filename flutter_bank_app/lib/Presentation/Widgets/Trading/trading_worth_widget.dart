@@ -67,13 +67,21 @@ class WorthTrading extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Color.fromARGB(255, 7, 11, 129),
-                    ),
+                  child: Column(
+                    children: [
+                      Text(
+                        name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 7, 11, 129),
+                        ),
+                      ),
+                      Text(
+                        'Symbol: ${tradingState.tradingRecords.last.symbol}',
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                    ],
                   ),
                 ),
                 const Divider(color: Colors.blueAccent),

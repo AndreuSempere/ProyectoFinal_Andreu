@@ -6,7 +6,7 @@ class UserEntity {
   final String? password;
   final String? dni;
   final String? age;
-  final int? telf;
+  final String? telf;
 
   UserEntity({
     this.idUser,
