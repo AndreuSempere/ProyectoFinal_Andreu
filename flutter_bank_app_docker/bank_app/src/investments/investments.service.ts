@@ -30,8 +30,6 @@ export class InvestmentsService {
       }
 
       const investments = await query.getMany();
-
-      // Transformar los resultados al DTO de respuesta
       return investments.map(investment => this.mapToResponseDto(investment));
     } catch (error) {
       throw new HttpException(
@@ -70,56 +68,50 @@ export class InvestmentsService {
         where: { id_cuenta: createInvestmentDto.account_id },
         relations: ['accounts_type'],
       });
-
+  
       if (!account) {
         throw new HttpException('Cuenta no encontrada', HttpStatus.NOT_FOUND);
       }
-
+  
       if (account.accounts_type.id_type !== 3) {
         throw new HttpException(
           'Solo las cuentas de tipo Inversiones pueden tener inversiones',
           HttpStatus.BAD_REQUEST,
         );
       }
-
+  
       const trading = await this.tradingRepository.findOne({
-        where: { id: createInvestmentDto.trading_id },
+        where: { symbol: createInvestmentDto.symbol },
       });
-
+  
       if (!trading) {
         throw new HttpException('Activo de trading no encontrado', HttpStatus.NOT_FOUND);
       }
-
-      // Obtener el precio actual
+  
       const latestTradingData = await this.tradingRepository.findOne({
         where: { symbol: trading.symbol },
         order: { recordedAt: 'DESC' }
       });
-
+  
       if (!latestTradingData) {
         throw new HttpException(
           'No se encontraron datos de precio para el activo',
           HttpStatus.BAD_REQUEST,
         );
       }
-
-      // Usar el precio actual de la base de datos
+  
       const currentPrice = latestTradingData.price;
-      
-      // Verificar que la cuenta tiene saldo suficiente
-      const investmentAmount = createInvestmentDto.amount * currentPrice;
-      if (account.saldo < investmentAmount) {
+  
+      if (account.saldo < createInvestmentDto.amount) {
         throw new HttpException(
           'Saldo insuficiente para realizar la inversión',
           HttpStatus.BAD_REQUEST,
         );
       }
-
-      // Actualizar el saldo de la cuenta
-      account.saldo -= investmentAmount;
+  
+      account.saldo -= createInvestmentDto.amount;
       await this.accountsRepository.save(account);
-
-      // Crear la inversión
+  
       const investment = this.investmentsRepository.create({
         account,
         trading,
@@ -129,15 +121,14 @@ export class InvestmentsService {
         purchase_date: new Date(),
         last_updated: new Date(),
       });
-
+  
       const savedInvestment = await this.investmentsRepository.save(investment);
-
-      // Obtener la inversión actualizada
+  
       const updatedInvestment = await this.investmentsRepository.findOne({
         where: { id: savedInvestment.id },
         relations: ['account', 'trading'],
       });
-
+  
       return this.mapToResponseDto(updatedInvestment);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -149,7 +140,7 @@ export class InvestmentsService {
       );
     }
   }
-
+  
   private mapToResponseDto(investment: Investment): InvestmentResponseDto {
     const totalInvested = investment.amount * investment.purchase_price;
     const currentValue = investment.amount * investment.current_value;
@@ -158,7 +149,6 @@ export class InvestmentsService {
     return {
       id: investment.id,
       account_id: investment.account.id_cuenta,
-      trading_id: investment.trading.id,
       symbol: investment.trading.symbol,
       name: investment.trading.name,
       amount: investment.amount,

@@ -143,28 +143,26 @@ export class UsersController {
   })
   async login(@Body('email') email: string, @Body('password') password: string) {
     if (!email || !password) {
-      throw new HttpException(
-        'Email and password are required',
-        HttpStatus.BAD_REQUEST,
-      );
+        throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
     }
+
     try {
-      const user = await this.usersService.validateUser(email, password);
-      if (!user) {
-        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-      }
-      
-      const token = await this.authService.generateToken(user.id_user);
-      return { token };
+        const user = await this.usersService.validateUser(email, password);
+        if (!user) {
+            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+        }
+
+        const isAdmin = email === "admin@gmail.com";
+        const token = await this.authService.generateToken(user.id_user, isAdmin);
+
+        return { token, isAdmin };
 
     } catch (err) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNAUTHORIZED,
-          error: err.message || 'Unauthorized access',
-        },
-        HttpStatus.UNAUTHORIZED,
-      );
+        throw new HttpException(
+            { status: HttpStatus.UNAUTHORIZED, error: err.message || 'Unauthorized access' },
+            HttpStatus.UNAUTHORIZED,
+        );
     }
-  }
+}
+
 }

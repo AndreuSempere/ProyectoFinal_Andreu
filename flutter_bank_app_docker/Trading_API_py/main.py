@@ -3,9 +3,7 @@ import yfinance as yf
 import logging
 import time
 import requests
-import json
 import os
-import random
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 from fastapi.middleware.cors import CORSMiddleware
@@ -94,9 +92,7 @@ def read_root():
 
 @app.get("/test-connection")
 def test_connection():
-    """Prueba la conectividad a diferentes servicios para diagnosticar problemas"""
     results = {}
-    
     # Probar Google
     try:
         response = requests.get("https://www.google.com", timeout=5)
@@ -136,11 +132,9 @@ def test_connection():
     return results
 
 def get_yahoo_direct(symbol: str):
-    """Intenta obtener datos directamente de la API de Yahoo Finance sin usar yfinance"""
     try:
         logger.info(f"Intentando obtener datos directamente de Yahoo Finance para {symbol}")
         
-        # Construir URL para la API de Yahoo Finance
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval=1d&range=1d"
         
         response = session.get(url, timeout=10)
