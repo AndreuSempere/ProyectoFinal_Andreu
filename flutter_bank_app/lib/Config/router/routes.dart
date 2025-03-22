@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/account_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/sign_in_repository.dart';
 import 'package:flutter_bank_app/Presentation/Screens/home_screen.dart';
@@ -48,8 +49,15 @@ final GoRouter router = GoRouter(
       GoRoute(
         path: '/worth_trading',
         builder: (context, state) {
-          final String name = state.extra as String;
-          return WorthTrading(name: name);
+          final dynamic extra = state.extra;
+
+          if (extra is Map<String, dynamic>) {
+            final String transactionName = extra['transactionName'];
+            final int accountId = extra['accountId'];
+            return WorthTrading(name: transactionName, accountId: accountId);
+          } else {
+            return const SizedBox();
+          }
         },
       ),
       GoRoute(

@@ -41,8 +41,10 @@ class _AccountListWidgetState extends State<AccountListWidget> {
       builder: (context, accountState) {
         if (accountState.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (accountState.errorMessage.isNotEmpty) {
-          return Center(child: Text(accountState.errorMessage));
+        } else if (accountState.errorMessage.isNotEmpty &&
+            accountState.accounts.isEmpty) {
+          // Only show error message if we don't have any accounts
+          return Center(child: Text('Error: ${accountState.errorMessage}'));
         } else if (accountState.accounts.isNotEmpty) {
           final myLoginState = context.watch<LoginBloc>().state;
           final userid = myLoginState.user?.idUser;

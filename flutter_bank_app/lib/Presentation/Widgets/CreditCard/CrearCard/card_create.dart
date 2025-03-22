@@ -7,11 +7,11 @@ import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/Widgets/Templat
 import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/CrearCard/Style/my_appbar.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/Widgets/TemplateCard/card_back_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/Widgets/TemplateCard/card_front_widget.dart';
-import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/CrearCard/expiration_date_formatter.dart';
 import 'package:flutter_bank_app/core/generate_number_random_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/CreditCard/Widgets/card_wallet_widget.dart';
 import 'package:flutter_bank_app/Domain/Entities/card_entity.dart';
+import 'dart:math';
 
 class CardCreate extends StatefulWidget {
   final String cardType;
@@ -32,26 +32,60 @@ class _CardCreateState extends State<CardCreate> {
 
   int selectedColorIndex = 0;
   late CreditCardEntity creditCard;
+  late String generatedExpirationDate;
+  late int generatedCvv;
+  bool _isSaving = false;
 
   @override
   void initState() {
     super.initState();
+    // Generate random CVV (3 digits)
+    generatedCvv = _generateCvv();
+    // Generate expiration date (4 years from now)
+    generatedExpirationDate = _generateExpirationDate();
+    
     creditCard = CreditCardEntity(
       cardHolderName: 'CARDHOLDER NAME',
       numero_tarjeta: GenerateAccountNumber.generate(),
-      fecha_expiracion: '00/0000',
-      cardCvv: 000,
+      fecha_expiracion: generatedExpirationDate,
+      cardCvv: generatedCvv,
       cardColor: selectedColorIndex,
       tipo_tarjeta: widget.cardType,
       id_cuenta: widget.accountId,
     );
+    
+    // Set the generated values to the controllers for display
+    expirationController.text = _formatExpirationDateForDisplay(generatedExpirationDate);
+    cvvController.text = generatedCvv.toString().padLeft(3, '0');
+    
     _setupListeners();
+  }
+
+  // Generate a random 3-digit CVV
+  int _generateCvv() {
+    final random = Random();
+    return random.nextInt(900) + 100; // Generates a number between 100-999
+  }
+
+  // Generate expiration date (4 years from now)
+  String _generateExpirationDate() {
+    final now = DateTime.now();
+    final expiryYear = now.year + 4;
+    final expiryMonth = now.month.toString().padLeft(2, '0');
+    return '$expiryYear/$expiryMonth';
+  }
+
+  // Format the expiration date for display (MM/YYYY)
+  String _formatExpirationDateForDisplay(String dbFormatDate) {
+    List<String> parts = dbFormatDate.split('/');
+    if (parts.length == 2) {
+      return '${parts[1]}/${parts[0]}';
+    }
+    return dbFormatDate;
   }
 
   void _setupListeners() {
     holderNameController.addListener(_updateState);
-    expirationController.addListener(_updateState);
-    cvvController.addListener(_updateState);
   }
 
   @override
@@ -68,8 +102,6 @@ class _CardCreateState extends State<CardCreate> {
         cardHolderName: holderNameController.text.isNotEmpty
             ? holderNameController.text
             : 'CARDHOLDER NAME',
-        fecha_expiracion: _convertExpirationDate(expirationController.text),
-        cardCvv: int.tryParse(cvvController.text.padLeft(3, '0')) ?? 0,
       );
     });
   }
@@ -83,51 +115,80 @@ class _CardCreateState extends State<CardCreate> {
         context: context,
       ),
       backgroundColor: Colors.grey[100],
-      body: ListView(
-        padding: const EdgeInsets.all(20.0),
-        children: <Widget>[
-          const SizedBox(height: 10),
-          SizedBox(
-            height: 250,
-            child: FlipCard(
-              key: animatedStateKey,
-              front: CardFront(card: creditCard),
-              back: CardBack(
-                cardColor: selectedColorIndex,
-                cardCvv: creditCard.cardCvv!,
-              ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          _buildTextField(holderNameController, 'Nombre del Propietario'),
-          _buildNonEditableField(
-              'Número de Tarjeta', creditCard.numero_tarjeta),
-          Row(
-            children: [
-              Expanded(
-                child: _buildTextField(
-                  expirationController,
-                  'MM/YYYY',
-                  isNumeric: true,
-                  maxLength: 7,
-                  inputFormatters: [ExpirationDateFormatter()],
+      body: Stack(
+        children: [
+          ListView(
+            padding: const EdgeInsets.all(20.0),
+            children: <Widget>[
+              const SizedBox(height: 10),
+              SizedBox(
+                height: 250,
+                child: FlipCard(
+                  key: animatedStateKey,
+                  front: CardFront(card: creditCard),
+                  back: CardBack(
+                    cardColor: selectedColorIndex,
+                    cardCvv: creditCard.cardCvv!,
+                  ),
                 ),
               ),
-              const SizedBox(width: 10),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _buildTextField(cvvController, 'CVV',
-                    isNumeric: true, maxLength: 3),
+              const SizedBox(height: 20),
+              _buildTextField(holderNameController, 'Nombre del Propietario'),
+              _buildNonEditableField(
+                  'Número de Tarjeta', creditCard.numero_tarjeta),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildNonEditableField(
+                      'Fecha de Expiración (MM/YYYY)',
+                      expirationController.text,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: _buildNonEditableField(
+                      'CVV',
+                      cvvController.text,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              _buildColorPicker(),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                onPressed: _isSaving ? null : _saveCard,
+                child: _isSaving 
+                    ? const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          Text('Guardando...'),
+                        ],
+                      )
+                    : const Text('Guardar Tarjeta'),
               ),
             ],
           ),
-          const SizedBox(height: 20),
-          _buildColorPicker(),
-          const SizedBox(height: 30),
-          ElevatedButton(
-            onPressed: _saveCard,
-            child: const Text('Guardar Tarjeta'),
-          ),
+          if (_isSaving)
+            Container(
+              color: Colors.black.withOpacity(0.1),
+              child: const Center(
+                child: SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -205,22 +266,47 @@ class _CardCreateState extends State<CardCreate> {
     );
   }
 
-  void _saveCard() {
+  void _saveCard() async {
     if (_validateInputs()) {
-      String expirationDate = creditCard.fecha_expiracion!;
-      creditCard = creditCard.copyWith(fecha_expiracion: expirationDate);
+      setState(() {
+        _isSaving = true;
+      });
 
-      context.read<CreditCardBloc>().add(CreateCreditCard(creditCard));
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const CardWallet()));
+      try {
+        // Ensure we're using the correct format for the expiration date
+        String expirationDate = creditCard.fecha_expiracion!;
+        creditCard = creditCard.copyWith(
+          cardHolderName: holderNameController.text,
+          fecha_expiracion: expirationDate
+        );
+
+        // Dispatch the event to create the credit card
+        context.read<CreditCardBloc>().add(CreateCreditCard(creditCard));
+        
+        // Add a small delay to ensure the card is saved
+        await Future.delayed(const Duration(milliseconds: 500));
+        
+        // Navigate to the card wallet screen and trigger loading of cards
+        if (mounted) {
+          Navigator.pushReplacement(
+            context, 
+            MaterialPageRoute(builder: (_) => const CardWallet())
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _isSaving = false;
+          });
+          _showErrorDialog("Error al guardar la tarjeta: ${e.toString()}");
+        }
+      }
     }
   }
 
   bool _validateInputs() {
-    if (holderNameController.text.isEmpty ||
-        expirationController.text.length != 7 ||
-        cvvController.text.length != 3) {
-      _showErrorDialog("Por favor, ingresa todos los datos correctamente.");
+    if (holderNameController.text.isEmpty) {
+      _showErrorDialog("Por favor, ingresa el nombre del propietario correctamente.");
       return false;
     }
     return true;

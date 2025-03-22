@@ -14,7 +14,8 @@ class TransactionListWidget extends StatelessWidget {
       builder: (context, transactionState) {
         if (transactionState.isLoading) {
           return const Center(child: CircularProgressIndicator());
-        } else if (transactionState.errorMessage.isNotEmpty) {
+        } else if (transactionState.errorMessage.isNotEmpty &&
+            transactionState.transactions.isEmpty) {
           return Center(child: Text(transactionState.errorMessage));
         } else if (transactionState.transactions.isNotEmpty) {
           final transactionAccounts = transactionState.transactions

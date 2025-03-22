@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter_bank_app/Domain/Entities/investment_entity.dart';
 
 // Eventos
 abstract class InvestmentsEvent extends Equatable {
@@ -8,11 +7,15 @@ abstract class InvestmentsEvent extends Equatable {
 }
 
 class CreateInvestment extends InvestmentsEvent {
-  final InvestmentEntity investment;
+  final String symbol;
+  final double amount;
+  final int accountId;
 
-  CreateInvestment(
-    this.investment,
-  );
+  CreateInvestment({
+    required this.symbol,
+    required this.amount,
+    required this.accountId,
+  });
 }
 
 class GetAllInvestments extends InvestmentsEvent {

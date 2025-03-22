@@ -22,9 +22,10 @@ class CardFront extends StatelessWidget {
         color: CardColor.baseColors[colorIndex],
         borderRadius: BorderRadius.circular(15.0),
       ),
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           /// **Fila superior con el chip y logo de la tarjeta**
           Row(
@@ -33,47 +34,47 @@ class CardFront extends StatelessWidget {
               const CardChip(),
               Image.asset(
                 'assets/credit_card/visa_logo.png',
-                width: 65.0,
-                height: 32.0,
+                width: 50.0,
+                height: 25.0,
               ),
             ],
           ),
-
-          const SizedBox(height: 20.0),
 
           /// **Número de tarjeta**
           Text(
             _formatCardNumber(card.numero_tarjeta),
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 20.0,
-              letterSpacing: 2.0,
+              fontSize: 16.0,
+              letterSpacing: 1.5,
               fontWeight: FontWeight.bold,
             ),
           ),
-
-          const SizedBox(height: 15.0),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               /// **Nombre del titular**
               Expanded(
+                flex: 3,
                 child: Text(
                   card.cardHolderName.isNotEmpty
                       ? card.cardHolderName.toUpperCase()
                       : 'CARDHOLDER NAME',
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16.0,
+                    fontSize: 12.0,
                     fontWeight: FontWeight.bold,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
 
+              const SizedBox(width: 10),
+
               /// **Fecha de vencimiento**
-              Flexible(
+              Expanded(
+                flex: 1,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -81,14 +82,14 @@ class CardFront extends StatelessWidget {
                       'VALID THRU',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 8.0,
+                        fontSize: 6.0,
                       ),
                     ),
                     Text(
                       _formatMonthYear(card.fecha_expiracion!),
                       style: const TextStyle(
                         color: Colors.white,
-                        fontSize: 16.0,
+                        fontSize: 12.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -115,8 +116,14 @@ class CardFront extends StatelessWidget {
     List<String> parts = fecha.split('/');
     if (parts.length < 2) return 'MM/YYYY';
 
-    String month = parts[0].padLeft(2, '0');
-    String year = parts[1];
+    // The format should be MM/YYYY
+    String year = parts[0];
+    String month = parts[1].padLeft(2, '0');
+
+    // If year is 4 digits, take only the last 2
+    if (year.length > 2) {
+      year = year.substring(year.length - 2);
+    }
 
     return '$month/$year';
   }

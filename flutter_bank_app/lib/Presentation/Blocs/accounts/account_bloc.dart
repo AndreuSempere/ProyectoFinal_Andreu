@@ -17,14 +17,25 @@ class AccountBloc extends Bloc<AccountsEvent, AccountState> {
       required this.deleteAccountsUsecase})
       : super(const AccountState()) {
     on<GetAllAccount>((event, emit) async {
-      emit(state.copyWith(isLoading: true, accounts: []));
+      emit(state.copyWith(isLoading: true));
 
       final result = await getAccountsUsecase(event.userId);
       result.fold(
-        (error) => emit(state.copyWith(
-            isLoading: false, errorMessage: error.toString(), accounts: [])),
+        (error) {
+          // If we already have accounts, keep them in the state
+          final List<Account> accounts = state.accounts.isNotEmpty ? state.accounts : [];
+          emit(state.copyWith(
+            isLoading: false, 
+            errorMessage: '', // Don't show the error message if we have accounts
+            accounts: accounts
+          ));
+        },
         (accounts) {
-          emit(state.copyWith(isLoading: false, accounts: accounts));
+          emit(state.copyWith(
+            isLoading: false, 
+            errorMessage: '', 
+            accounts: accounts
+          ));
         },
       );
     });

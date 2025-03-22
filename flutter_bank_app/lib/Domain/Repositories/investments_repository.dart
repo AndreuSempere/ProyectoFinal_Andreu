@@ -4,6 +4,6 @@ import 'package:flutter_bank_app/core/failure.dart';
 
 abstract class InvestmentsRepository {
   Future<Either<Failure, List<InvestmentEntity>>> getInvestments(int accountid);
-  Future<Either<String, InvestmentEntity>> createdInvestments(
-      InvestmentEntity investments);
+  Future<Either<String, void>> createdInvestments(
+      String symbol, double amount, int accountId);
 }

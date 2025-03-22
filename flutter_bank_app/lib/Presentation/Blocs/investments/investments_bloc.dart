@@ -1,4 +1,3 @@
-import 'package:flutter_bank_app/Domain/Entities/investment_entity.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Investments/create_investments_usecase.dart';
 import 'package:flutter_bank_app/Domain/Usecases/Investments/get_all_investments_usecase.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_event.dart';
@@ -28,7 +27,8 @@ class InvestmentsBloc extends Bloc<InvestmentsEvent, InvestmentsState> {
 
     on<CreateInvestment>((event, emit) async {
       emit(state.copyWith(isLoading: true));
-      final result = await createInvestmentUseCase(event.investment);
+      final result = await createInvestmentUseCase(
+          event.symbol, event.amount, event.accountId);
       result.fold(
         (error) {
           emit(state.copyWith(
@@ -37,11 +37,7 @@ class InvestmentsBloc extends Bloc<InvestmentsEvent, InvestmentsState> {
           ));
         },
         (investments) {
-          final updatedinvestmens =
-              List<InvestmentEntity>.from(state.investments)..add(investments);
-
           emit(state.copyWith(
-            investments: updatedinvestmens,
             isLoading: false,
           ));
         },

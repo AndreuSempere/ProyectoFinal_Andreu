@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Domain/Entities/trading_entity.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/investments/investments_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_event.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/trading/trading_state.dart';
@@ -11,8 +13,9 @@ import 'package:intl/intl.dart';
 
 class WorthTrading extends StatelessWidget {
   final String name;
+  final int accountId;
 
-  const WorthTrading({super.key, required this.name});
+  const WorthTrading({super.key, required this.name, required this.accountId});
 
   @override
   Widget build(BuildContext context) {
@@ -63,170 +66,185 @@ class WorthTrading extends StatelessWidget {
             final currencyFormatter = NumberFormat.currency(
                 locale: 'en_US', symbol: '\$', decimalDigits: 2);
 
-            return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Text(
-                        name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 7, 11, 129),
-                        ),
-                      ),
-                      Text(
-                        'Symbol: ${tradingState.tradingRecords.last.symbol}',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
-                  ),
-                ),
-                const Divider(color: Colors.blueAccent),
-
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      buildPriceCard('Hoy', todayPrice, currencyFormatter),
-                      buildPriceCard(
-                          'Hace 3 días', threeDaysAgoPrice, currencyFormatter),
-                      buildPriceCard(
-                          'Hace 7 días', sevenDaysAgoPrice, currencyFormatter),
-                    ],
-                  ),
-                ),
-                // Gráfico
-                SizedBox(
-                  height: 200,
-                  width: 450,
-                  child: Padding(
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: LineChart(
-                      LineChartData(
-                        gridData: FlGridData(show: false),
-                        titlesData: const FlTitlesData(show: false),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: Border.all(
-                              color: Colors.blueGrey.withOpacity(0.2)),
+                    child: Column(
+                      children: [
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(255, 7, 11, 129),
+                          ),
                         ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: sortedTradings.map((transaction) {
-                              return FlSpot(
-                                transaction.recordedAt!.millisecondsSinceEpoch
-                                    .toDouble(),
-                                transaction.price ?? 0.0,
-                              );
-                            }).toList(),
-                            isCurved: true,
-                            color: const Color.fromARGB(255, 244, 244, 244),
-                            barWidth: 3,
-                            isStrokeCapRound: true,
-                            dotData: FlDotData(
-                              show: true,
-                              getDotPainter: (spot, percent, barData, index) =>
-                                  FlDotCirclePainter(
-                                radius: 4,
-                                color: Colors.blue,
-                                strokeWidth: 1.5,
-                                strokeColor: Colors.white,
+                        Text(
+                          'Symbol: ${tradingState.tradingRecords.last.symbol}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Divider(color: Colors.blueAccent),
+
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        buildPriceCard('Hoy', todayPrice, currencyFormatter),
+                        buildPriceCard('Hace 3 días', threeDaysAgoPrice,
+                            currencyFormatter),
+                        buildPriceCard('Hace 7 días', sevenDaysAgoPrice,
+                            currencyFormatter),
+                      ],
+                    ),
+                  ),
+                  // Gráfico
+                  SizedBox(
+                    height: 200,
+                    width: 300,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: LineChart(
+                        LineChartData(
+                          gridData: FlGridData(show: false),
+                          titlesData: const FlTitlesData(show: false),
+                          borderData: FlBorderData(
+                            show: true,
+                            border: Border.all(
+                                color: Colors.blueGrey.withOpacity(0.2)),
+                          ),
+                          lineBarsData: [
+                            LineChartBarData(
+                              spots: sortedTradings.map((transaction) {
+                                return FlSpot(
+                                  transaction.recordedAt!.millisecondsSinceEpoch
+                                      .toDouble(),
+                                  transaction.price ?? 0.0,
+                                );
+                              }).toList(),
+                              isCurved: true,
+                              color: const Color.fromARGB(255, 244, 244, 244),
+                              barWidth: 3,
+                              isStrokeCapRound: true,
+                              dotData: FlDotData(
+                                show: true,
+                                getDotPainter:
+                                    (spot, percent, barData, index) =>
+                                        FlDotCirclePainter(
+                                  radius: 4,
+                                  color: Colors.blue,
+                                  strokeWidth: 1.5,
+                                  strokeColor: Colors.white,
+                                ),
+                              ),
+                              belowBarData: BarAreaData(
+                                show: true,
+                                color: Colors.blue.withOpacity(0.2),
                               ),
                             ),
-                            belowBarData: BarAreaData(
-                              show: true,
-                              color: Colors.blue.withOpacity(0.2),
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
 
-                // Botones
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ModalWidget(
-                                title: 'Comprar',
-                                actionLabel: 'Enviar',
-                                onAction: () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: const Text('Comprar'),
+                  // Botones
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            final cantidad = await showModalBottomSheet<String>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ModalWidget(
+                                  title: 'Comprar',
+                                  actionLabel: 'Enviar',
+                                );
+                              },
+                            );
+
+                            if (cantidad != null && cantidad.isNotEmpty) {
+                              print('Cantidad ingresada: $cantidad');
+
+                              context
+                                  .read<InvestmentsBloc>()
+                                  .add(CreateInvestment(
+                                    symbol: tradingState
+                                            .tradingRecords.last.symbol ??
+                                        '',
+                                    amount: double.parse(cantidad),
+                                    accountId: accountId,
+                                  ));
+                            }
+                          },
+                          child: const Text('Comprar'),
+                        ),
+                        ElevatedButton(
+                          onPressed: () async {
+                            final cantidad = await showModalBottomSheet<String>(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return const ModalWidget(
+                                  title: 'Vender',
+                                  actionLabel: 'Enviar',
+                                );
+                              },
+                            );
+                            if (cantidad != null && cantidad.isNotEmpty) {
+                              print('Cantidad ingresada: $cantidad');
+                            }
+                          },
+                          child: const Text('Vender'),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  //Acordeón
+                  ExpansionTile(
+                    title: const Text(
+                      'Ver registros históricos',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: Colors.blueGrey,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return ModalWidget(
-                                title: 'Vender',
-                                actionLabel: 'Enviar',
-                                onAction: () {
-                                  Navigator.of(context).pop();
-                                },
-                              );
-                            },
-                          );
-                        },
-                        child: const Text('Vender'),
+                    ),
+                    children: [
+                      SizedBox(
+                        height: 350,
+                        child: ListView.builder(
+                          shrinkWrap: true, // agrega esto
+                          itemCount: sortedTradings.length,
+                          itemBuilder: (context, index) {
+                            final trading = sortedTradings[index];
+                            return Card(
+                              margin: const EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 4),
+                              child: ListTile(
+                                title: Text(currencyFormatter
+                                    .format(trading.price ?? 0.0)),
+                                subtitle: Text(DateFormat.yMMMd()
+                                    .add_jm()
+                                    .format(trading.recordedAt!)),
+                              ),
+                            );
+                          },
+                        ),
                       ),
                     ],
                   ),
-                ),
-
-                //Acordeón
-                ExpansionTile(
-                  title: const Text(
-                    'Ver registros históricos',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: Colors.blueGrey,
-                    ),
-                  ),
-                  children: [
-                    SizedBox(
-                      height: 350,
-                      child: ListView.builder(
-                        itemCount: sortedTradings.length,
-                        itemBuilder: (context, index) {
-                          final trading = sortedTradings[index];
-                          return Card(
-                            margin: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 4),
-                            child: ListTile(
-                              title: Text(currencyFormatter
-                                  .format(trading.price ?? 0.0)),
-                              subtitle: Text(DateFormat.yMMMd()
-                                  .add_jm()
-                                  .format(trading.recordedAt!)),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                ],
+              ),
             );
           } else {
             return const Center(

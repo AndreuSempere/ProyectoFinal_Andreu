@@ -32,7 +32,8 @@ Future<void> main() async {
 
   try {
     await Firebase.initializeApp(
-      // name: 'bankifyApp',
+      //Comentar si se usa en Web
+      name: 'bankifyApp',
       options: DefaultFirebaseOptions.currentPlatform,
     );
     debugPrint('Firebase inicializado correctamente.');

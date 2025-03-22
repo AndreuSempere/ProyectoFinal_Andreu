@@ -62,7 +62,6 @@ class SignInRepositoryImpl implements SignInRepository {
       }
 
       await dataSource.signUp(email, password);
-      await sharedPreferences.setString(_userKey, email);
 
       return const Right(Msg());
     } catch (e) {

@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 abstract class InvestmentRemoteDataSource {
   Future<List<InvestmentModel>> getInvestments(int accountid);
-  Future<bool> createdInvestment(InvestmentModel investments);
+  Future<bool> createdInvestment(String symbol, double amount, int accountId);
 }
 
 class InvestmentsRemoteDatasourceImpl implements InvestmentRemoteDataSource {
@@ -35,23 +35,28 @@ class InvestmentsRemoteDatasourceImpl implements InvestmentRemoteDataSource {
   }
 
   @override
-  Future<bool> createdInvestment(InvestmentModel investments) async {
+  Future<bool> createdInvestment(
+      String symbol, double amount, int accountId) async {
     try {
       final uri = Uri.parse('$baseUrl$investmentsPath');
       final response = await client.post(
         uri,
         headers: {'Content-Type': 'application/json'},
-        body: json.encode(investments.toJson()),
+        body: json.encode({
+          'account_id': accountId,
+          'symbol': symbol,
+          'amount': amount,
+        }),
       );
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        return true;
-      } else {
+      if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception(
-            'Error al crear una cuenta en el backend: ${response.body}');
+            'Error al crear la inversión en el backend: ${response.body}');
+      } else {
+        return false;
       }
     } catch (e) {
-      throw Exception('Fallo al crear la cuenta: $e');
+      throw Exception('Fallo al crear la inversión: $e');
     }
   }
 }

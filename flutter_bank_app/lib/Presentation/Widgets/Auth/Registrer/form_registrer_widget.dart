@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
+import 'package:flutter_bank_app/Presentation/Blocs/auth/login_state.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/EditUser/template_form_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/OCR/ocr_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,25 +114,6 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
       context.read<LoginBloc>().add(RegisterButtonPressed(
           name, surname, email, password, dni, BirthDate));
-
-      await Future.delayed(const Duration(seconds: 1));
-      final state = context.read<LoginBloc>().state;
-
-      if (state.isSuccess) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(state.message ??
-                  AppLocalizations.of(context)!
-                      .usuarioRegistradoCorrectamente)),
-        );
-        Navigator.pop(context);
-      } else if (state.message != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(state.message ??
-                  AppLocalizations.of(context)!.errorRegistrarUsuario)),
-        );
-      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Error al registrar usuario. Inténtalo de nuevo.')));
@@ -140,153 +122,199 @@ class _SignUpFormWidgetState extends State<SignUpFormWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          PlantillaTextField(
-            controller: _nameController,
-            label: AppLocalizations.of(context)!.nameUpdUser,
-            icon: Icons.person,
-            validatorMsg: AppLocalizations.of(context)!.elNombreEsObligatorio,
-          ),
-          PlantillaTextField(
-            controller: _surnameController,
-            label: AppLocalizations.of(context)!.surnameUpdUser,
-            icon: Icons.person_outline,
-            validatorMsg: AppLocalizations.of(context)!.elApellidoEsObligatorio,
-          ),
-          PlantillaTextField(
-            controller: _emailController,
-            label: AppLocalizations.of(context)!.email,
-            icon: Icons.email,
-            validatorMsg: AppLocalizations.of(context)!.introduceUnEmailValido,
-            keyboardType: TextInputType.emailAddress,
-          ),
-          PlantillaTextField(
-            controller: _passwordController,
-            label: AppLocalizations.of(context)!.password,
-            icon: Icons.lock,
-            validatorMsg: AppLocalizations.of(context)!
-                .laPasswordDebeTenerAlMenos6Caracteres,
-            keyboardType: TextInputType.visiblePassword,
-          ),
-          const SizedBox(height: 15.0),
-          if (!_showAdditionalFields) ...[
-            const Text(
-              'Elige una fuente para escanear el DNI',
-              style: TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-              textAlign: TextAlign.center,
+    return BlocListener<LoginBloc, LoginState>(
+      listenWhen: (previous, current) =>
+          previous.isLoading != current.isLoading ||
+          previous.isSuccess != current.isSuccess ||
+          previous.message != current.message,
+      listener: (context, state) {
+        // Hide any existing SnackBar
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+        if (state.isLoading) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registrando usuario...'),
+              duration: Duration(seconds: 30),
+            ),
+          );
+        } else if (state.isSuccess) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message ??
+                  AppLocalizations.of(context)!.usuarioRegistradoCorrectamente),
+              backgroundColor: Colors.green,
+              duration: const Duration(seconds: 2),
+            ),
+          );
+          // Navigate back after showing the success message
+          Future.delayed(const Duration(seconds: 2), () {
+            Navigator.pop(context);
+          });
+        } else if (state.message != null) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message ??
+                  AppLocalizations.of(context)!.errorRegistrarUsuario),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 3),
+            ),
+          );
+        }
+      },
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: [
+            PlantillaTextField(
+              controller: _nameController,
+              label: AppLocalizations.of(context)!.nameUpdUser,
+              icon: Icons.person,
+              validatorMsg: AppLocalizations.of(context)!.elNombreEsObligatorio,
+            ),
+            PlantillaTextField(
+              controller: _surnameController,
+              label: AppLocalizations.of(context)!.surnameUpdUser,
+              icon: Icons.person_outline,
+              validatorMsg:
+                  AppLocalizations.of(context)!.elApellidoEsObligatorio,
+            ),
+            PlantillaTextField(
+              controller: _emailController,
+              label: AppLocalizations.of(context)!.email,
+              icon: Icons.email,
+              validatorMsg:
+                  AppLocalizations.of(context)!.introduceUnEmailValido,
+              keyboardType: TextInputType.emailAddress,
+            ),
+            PlantillaTextField(
+              controller: _passwordController,
+              label: AppLocalizations.of(context)!.password,
+              icon: Icons.lock,
+              validatorMsg: AppLocalizations.of(context)!
+                  .laPasswordDebeTenerAlMenos6Caracteres,
+              keyboardType: TextInputType.visiblePassword,
             ),
             const SizedBox(height: 15.0),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-              child: Row(
+            if (!_showAdditionalFields) ...[
+              const Text(
+                'Elige una fuente para escanear el DNI',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 15.0),
+              Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 10.0, horizontal: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _processImageExtractText(
+                              imageSource: ImageSource.gallery),
+                          icon: const Icon(Icons.image_outlined, size: 20),
+                          label: const Text('Galería',
+                              style: TextStyle(fontSize: 14)),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blueAccent,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            minimumSize: const Size(0, 45),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () => _processImageExtractText(
+                              imageSource: ImageSource.camera),
+                          icon: const Icon(Icons.camera_alt_outlined, size: 20),
+                          label: const Text('Cámara',
+                              style: TextStyle(fontSize: 14)),
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.redAccent,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            minimumSize: const Size(0, 45),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ],
+            if (_showAdditionalFields) ...[
+              PlantillaTextField(
+                controller: _dniController,
+                label: 'DNI',
+                icon: Icons.assignment_ind,
+                validatorMsg: 'El DNI es obligatorio',
+              ),
+              PlantillaTextField(
+                controller: _birthDateController,
+                label: 'Fecha de nacimiento',
+                icon: Icons.calendar_today,
+                validatorMsg: 'La fecha de nacimiento es obligatoria',
+                customValidator: _validateBirthDate,
+              ),
+              const SizedBox(height: 14),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _processImageExtractText(
-                          imageSource: ImageSource.gallery),
-                      icon: const Icon(Icons.image_outlined),
-                      label: const Text('Subir desde galería'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.blueAccent,
-                        textStyle: const TextStyle(fontSize: 16.0),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                  ElevatedButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 188, 193, 203),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      elevation: 5,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.buttoncancel,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black),
                     ),
                   ),
-                  const SizedBox(width: 10.0),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _processImageExtractText(
-                          imageSource: ImageSource.camera),
-                      icon: const Icon(Icons.camera_alt_outlined),
-                      label: const Text('Abrir cámara'),
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.redAccent,
-                        textStyle: const TextStyle(fontSize: 16.0),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
+                  const SizedBox(width: 8),
+                  ElevatedButton(
+                    onPressed: () => _submitForm(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 174, 192, 232),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      elevation: 5,
+                    ),
+                    child: Text(
+                      AppLocalizations.of(context)!.buttonguardar,
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
                     ),
                   ),
                 ],
               ),
-            ),
+            ],
           ],
-          if (_showAdditionalFields) ...[
-            PlantillaTextField(
-              controller: _dniController,
-              label: 'DNI',
-              icon: Icons.assignment_ind,
-              validatorMsg: 'El DNI es obligatorio',
-            ),
-            PlantillaTextField(
-              controller: _birthDateController,
-              label: 'Fecha de nacimiento',
-              icon: Icons.calendar_today,
-              validatorMsg: 'La fecha de nacimiento es obligatoria',
-              customValidator: _validateBirthDate,
-            ),
-            const SizedBox(height: 14),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 188, 193, 203),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    elevation: 5,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.buttoncancel,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                ElevatedButton(
-                  onPressed: () => _submitForm(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 174, 192, 232),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-                    elevation: 5,
-                  ),
-                  child: Text(
-                    AppLocalizations.of(context)!.buttonguardar,
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ],
+        ),
       ),
     );
   }

@@ -6,7 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class TradingListWidget extends StatelessWidget {
-  const TradingListWidget({super.key});
+  final int accountid;
+  const TradingListWidget({super.key, required this.accountid});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +51,10 @@ class TradingListWidget extends StatelessWidget {
                             onTap: () {
                               context.push(
                                 '/worth_trading',
-                                extra: transaction.name,
+                                extra: {
+                                  'transactionName': transaction.name,
+                                  'accountId': accountid,
+                                },
                               );
                             },
                             child: ListTile(

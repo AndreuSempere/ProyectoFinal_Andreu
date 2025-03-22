@@ -15,7 +15,8 @@ class AccountRepositoryImpl implements AccountsRepository {
       final accountModels = await remoteDataSource.getAccounts(id);
       return Right(accountModels.map((model) => model.toEntity()).toList());
     } catch (e) {
-      return Left(AuthFailure());
+      return Left(AuthFailure(
+          message: 'Error al obtener las cuentas: ${e.toString()}'));
     }
   }
 

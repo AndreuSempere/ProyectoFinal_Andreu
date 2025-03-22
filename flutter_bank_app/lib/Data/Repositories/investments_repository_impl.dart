@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bank_app/Data/Datasources/investments_remote_datasource.dart';
-import 'package:flutter_bank_app/Data/Models/investments_model.dart';
 import 'package:flutter_bank_app/Domain/Entities/investment_entity.dart';
 import 'package:flutter_bank_app/Domain/Repositories/investments_repository.dart';
 import 'package:flutter_bank_app/core/failure.dart';
+import 'package:flutter_bank_app/core/unit.dart';
 
 class InvestmentsRepositoryImpl implements InvestmentsRepository {
   final InvestmentRemoteDataSource remoteDataSource;
@@ -22,35 +22,13 @@ class InvestmentsRepositoryImpl implements InvestmentsRepository {
   }
 
   @override
-  Future<Either<String, InvestmentEntity>> createdInvestments(
-      InvestmentEntity investments) async {
+  Future<Either<String, Msg>> createdInvestments(
+      String symbol, double amount, int accountId) async {
     try {
-      final investmentsModel = InvestmentModel(
-        idInvestment: investments.idInvestment,
-        idAccount: investments.idAccount,
-        amount: investments.amount,
-        purchase_price: investments.purchase_price,
-        current_value: investments.current_value,
-        tradingId: investments.tradingId,
-        purchase_date: investments.purchase_date,
-        last_updated: investments.last_updated,
-      );
-
-      await remoteDataSource.createdInvestment(investmentsModel);
-      final createdInvestment = InvestmentEntity(
-        idInvestment: investments.idInvestment,
-        idAccount: investments.idAccount,
-        amount: investments.amount,
-        purchase_price: investments.purchase_price,
-        current_value: investments.current_value,
-        tradingId: investments.tradingId,
-        purchase_date: investments.purchase_date,
-        last_updated: investments.last_updated,
-      );
-
-      return Right(createdInvestment);
+      await remoteDataSource.createdInvestment(symbol, amount, accountId);
+      return const Right(Msg());
     } catch (e) {
-      return Left('Fallo al crear la cuenta: $e');
+      return Left('Fallo al crear la inversión: $e');
     }
   }
 }
