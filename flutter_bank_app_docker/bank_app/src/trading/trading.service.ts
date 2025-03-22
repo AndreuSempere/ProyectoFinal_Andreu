@@ -1,7 +1,6 @@
 import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UtilsService } from '../utils/utils.service';
 import { TradingEntity } from './trading.entity';
 import { CreateTradingDto } from './trading.dto';
 
@@ -10,12 +9,11 @@ export class TradingService {
   constructor(
     @InjectRepository(TradingEntity)
     private readonly tradingRepository: Repository<TradingEntity>,
-    private readonly utilsService: UtilsService,
   ) {}
 
   async getAllLatestTradingRecords(): Promise<any> {
     const query = this.tradingRepository.createQueryBuilder('trading')
-      .orderBy('trading.id', 'DESC')
+      .orderBy('trading.idtrading', 'DESC')
       .limit(15);
 
     const tradingRecords = await query.getMany();
@@ -39,5 +37,4 @@ export class TradingService {
     await this.tradingRepository.save(newTradingRecord);
     return { message: 'Registro de trading creado satisfactoriamente' };
   }
-
 }

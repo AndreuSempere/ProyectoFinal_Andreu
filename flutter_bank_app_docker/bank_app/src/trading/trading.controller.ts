@@ -15,7 +15,6 @@ import {
 import { TradingService } from './trading.service';
 import { CreateTradingDto } from './trading.dto';
   
-  @ApiTags('trading')
   @Controller('trading')
   export class TradingController {
     constructor(private readonly tradingService: TradingService) {}

@@ -5,7 +5,7 @@ import { TradingEntity } from '../trading/trading.entity';
 @Entity('investments')
 export class Investment {
   @PrimaryGeneratedColumn()
-  id: number;
+  idInvestment: number;
 
   @ManyToOne(() => Accounts, (account) => account.investments)
   @JoinColumn({ name: 'account_id' })

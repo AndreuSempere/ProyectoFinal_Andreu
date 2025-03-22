@@ -69,22 +69,23 @@ COMMODITIES = {
 
 # Datos de fallback
 FALLBACK_DATA = {
-    "TSLA": {"price": 292.98, "date": "2025-02-28"},
-    "NVDA": {"price": 950.02, "date": "2025-02-28"},
-    "AAPL": {"price": 182.52, "date": "2025-02-28"},
-    "MSFT": {"price": 425.22, "date": "2025-02-28"},
-    "GOOGL": {"price": 175.98, "date": "2025-02-28"},
-    "BTC-USD": {"price": 62500.25, "date": "2025-02-28"},
-    "ETH-USD": {"price": 3450.75, "date": "2025-02-28"},
-    "SOL-USD": {"price": 125.50, "date": "2025-02-28"},
-    "XRP-USD": {"price": 0.55, "date": "2025-02-28"},
-    "ADA-USD": {"price": 0.45, "date": "2025-02-28"},
-    "GC=F": {"price": 2150.30, "date": "2025-02-28"},
-    "SI=F": {"price": 24.75, "date": "2025-02-28"},
-    "CL=F": {"price": 78.25, "date": "2025-02-28"},
-    "NG=F": {"price": 1.95, "date": "2025-02-28"},
-    "HG=F": {"price": 4.25, "date": "2025-02-28"}
+    "TSLA": {"price": 310.45, "date": "2025-03-16"},
+    "NVDA": {"price": 975.60, "date": "2025-03-16"},
+    "AAPL": {"price": 190.75, "date": "2025-03-16"},
+    "MSFT": {"price": 432.80, "date": "2025-03-16"},
+    "GOOGL": {"price": 180.40, "date": "2025-03-16"},
+    "BTC-USD": {"price": 64500.75, "date": "2025-03-16"},
+    "ETH-USD": {"price": 3580.90, "date": "2025-03-16"},
+    "SOL-USD": {"price": 135.20, "date": "2025-03-16"},
+    "XRP-USD": {"price": 0.58, "date": "2025-03-16"},
+    "ADA-USD": {"price": 0.48, "date": "2025-03-16"},
+    "GC=F": {"price": 2205.80, "date": "2025-03-16"},
+    "SI=F": {"price": 25.90, "date": "2025-03-16"},
+    "CL=F": {"price": 80.15, "date": "2025-03-16"},
+    "NG=F": {"price": 2.05, "date": "2025-03-16"},
+    "HG=F": {"price": 4.40, "date": "2025-03-16"}
 }
+
 
 @app.get("/")
 def read_root():
@@ -196,7 +197,6 @@ def get_price(symbol: str):
 
 @app.get("/all")
 def get_all_prices():
-    """Devuelve todos los precios, usando datos de fallback en Docker"""
     all_data = {
         "stocks": [],
         "crypto": [],

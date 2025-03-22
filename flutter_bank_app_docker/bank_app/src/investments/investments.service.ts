@@ -5,7 +5,6 @@ import { Investment } from './investments.entity';
 import { CreateInvestmentDto, InvestmentResponseDto } from './investments.dto';
 import { Accounts } from '../accounts/accounts.entity';
 import { TradingEntity } from '../trading/trading.entity';
-import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class InvestmentsService {
@@ -39,10 +38,10 @@ export class InvestmentsService {
     }
   }
 
-  async getInvestmentById(id: number): Promise<InvestmentResponseDto> {
+  async getInvestmentById(idInvestment: number): Promise<InvestmentResponseDto> {
     try {
       const investment = await this.investmentsRepository.findOne({
-        where: { id },
+        where: { idInvestment },
         relations: ['account', 'trading'],
       });
 
@@ -125,7 +124,7 @@ export class InvestmentsService {
       const savedInvestment = await this.investmentsRepository.save(investment);
   
       const updatedInvestment = await this.investmentsRepository.findOne({
-        where: { id: savedInvestment.id },
+        where: { idInvestment: savedInvestment.idInvestment },
         relations: ['account', 'trading'],
       });
   
@@ -147,7 +146,7 @@ export class InvestmentsService {
     const profitLossPercentage = ((currentValue - totalInvested) / totalInvested) * 100;
 
     return {
-      id: investment.id,
+      id: investment.idInvestment,
       account_id: investment.account.id_cuenta,
       symbol: investment.trading.symbol,
       name: investment.trading.name,

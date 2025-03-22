@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeor
 
 @Entity('trading_data')
 export class TradingEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('increment', { name: 'idtrading' })
+  idtrading: number;
 
   @Column()
   type: string;
@@ -14,7 +14,7 @@ export class TradingEntity {
   @Column()
   symbol: string;
 
-  @Column('decimal', { precision: 10, scale: 2 })
+  @Column('decimal', { precision: 10, scale: 2})
   price: number;
 
   @CreateDateColumn()
