@@ -45,35 +45,81 @@ public class TransactionService {
     @Transactional
     public CompletableFuture<String> createTransaction(CreateTransactionDto dto) {
         return CompletableFuture.supplyAsync(() -> {
-        	Account origenAccount = accountRepository.findByNumeroCuenta(dto.getAccountId())
-        	        .orElseThrow(() -> new RuntimeException("Cuenta origen no encontrada"));
+            System.out.println("DTO recibido: accountId=" + dto.getAccountId() + 
+                               ", targetAccountId=" + dto.getTargetAccountId() + 
+                               ", cantidad=" + dto.getCantidad() + ", tipo=" + dto.getTipo());
 
-            if (dto.getTipo().equals("ingreso")) {
-                origenAccount.setSaldo(origenAccount.getSaldo() + dto.getCantidad());
-            } else if (dto.getTipo().equals("gasto") && origenAccount.getSaldo() < dto.getCantidad()) {
-                throw new RuntimeException("Fondos insuficientes");
-            } else {
-                origenAccount.setSaldo(origenAccount.getSaldo() - dto.getCantidad());
+        Account origenAccount = accountRepository.findById(dto.getAccountId())
+                .orElseThrow(() -> {
+                    System.out.println("Cuenta origen no encontrada con ID: " + dto.getAccountId());
+                    return new RuntimeException("Cuenta origen no encontrada");
+                });
+
+        System.out.println("Cuenta origen encontrada: " + origenAccount.getId_cuenta() + 
+                           ", saldo: " + origenAccount.getSaldo());
+
+        Account targetAccount = null;
+        if (dto.getTargetAccountId() != null) {
+            targetAccount = accountRepository.findById(dto.getTargetAccountId())
+                    .orElseThrow(() -> {
+                        System.out.println("Cuenta destino no encontrada con ID: " + dto.getTargetAccountId());
+                        return new RuntimeException("Cuenta destino no encontrada");
+                    });
+            System.out.println("Cuenta destino encontrada: " + targetAccount.getId_cuenta() + 
+                               ", saldo: " + targetAccount.getSaldo());
+        }
+
+        if ("ingreso".equals(dto.getTipo())) {
+            origenAccount.setSaldo(origenAccount.getSaldo() + dto.getCantidad());
+        } else if ("gasto".equals(dto.getTipo())) {
+            if (origenAccount.getSaldo() < dto.getCantidad()) {
+                throw new RuntimeException("Fondos insuficientes en la cuenta origen");
             }
+            origenAccount.setSaldo(origenAccount.getSaldo() - dto.getCantidad());
 
-            Transaction transaction = new Transaction();
-            transaction.setAccount(origenAccount);
-            transaction.setCantidad(dto.getCantidad());
-            transaction.setTipo(dto.getTipo());
-            transaction.setDescripcion(dto.getDescripcion() != null ? dto.getDescripcion() : "Transferencia");
+            if (targetAccount != null) {
+                targetAccount.setSaldo(targetAccount.getSaldo() + dto.getCantidad());
+            }
+        } else {
+            throw new RuntimeException("Tipo de transacción inválido");
+        }
 
-            transactionRepository.save(transaction);
-            accountRepository.save(origenAccount);
+        Transaction sourceTransaction = new Transaction();
+        sourceTransaction.setAccount(origenAccount);
+        sourceTransaction.setCantidad(dto.getCantidad());
+        sourceTransaction.setTipo("gasto".equals(dto.getTipo()) ? "gasto" : "ingreso");
+        sourceTransaction.setDescripcion(dto.getDescripcion() != null ? dto.getDescripcion() : "Transferencia");
 
-            return "Transacción procesada con éxito";
+        Transaction targetTransaction = null;
+        if (targetAccount != null) {
+            targetTransaction = new Transaction();
+            targetTransaction.setAccount(targetAccount);
+            targetTransaction.setCantidad(dto.getCantidad());
+            targetTransaction.setTipo("ingreso");
+            targetTransaction.setDescripcion(dto.getDescripcion() != null ? dto.getDescripcion() : "Transferencia recibida");
+        }
+
+        transactionRepository.save(sourceTransaction);
+        if (targetTransaction != null) {
+            transactionRepository.save(targetTransaction);
+        }
+
+        accountRepository.save(origenAccount);
+        if (targetAccount != null) {
+            accountRepository.save(targetAccount);
+        }
+
+        System.out.println("Transacción procesada con éxito");
+        return "Transacción procesada con éxito";
         });
     }
+
 
     @Async
     @Transactional
     public CompletableFuture<String> bizumTransaction(CreateTransactionDto dto) {
         return CompletableFuture.supplyAsync(() -> {
-            User sourceUser = userRepository.findByTelf(dto.getAccountId())
+            User sourceUser = userRepository.findByTelf(dto.getAccountId().toString())
                     .orElseThrow(() -> new RuntimeException("Cuenta origen no encontrada"));
 
             Hibernate.initialize(sourceUser.getAccounts());
@@ -94,7 +140,7 @@ public class TransactionService {
 
             Account targetAccount = null;
             if (dto.getTargetAccountId() != null) {
-                User targetUser = userRepository.findByTelf(dto.getTargetAccountId())
+                User targetUser = userRepository.findByTelf(dto.getTargetAccountId().toString())
                         .orElseThrow(() -> new RuntimeException("Cuenta destino no encontrada"));
 
                 Hibernate.initialize(targetUser.getAccounts());
@@ -127,8 +173,6 @@ public class TransactionService {
             if (targetAccount != null) {
                 accountRepository.save(targetAccount);
             }
-
-  
 
             return "Bizum procesado con éxito";
         });

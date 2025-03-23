@@ -71,7 +71,7 @@ services:
 
   web:
     image: odoo:17
-    container_name: bank_app-odoo
+    container_name: bank-app-odoo
     depends_on:
       db:
         condition: service_healthy
@@ -93,7 +93,7 @@ services:
     build:
       context: ./Spring_proyect-1
       dockerfile: Dockerfile-spring
-    container_name: bank_app-spring
+    container_name: bank-app-spring
     ports:
       - "8085:8085"
     depends_on:

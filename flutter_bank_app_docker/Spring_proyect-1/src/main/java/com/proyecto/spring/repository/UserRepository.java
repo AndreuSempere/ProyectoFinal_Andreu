@@ -10,6 +10,6 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
 	 @EntityGraph(attributePaths = "accounts")
-	 Optional<User> findByTelf(Long telf);
+	 Optional<User> findByTelf(String telf);
 
 }

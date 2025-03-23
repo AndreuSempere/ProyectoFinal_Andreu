@@ -2,6 +2,7 @@ package com.proyecto.spring.entity;
 
 import jakarta.persistence.*;
 import java.util.List;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -23,13 +24,19 @@ public class User {
     private String email;
 
     @Column(unique = true, nullable = true)
-    private Long telf;  
+    private String telf;  
 
     @Column(unique = true, nullable = true)
     private String dni;
 
-    @Column(nullable = false)
-    private String edad;
+    @Column(name = "fecha_nacimiento", nullable = false)
+    private String fecha_nacimiento;
+
+    @Column(nullable = true)
+    private Date tokenExpiration;
+
+    @Column(nullable = true)
+    private String token;
 
     @Column(nullable = true)
     private String firebaseToken;
@@ -79,11 +86,11 @@ public class User {
         this.email = email;
     }
 
-    public Long getTelf() {
+    public String getTelf() {
         return telf;
     }
 
-    public void setTelf(Long telf) {
+    public void setTelf(String telf) {
         this.telf = telf;
     }
 
@@ -95,12 +102,28 @@ public class User {
         this.dni = dni;
     }
 
-    public String getEdad() {
-        return edad;
+    public String getFecha_nacimiento() {
+        return fecha_nacimiento;
     }
 
-    public void setEdad(String edad) {
-        this.edad = edad;
+    public void setFecha_nacimiento(String fecha_nacimiento) {
+        this.fecha_nacimiento = fecha_nacimiento;
+    }
+
+    public Date getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(Date tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getFirebaseToken() {

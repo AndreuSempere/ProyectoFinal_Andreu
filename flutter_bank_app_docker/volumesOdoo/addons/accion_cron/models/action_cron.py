@@ -62,6 +62,7 @@ class AccionCron(models.Model):
                         "Authorization": f"Bearer {bearer_token}"
                     }
                     response_post = requests.post(url_post, data=json.dumps(item), headers=headers, timeout=10)
+                    print(response_post.text)
                     
                     if response_post.status_code in [200, 201]:
                         success_count += 1
@@ -70,7 +71,7 @@ class AccionCron(models.Model):
                         self.env.cr.commit()
                 except Exception as e:
                     error_count += 1
-                    self.env.cr.commit()  # Confirmar transacción para guardar los éxitos hasta ahora
+                    self.env.cr.commit()
             
             if error_count > 0:
                 if success_count > 0:

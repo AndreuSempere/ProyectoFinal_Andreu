@@ -6,6 +6,7 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import Image
 import io
 import os
+from datetime import datetime
 
 class TransactionController(http.Controller):
     
@@ -14,14 +15,26 @@ class TransactionController(http.Controller):
         try:
             # Acceder a los datos del JSON
             data = request.httprequest.get_json()
-            cantidad = data.get('cantidad')
-            tipo = data.get('tipo')
-            descripcion = data.get('descripcion')
-            account_id = data.get('accountId')
-            target_account_id = data.get('targetAccountId')
             
-            if not all([cantidad, tipo, descripcion, account_id, target_account_id]):
-                return {'error': 'Faltan datos en el JSON'}
+            # Extraer todos los campos del JSON
+            cantidad = data.get('cantidad')
+            tipo = data.get('tipo', 'Transferencia')
+            descripcion = data.get('descripcion', 'Sin descripción')
+            
+            # Información de cuenta origen
+            account_number = data.get('accountNumber', '')
+            user_name = data.get('userName', '')
+            user_surname = data.get('userSurname', '')
+            
+            # Información de cuenta destino
+            target_account_number = data.get('targetAccountNumber', '')
+            target_user_name = data.get('targetUserName', '')
+            target_user_surname = data.get('targetUserSurname', '')
+            
+
+            # Validar campos obligatorios
+            if not cantidad:
+                return {'error': 'Faltan datos obligatorios en el JSON (cantidad)'}
             
             # Crear PDF
             pdf_buffer = io.BytesIO()
@@ -40,23 +53,52 @@ class TransactionController(http.Controller):
             # Encabezado
             p.drawString(150, 770, "Bankify - Justificante de Pago")
             
+            # Fecha y hora actual
+            current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            p.setFont("Helvetica", 10)
+            p.drawString(400, 750, f"Fecha: {current_time}")
+            
             # Línea de separación
             p.setStrokeColor(colors.HexColor("#D1D3D4"))
             p.setLineWidth(1)
             p.line(50, 740, 550, 740)
 
             # Detalles de la transacción
-            p.setFont("Helvetica", 12)
+            p.setFont("Helvetica-Bold", 12)
             p.setFillColor(colors.black)
-
-            p.drawString(50, 700, f"Cantidad: {cantidad} {tipo}")
-            p.drawString(50, 680, f"Descripción: {descripcion}")
-            p.drawString(50, 660, f"De: {account_id}")
-            p.drawString(50, 640, f"Para: {target_account_id}")
-
+            p.drawString(50, 710, "DETALLES DE LA TRANSACCIÓN")
+            
+            p.setFont("Helvetica", 12)
+            p.drawString(50, 680, f"Importe: {cantidad} €")
+            p.drawString(50, 660, f"Tipo: {tipo}")
+            p.drawString(50, 640, f"Concepto: {descripcion}")
+            
+            # Información de cuenta origen
+            p.setFont("Helvetica-Bold", 12)
+            p.drawString(50, 610, "CUENTA ORIGEN")
+            p.setFont("Helvetica", 12)
+            if user_name or user_surname:
+                p.drawString(50, 590, f"Titular: {user_name} {user_surname}")
+            p.drawString(50, 570, f"Número: {account_number}")
+            
+            # Información de cuenta destino (si existe)
+            if target_account_number:
+                p.setFont("Helvetica-Bold", 12)
+                p.drawString(50, 520, "CUENTA DESTINO")
+                p.setFont("Helvetica", 12)
+                if target_user_name or target_user_surname:
+                    p.drawString(50, 500, f"Titular: {target_user_name} {target_user_surname}")
+                p.drawString(50, 480, f"Número: {target_account_number}")
+            
             # Agregar líneas horizontales para un formato más limpio
-            p.line(50, 630, 550, 630)
+            p.setStrokeColor(colors.HexColor("#D1D3D4"))
+            p.line(50, 440, 550, 440)
 
+            # Información legal
+            p.setFont("Helvetica-Oblique", 8)
+            p.drawString(50, 100, "Este documento es un justificante de la operación realizada y no constituye un documento fiscal.")
+            p.drawString(50, 90, "Para cualquier reclamación, conserve este documento como prueba de la transacción.")
+            
             # Footer - Firma y detalles
             p.setFont("Helvetica-Oblique", 10)
             p.drawString(50, 50, "Firma del remitente")

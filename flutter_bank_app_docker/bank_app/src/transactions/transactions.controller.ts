@@ -81,18 +81,6 @@ export class TransactionsController {
     }
   }
 
-  @Post('/qr/')
-  @ApiOperation({ summary: 'Create a QR transaction', description: 'Creates a QR transaction based on the provided data.' })
-  @ApiResponse({ status: 201, description: 'Successfully created the QR transaction.' })
-  @ApiResponse({ status: 400, description: 'Bad request, invalid data.' })
-  async qrTransaction(@Body() createTransactionDto: CreateTransactionDto) {
-    try {
-      return await this.transactionsService.qrTransaction(createTransactionDto);
-    } catch (err) {
-      throw new BadRequestException('Failed to create QR transaction');
-    }
-  }
-
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a transaction', description: 'Deletes a transaction by its ID.' })
   @ApiResponse({ status: 200, description: 'Successfully deleted the transaction.' })

@@ -3,9 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { config } from 'dotenv';
 config();
 
-console.log(process.env.PROJECT_ID_FIREBASE);
-console.log(process.env.CLIENT_EMAIL_FIREBASE);
-console.log(process.env.PRIVATE_KEY_FIREBASE);
 @Injectable()
 export class FirebaseService {
   private readonly logger = new Logger(FirebaseService.name);
