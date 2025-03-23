@@ -36,7 +36,7 @@ class _TransactionPageState extends State<TransactionPage> {
     final accounts = myAccountState.accounts;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 143, 193, 226),
         title: const Text(
@@ -50,191 +50,191 @@ class _TransactionPageState extends State<TransactionPage> {
         centerTitle: true,
         elevation: 5,
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppLocalizations.of(context)!.chooseTransactionType,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            DropdownButton<String>(
+              value: _transactionType,
+              onChanged: (value) {
+                setState(() {
+                  _transactionType = value!;
+                  _fromAccount = null;
+                  _toAccount = null;
+                });
+              },
+              items: [
+                DropdownMenuItem(
+                  value: 'own',
+                  child: Text(AppLocalizations.of(context)!.toOwnAccount),
+                ),
+                DropdownMenuItem(
+                  value: 'other',
+                  child: Text(AppLocalizations.of(context)!.toOtherAccount),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            if (_transactionType == 'own') ...[
               Text(
-                AppLocalizations.of(context)!.chooseTransactionType,
+                AppLocalizations.of(context)!.chooseFromAccount,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               DropdownButton<String>(
-                value: _transactionType,
+                value: _fromAccount ?? widget.accountId.toString(),
                 onChanged: (value) {
                   setState(() {
-                    _transactionType = value!;
-                    _fromAccount = null;
-                    _toAccount = null;
+                    _fromAccount = value!;
                   });
                 },
-                items: [
-                  DropdownMenuItem(
-                    value: 'own',
-                    child: Text(AppLocalizations.of(context)!.toOwnAccount),
-                  ),
-                  DropdownMenuItem(
-                    value: 'other',
-                    child: Text(AppLocalizations.of(context)!.toOtherAccount),
-                  ),
-                ],
+                hint: Text(AppLocalizations.of(context)!.selectFromAccount),
+                items: accounts.map((account) {
+                  return DropdownMenuItem<String>(
+                    value: account.idCuenta.toString(),
+                    child: Text(
+                      account.numeroCuenta!,
+                      style: TextStyle(fontSize: 14),
+                    ),
+                  );
+                }).toList(),
               ),
               const SizedBox(height: 20),
-              if (_transactionType == 'own') ...[
-                Text(
-                  AppLocalizations.of(context)!.chooseFromAccount,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                DropdownButton<String>(
-                  value: _fromAccount ?? widget.accountId.toString(),
-                  onChanged: (value) {
-                    setState(() {
-                      _fromAccount = value!;
-                    });
-                  },
-                  hint: Text(AppLocalizations.of(context)!.selectFromAccount),
-                  items: accounts.map((account) {
-                    return DropdownMenuItem<String>(
-                      value: account.idCuenta.toString(),
-                      child: Text(account.numeroCuenta!),
-                    );
-                  }).toList(),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  AppLocalizations.of(context)!.chooseToAccount,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                DropdownButton<String>(
-                  value: _toAccount,
-                  onChanged: (value) {
-                    setState(() {
-                      _toAccount = value!;
-                    });
-                  },
-                  hint: Text(AppLocalizations.of(context)!.selectToAccount),
-                  items: accounts.map((account) {
-                    return DropdownMenuItem<String>(
-                      value: account.idCuenta.toString(),
-                      child: Text(
-                          '${tipoCuenta[account.accountType] ?? "Desconocido"} - ${account.numeroCuenta!}'),
-                    );
-                  }).toList(),
-                ),
-              ],
-              if (_transactionType == 'other') ...[
-                Text(
-                  AppLocalizations.of(context)!.targetAccount,
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                TextField(
-                  controller: _targetAccountController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.enterTargetAccount,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                ),
-              ],
-              const SizedBox(height: 20),
               Text(
-                AppLocalizations.of(context)!.enteramount,
+                AppLocalizations.of(context)!.chooseToAccount,
+                style:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              DropdownButton<String>(
+                value: _toAccount,
+                onChanged: (value) {
+                  setState(() {
+                    _toAccount = value!;
+                  });
+                },
+                hint: Text(AppLocalizations.of(context)!.selectToAccount),
+                isExpanded: true,
+                items: accounts.map((account) {
+                  return DropdownMenuItem<String>(
+                    value: account.idCuenta.toString(),
+                    child: Text(
+                      '${tipoCuenta[account.accountType] ?? "Desconocido"} - ${account.numeroCuenta!}',
+                      style: TextStyle(fontSize: 13),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+            if (_transactionType == 'other') ...[
+              Text(
+                AppLocalizations.of(context)!.targetAccount,
                 style:
                     const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
               TextField(
-                controller: _amountController,
+                controller: _targetAccountController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.amount,
+                  labelText: AppLocalizations.of(context)!.enterTargetAccount,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              Text(
-                AppLocalizations.of(context)!.description,
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  labelText: AppLocalizations.of(context)!.enterdescription,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20), // Ajuste de espacio
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    final amount = _amountController.text;
-                    final description = _descriptionController.text;
-                    final targetAccount = _targetAccountController.text;
-
-                    final fromAccount =
-                        _fromAccount ?? widget.accountId.toString();
-                    final toAccount = _toAccount;
-
-                    if (amount.isEmpty ||
-                        description.isEmpty ||
-                        (_transactionType == 'own' &&
-                            (fromAccount.isEmpty || toAccount == null)) ||
-                        (_transactionType == 'other' &&
-                            targetAccount.isEmpty)) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content:
-                              Text(AppLocalizations.of(context)!.fillallfields),
-                        ),
-                      );
-                    }
-                    final newTransaction = Transaction(
-                      account: int.parse(fromAccount),
-                      targetAccount: _transactionType == 'other'
-                          ? int.parse(targetAccount)
-                          : int.parse(toAccount!),
-                      cantidad: int.parse(amount),
-                      descripcion: description,
-                      tipo: 'gasto',
-                    );
-
-                    context
-                        .read<TransactionBloc>()
-                        .add(CreateTransactions(newTransaction));
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(AppLocalizations.of(context)!
-                            .transactionsuccessful),
-                      ),
-                    );
-
-                    Navigator.pop(context);
-                    Navigator.pop(context);
-                  },
-                  child: Text(AppLocalizations.of(context)!.buttonconfirm),
                 ),
               ),
             ],
-          ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.enteramount,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _amountController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.amount,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              AppLocalizations.of(context)!.description,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _descriptionController,
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context)!.enterdescription,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20), // Ajuste de espacio
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  final amount = _amountController.text;
+                  final description = _descriptionController.text;
+                  final targetAccount = _targetAccountController.text;
+
+                  final fromAccount =
+                      _fromAccount ?? widget.accountId.toString();
+                  final toAccount = _toAccount;
+
+                  if (amount.isEmpty ||
+                      description.isEmpty ||
+                      (_transactionType == 'own' &&
+                          (fromAccount.isEmpty || toAccount == null)) ||
+                      (_transactionType == 'other' && targetAccount.isEmpty)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content:
+                            Text(AppLocalizations.of(context)!.fillallfields),
+                      ),
+                    );
+                  }
+                  final newTransaction = Transaction(
+                    account: int.parse(fromAccount),
+                    targetAccount: _transactionType == 'other'
+                        ? int.parse(targetAccount)
+                        : int.parse(toAccount!),
+                    cantidad: int.parse(amount),
+                    descripcion: description,
+                    tipo: 'gasto',
+                  );
+
+                  context
+                      .read<TransactionBloc>()
+                      .add(CreateTransactions(newTransaction));
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          AppLocalizations.of(context)!.transactionsuccessful),
+                    ),
+                  );
+
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                },
+                child: Text(AppLocalizations.of(context)!.buttonconfirm),
+              ),
+            ),
+          ],
         ),
       ),
     );

@@ -58,33 +58,6 @@ class DialogoState extends State<EditarUser> {
                 icon: Icons.person_outline,
                 validatorMsg: 'Introduce nuevos apellidos',
               ),
-              PlantillaTextField(
-                controller: _edadController,
-                label: AppLocalizations.of(context)!.ageUpdUser,
-                icon: Icons.calendar_today,
-                keyboardType: TextInputType.number,
-                validatorMsg: 'Introduce una nueva edad',
-                customValidator: (value) {
-                  if (int.tryParse(value!) == null ||
-                      int.parse(value) <= 0 ||
-                      int.parse(value) < 18) {
-                    return 'Introduce una edad válida';
-                  }
-                  return null;
-                },
-              ),
-              PlantillaTextField(
-                controller: _dniController,
-                label: 'DNI',
-                icon: Icons.badge,
-                validatorMsg: 'Introduce un nuevo DNI',
-                customValidator: (value) {
-                  if (!RegExp(r'^\d{8}[A-Za-z]$').hasMatch(value!)) {
-                    return 'Introduce un DNI válido (8 números y 1 letra)';
-                  }
-                  return null;
-                },
-              ),
               const SizedBox(height: 8),
             ],
           ),

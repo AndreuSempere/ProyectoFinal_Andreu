@@ -30,7 +30,6 @@ class QrOptionsPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SizedBox(height: 30),
-            // Título
             Text(
               "Elige una opción QR",
               style: TextStyle(
@@ -41,11 +40,8 @@ class QrOptionsPage extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 40),
-
-            // Botón para generar QR
             ElevatedButton.icon(
               onPressed: () {
-                // Generar QR con accountId
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -68,15 +64,12 @@ class QrOptionsPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 20),
-
-            // Botón para leer QR
             ElevatedButton.icon(
               onPressed: () {
-                // Leer QR
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ScanQrPage(),
+                    builder: (context) => ScanQrPage(accountId: accountId),
                   ),
                 );
               },

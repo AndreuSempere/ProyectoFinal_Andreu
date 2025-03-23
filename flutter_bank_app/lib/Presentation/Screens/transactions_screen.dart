@@ -71,9 +71,7 @@ class _TransactionInfoPageState extends State<TransactionInfoPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
-            if (mounted) {
-              context.go('/home');
-            }
+            context.go('/home');
           },
         ),
       ),

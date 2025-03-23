@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/auth/login_event.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Privacidad/privacid
 import 'package:flutter_bank_app/Presentation/Widgets/Drawer/Logout/alert_logout_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -22,62 +19,6 @@ class DrawerWidget extends StatefulWidget {
 }
 
 class _DrawerWidgetState extends State<DrawerWidget> {
-  File? _imageFile;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImage(); // Cargar la imagen guardada al iniciar
-  }
-
-  Future<String> _getUserDirectory(String userEmail) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final userDir = Directory('${directory.path}/users/$userEmail');
-
-    if (!await userDir.exists()) {
-      await userDir.create(recursive: true);
-    }
-
-    return userDir.path;
-  }
-
-  Future<void> _loadImage() async {
-    final state = context.read<LoginBloc>().state;
-
-    if (state.user != null) {
-      final userDir = await _getUserDirectory(state.user!.email);
-      final imagePath = '$userDir/avatar_image.png';
-      final imageFile = File(imagePath);
-
-      if (await imageFile.exists()) {
-        setState(() {
-          _imageFile = imageFile;
-        });
-      }
-    }
-  }
-
-  Future<void> _pickImage() async {
-    final state = context.read<LoginBloc>().state;
-
-    if (state.user != null) {
-      final picker = ImagePicker();
-      final pickedFile = await picker.pickImage(
-        source: ImageSource.gallery,
-      );
-
-      if (pickedFile != null) {
-        final userDir = await _getUserDirectory(state.user!.email);
-        final imagePath = '$userDir/avatar_image.png';
-        final savedImage = await File(pickedFile.path).copy(imagePath);
-
-        setState(() {
-          _imageFile = savedImage;
-        });
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -94,18 +35,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 UserAccountsDrawerHeader(
                   decoration: const BoxDecoration(
                       color: Color.fromARGB(255, 58, 57, 59)),
-                  currentAccountPicture: GestureDetector(
-                    onTap: _pickImage,
-                    child: CircleAvatar(
-                      backgroundColor: const Color.fromARGB(255, 195, 112, 177),
-                      backgroundImage:
-                          _imageFile != null ? FileImage(_imageFile!) : null,
-                      child: _imageFile == null
-                          ? Text(
-                              state.user!.name.substring(0, 3).toUpperCase(),
-                              style: const TextStyle(color: Color(0xFFF2F2F2)),
-                            )
-                          : null,
+                  currentAccountPicture: CircleAvatar(
+                    backgroundColor: const Color.fromARGB(255, 195, 112, 177),
+                    child: Text(
+                      state.user!.name.substring(0, 3).toUpperCase(),
+                      style: const TextStyle(color: Color(0xFFF2F2F2)),
                     ),
                   ),
                   accountName: Text(state.user!.name),
@@ -188,10 +122,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                     style: const TextStyle(
                       color: Color(0xFFF2F2F2),
                     ),
-                  ),
-                  trailing: const Icon(
-                    Icons.chevron_right,
-                    color: Color(0xFFF2F2F2),
                   ),
                 ),
                 const Spacer(),

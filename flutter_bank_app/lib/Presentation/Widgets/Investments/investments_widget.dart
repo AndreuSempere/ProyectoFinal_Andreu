@@ -31,7 +31,13 @@ class InvestmentsWidget extends StatelessWidget {
                     final double purchasePrice =
                         investment.purchase_price ?? 0.0;
                     final double currentValue = investment.current_value ?? 0.0;
-                    final double profitOrLoss = currentValue - purchasePrice;
+                    final double amountInvested = investment.amount ?? 0.0;
+
+                    final double quantity =
+                        purchasePrice > 0 ? amountInvested / purchasePrice : 0;
+
+                    final double profitOrLoss =
+                        (quantity * currentValue) - amountInvested;
                     final bool isProfit = profitOrLoss >= 0;
 
                     return Card(
@@ -46,7 +52,7 @@ class InvestmentsWidget extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Inversión #${investment.idInvestment ?? 'N/A'}',
+                              'Inversión #${index + 1}',
                               style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),

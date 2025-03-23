@@ -16,7 +16,12 @@ class TransactionListWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (transactionState.errorMessage.isNotEmpty &&
             transactionState.transactions.isEmpty) {
-          return Center(child: Text(transactionState.errorMessage));
+          if (transactionState.transactions.isEmpty) {
+            return const Center(
+                child: Text('No hay transacciones para esta cuenta.'));
+          } else {
+            return Center(child: Text(transactionState.errorMessage));
+          }
         } else if (transactionState.transactions.isNotEmpty) {
           final transactionAccounts = transactionState.transactions
               .where((transaction) => transaction.account == accountId)
