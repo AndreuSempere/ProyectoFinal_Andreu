@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_bloc.dart';
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TransactionListWidget extends StatelessWidget {
   final int accountId;
@@ -39,10 +40,29 @@ class TransactionListWidget extends StatelessWidget {
                     return Card(
                       margin: const EdgeInsets.all(8.0),
                       child: ExpansionTile(
-                        title: Text(
-                          '${transaction.descripcion}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
+                        title: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '${transaction.created_at} -  ',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 19,
+                                ),
+                              ),
+                              TextSpan(
+                                text:
+                                    '${transaction.tipo == 'ingreso' ? '+' : '-'}${transaction.cantidad}€',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: transaction.tipo == 'ingreso'
+                                      ? Colors.green
+                                      : Colors.red,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         children: [
@@ -52,20 +72,32 @@ class TransactionListWidget extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  '${transaction.tipo == 'ingreso' ? '+' : '-'}${transaction.cantidad}€',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 24,
-                                    color: transaction.tipo == 'ingreso'
-                                        ? Colors.black
-                                        : Colors.red,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  'Fecha: ${transaction.created_at}',
+                                  transaction.descripcion!,
                                   style: const TextStyle(fontSize: 16),
                                 ),
+                                const SizedBox(height: 4),
+                                if (transaction.receipt_url != null)
+                                  GestureDetector(
+                                    onTap: () async {
+                                      final url = transaction.receipt_url!;
+                                      print("URL del PDF: $url");
+
+                                      if (await canLaunchUrl(Uri.parse(url))) {
+                                        await launchUrl(Uri.parse(url),
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      } else {
+                                        print("No se pudo abrir el PDF");
+                                      }
+                                    },
+                                    child: Text(
+                                      'Ver recibo',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.blueAccent,
+                                      ),
+                                    ),
+                                  ),
                               ],
                             ),
                           ),

@@ -41,7 +41,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
       return Right(createdTransaction);
     } catch (e) {
-      return Left('Fallo al crear la transaction: $e');
+      return Left('Fallo al enviar la transaction intentalo de nuevo');
     }
   }
 
@@ -68,7 +68,7 @@ class TransactionsRepositoryImpl implements TransactionsRepository {
 
       return Right(createdTransaction);
     } catch (e) {
-      return Left('Fallo al crear la transaction: $e');
+      return Left('Fallo al enviar el bizum intentalo de nuevo');
     }
   }
 }

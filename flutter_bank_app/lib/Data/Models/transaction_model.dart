@@ -9,6 +9,7 @@ class TransactionModel {
   final int account;
   final int? targetAccount;
   final String? created_at;
+  final String? receipt_url;
 
   TransactionModel({
     this.id_transaction,
@@ -18,6 +19,7 @@ class TransactionModel {
     required this.account,
     this.targetAccount,
     this.created_at,
+    this.receipt_url,
   });
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
@@ -39,6 +41,7 @@ class TransactionModel {
       account: json['account']?['id_cuenta'],
       targetAccount: json['targetAccount'],
       created_at: formattedDate,
+      receipt_url: json['receipt_url'],
     );
   }
 
@@ -50,6 +53,8 @@ class TransactionModel {
       'descripcion': descripcion,
       'accountId': account,
       'targetAccountId': targetAccount,
+      'created_at': created_at,
+      'receipt_url': receipt_url,
     };
   }
 
@@ -62,6 +67,7 @@ class TransactionModel {
       account: account,
       targetAccount: targetAccount,
       created_at: created_at,
+      receipt_url: receipt_url,
     );
   }
 }

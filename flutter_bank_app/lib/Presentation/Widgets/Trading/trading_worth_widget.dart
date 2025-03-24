@@ -188,23 +188,6 @@ class WorthTrading extends StatelessWidget {
                           },
                           child: const Text('Comprar'),
                         ),
-                        ElevatedButton(
-                          onPressed: () async {
-                            final cantidad = await showModalBottomSheet<String>(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return const ModalWidget(
-                                  title: 'Vender',
-                                  actionLabel: 'Enviar',
-                                );
-                              },
-                            );
-                            if (cantidad != null && cantidad.isNotEmpty) {
-                              print('Cantidad ingresada: $cantidad');
-                            }
-                          },
-                          child: const Text('Vender'),
-                        ),
                       ],
                     ),
                   ),
@@ -223,7 +206,7 @@ class WorthTrading extends StatelessWidget {
                       SizedBox(
                         height: 350,
                         child: ListView.builder(
-                          shrinkWrap: true, // agrega esto
+                          shrinkWrap: true,
                           itemCount: sortedTradings.length,
                           itemBuilder: (context, index) {
                             final trading = sortedTradings[index];

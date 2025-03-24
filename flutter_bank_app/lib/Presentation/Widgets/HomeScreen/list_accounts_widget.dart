@@ -31,7 +31,6 @@ class _AccountListWidgetState extends State<AccountListWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Lista de posibles tipos de cuenta
     final Map<int, String> tipoCuenta = {
       1: AppLocalizations.of(context)!.accountType1,
       2: AppLocalizations.of(context)!.accountType2,
@@ -43,13 +42,11 @@ class _AccountListWidgetState extends State<AccountListWidget> {
           return const Center(child: CircularProgressIndicator());
         } else if (accountState.errorMessage.isNotEmpty &&
             accountState.accounts.isEmpty) {
-          // Only show error message if we don't have any accounts
           return Center(child: Text('Error: ${accountState.errorMessage}'));
         } else if (accountState.accounts.isNotEmpty) {
           final myLoginState = context.watch<LoginBloc>().state;
           final userid = myLoginState.user?.idUser;
 
-          // Filtrar cuentas asociadas al usuario
           final userAccounts = accountState.accounts
               .where((account) => account.idUser == userid)
               .toList();
@@ -114,8 +111,7 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                                       fontWeight: FontWeight.bold,
                                       fontSize: 24),
                                 ),
-                                Text(
-                                    'Fecha creada ${account.createdAt}${account.accountType}'),
+                                Text('Fecha creada ${account.createdAt}'),
                               ],
                             ),
                           ],

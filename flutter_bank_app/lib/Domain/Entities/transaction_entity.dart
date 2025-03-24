@@ -6,6 +6,7 @@ class Transaction {
   final int account;
   final int? targetAccount;
   final String? created_at;
+  final String? receipt_url;
 
   Transaction({
     this.id_transaction,
@@ -15,5 +16,6 @@ class Transaction {
     required this.account,
     this.targetAccount,
     this.created_at,
+    this.receipt_url,
   });
 }
