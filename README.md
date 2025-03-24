@@ -52,6 +52,7 @@ docker-compose up -d
 ```
 
 Este comando iniciará todos los servicios necesarios:
+
 - Servidor web (NestJS)
 - Base de datos MySQL
 - PHPMyAdmin
@@ -71,14 +72,17 @@ flutter run
 ### Dependencias principales
 
 #### Aplicación Flutter:
+
 - Flutter SDK >=3.4.1
 
 #### API Financiera (Python):
+
 - FastAPI
 - yfinance
 - requests
 
 #### Servicio Spring Boot:
+
 - Spring Boot
 - Spring Data JPA
 - MySQL Connector
@@ -89,43 +93,47 @@ flutter run
 
 Al abrir la aplicación, se mostrará la pantalla de inicio de sesión donde podrás acceder con tu correo electrónico y contraseña. También tienes la opción de utilizar autenticación biométrica si tu dispositivo lo soporta.
 
-![Pantalla de inicio de sesión](https://example.com/screenshots/login.jpg)
+![Pantalla de inicio de sesión](img/login.jpg)
 
 ### 2. Pantalla principal
 
 Una vez autenticado, verás la pantalla principal con un resumen de tus cuentas bancarias. Desde aquí puedes:
+
 - Ver el saldo de tus cuentas
 - Crear nuevas cuentas bancarias
 - Acceder al menú lateral para más opciones
 
-![Pantalla principal](https://example.com/screenshots/home.jpg)
+![Pantalla principal](img/homescreen.jpg)
 
 ### 3. Transacciones
 
 En la sección de transacciones puedes:
+
 - Ver el historial de transacciones
 - Filtrar por fecha o tipo
 - Realizar nuevas transferencias
 
-![Pantalla de transacciones](https://example.com/screenshots/transactions.jpg)
+![Pantalla de transacciones](img/transactions.jpg)
 
 ### 4. Tarjetas de crédito
 
 Gestiona tus tarjetas de crédito:
+
 - Visualiza los detalles de tus tarjetas
 - Activa o desactiva tarjetas
 - Solicita nuevas tarjetas
 
-![Gestión de tarjetas](https://example.com/screenshots/cards.jpg)
+![Gestión de tarjetas](img/credit_card.jpg)
 
 ### 5. Análisis financiero
 
 Visualiza gráficos interactivos que muestran:
+
 - Distribución de gastos por categoría
 - Evolución de ingresos y gastos
 - Comparativas mensuales
 
-![Análisis financiero](https://example.com/screenshots/charts.jpg)
+![Análisis financiero](img/estadisticas.jpg)
 
 ## Enlace a la presentación en formato PDF
 
@@ -134,7 +142,7 @@ Visualiza gráficos interactivos que muestran:
 ## Bibliografía utilizada
 
 ### Tutoriales y recursos
-- [Flutter OCR](https://medium.com/@frojho/flutter-projects-05-building-an-optical-character-recognition-ocr-app-639c165f857d )
+
+- [Flutter OCR](https://medium.com/@frojho/flutter-projects-05-building-an-optical-character-recognition-ocr-app-639c165f857d)
 - [Autentificación Face ID / Huella](https://medium.com/@dev.jocgomez/implementa-autenticaci%C3%B3n-biom%C3%A9trica-en-tu-proyecto-de-flutter-64b7d4f7c288)
 - [Hacer peticiones a la API python](https://www.datacamp.com/es/tutorial/making-http-requests-in-python)
-
