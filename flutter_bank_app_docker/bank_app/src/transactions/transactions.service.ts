@@ -1,12 +1,12 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Accounts } from '../accounts/accounts.entity';
 import { Transaction } from './transactions.entity';
 import { CreateTransactionDto } from './transactions.dto';
-import { FirebaseService } from '../firebase/firebase.service';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
+import { FirebaseService } from '../firebase/firebase.service';
 import { config } from 'dotenv';
 config();
 
@@ -14,27 +14,28 @@ config();
 export class TransactionsService {
   private readonly externalServiceUrl = process.env.PRIVATE_KEY_SPRING;
   private readonly odooServiceUrl = process.env.PRIVATE_KEY_ODOO;
+  
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionsRepository: Repository<Transaction>,
     @InjectRepository(Accounts)
     private readonly accountsRepository: Repository<Accounts>,
-    private firebaseService: FirebaseService,
     private readonly httpService: HttpService,
+    private readonly firebaseService: FirebaseService,
   ) {}
 
   async getTransaction(id?: number): Promise<any> {
     const result = await this.transactionsRepository.findOneBy({
       id_transaction: id,
-    });
+        });
 
     return result;
   }
 
   async getTransactionAll(): Promise<any> {
     const result = await this.transactionsRepository.find({
-      relations: ['account'],
-    });
+        relations: ['account'],
+      });
  
     return result;
   }
@@ -44,6 +45,7 @@ export class TransactionsService {
       .createQueryBuilder('transaction')
       .innerJoinAndSelect('transaction.account', 'account')
       .where('account.id_cuenta = :accountId', { accountId })
+      .orderBy('transaction.id_transaction', 'DESC')
       .getMany();
   
     return result;
@@ -51,23 +53,23 @@ export class TransactionsService {
 
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
-  ): Promise<{ message: string }> {
+  ): Promise<any> {
     try {
       const sourceAccount = await this.accountsRepository.findOne({
         where: { id_cuenta: createTransactionDto.accountId },
+        relations: ['id_user'],
       });
-      
+
       if (!sourceAccount) {
-        throw new HttpException('Cuenta origen no encontrada', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Cuenta de origen no encontrada',
+          HttpStatus.BAD_REQUEST,
+        );
       }
-      
-      const springTransactionDto = {
-        ...createTransactionDto,
-        accountId: sourceAccount.id_cuenta,
-      };
-      
+
       let targetAccount = null;
-      
+      let targetUser = null;
+
       if (createTransactionDto.targetAccountId) {
         targetAccount = await this.accountsRepository.findOne({
           where: [
@@ -75,33 +77,38 @@ export class TransactionsService {
             { numero_cuenta: createTransactionDto.targetAccountId }
           ],        
         });
-        
+        targetUser = targetAccount;
+
         if (!targetAccount) {
-          throw new HttpException('Cuenta destino no encontrada', HttpStatus.NOT_FOUND);
+          throw new HttpException(
+            'Cuenta de destino no encontrada',
+            HttpStatus.BAD_REQUEST,
+          );
         }
-        
-        springTransactionDto.targetAccountId = targetAccount.id_cuenta;
+        createTransactionDto.targetAccountId = targetAccount.id_cuenta;
       }
-      
+
       const response = await firstValueFrom(
-        this.httpService.post(`${this.externalServiceUrl}`, springTransactionDto)
+        this.httpService.post(this.externalServiceUrl, createTransactionDto),
       );
-      
-      let targetUser = null;
-      
-      if (createTransactionDto.targetAccountId && targetAccount) {
-        console.log("ID de la cuenta destino:", targetAccount.id_cuenta);
-        
-        targetUser = await this.accountsRepository
-          .createQueryBuilder('account')
-          .innerJoinAndSelect('account.id_user', 'user')  
-          .where('account.id_cuenta = :id_cuenta', { id_cuenta: targetAccount.id_cuenta })
-          .getOne();
-  
-        console.log("Resultado de la consulta:", targetUser);
-        console.log("Firebase Token encontrado:", targetUser?.id_user?.firebaseToken);
-  
-        if (targetUser?.id_user?.firebaseToken) {
+
+      const sourceTransaction = new Transaction();
+      sourceTransaction.account = sourceAccount;
+      sourceTransaction.cantidad = createTransactionDto.cantidad;
+      sourceTransaction.tipo = createTransactionDto.tipo === 'gasto' ? 'gasto' : 'ingreso';
+      sourceTransaction.descripcion = createTransactionDto.descripcion;
+
+      let targetTransaction = null;
+      if (targetAccount) {
+        targetTransaction = new Transaction();
+        targetTransaction.account = targetAccount;
+        targetTransaction.cantidad = createTransactionDto.cantidad;
+        targetTransaction.tipo = 'ingreso';
+        targetTransaction.descripcion = createTransactionDto.descripcion;
+      }
+
+      if (targetAccount && targetAccount.id_user && targetAccount.id_user.firebaseToken) {
+        if (this.firebaseService) {
           try {
             await this.firebaseService.sendPushNotification(
               targetUser.id_user.firebaseToken,
@@ -115,7 +122,6 @@ export class TransactionsService {
         }
       }
       
-      // Crear JSON para enviar a otro endpoint
       const pdfJson = {
         cantidad: createTransactionDto.cantidad,
         tipo: "Transferencia",
@@ -130,9 +136,51 @@ export class TransactionsService {
       
       try {
         const pdfResponse = await firstValueFrom(
-          this.httpService.post(`${this.odooServiceUrl}`, pdfJson)
+          this.httpService.post(`${this.odooServiceUrl}`, pdfJson, {
+            responseType: 'arraybuffer'
+          })
         );
-        console.log("Respuesta del servicio PDF:", pdfResponse.data);
+        console.log("Respuesta del servicio PDF recibida");
+        
+        if (pdfResponse && pdfResponse.data && pdfResponse.headers['content-type'] === 'application/pdf') {
+          try {
+            if (!this.firebaseService || !this.firebaseService.isInitialized()) {
+              console.error("Servicio de Firebase no disponible o no inicializado");
+              await this.transactionsRepository.save(sourceTransaction);
+              if (targetTransaction) {
+                await this.transactionsRepository.save(targetTransaction);
+              }
+            } else {
+              const userId = sourceAccount?.id_user?.id_user?.toString() || 'unknown';
+              const transactionId = sourceTransaction?.id_transaction?.toString() || Date.now().toString();
+              
+              if (!pdfResponse.data || !Buffer.isBuffer(Buffer.from(pdfResponse.data))) {
+                console.error("Datos de PDF inválidos");
+                throw new Error("Datos de PDF inválidos");
+              }
+              
+              const pdfUrl = await this.firebaseService.uploadPdfToStorage(
+                Buffer.from(pdfResponse.data), 
+                userId, 
+                transactionId
+              );
+              
+              sourceTransaction.receipt_url = pdfUrl;
+              await this.transactionsRepository.save(sourceTransaction);
+              
+              if (targetTransaction) {
+                targetTransaction.receipt_url = pdfUrl;
+                await this.transactionsRepository.save(targetTransaction);
+              }
+              
+              console.log("PDF subido a Firebase Storage y guardado en ambas transacciones:", pdfUrl);
+            }
+          } catch (uploadError) {
+            console.error("Error al subir PDF a Firebase Storage:", uploadError);
+          }
+        } else {
+          console.error("La respuesta no es un PDF válido:", pdfResponse.headers['content-type']);
+        }
       } catch (pdfError) {
         console.error("Error al enviar datos para PDF:", pdfError);
       }
@@ -142,7 +190,7 @@ export class TransactionsService {
       console.error('Error al procesar la transacción:', error);
       throw new HttpException(
         error.response?.data?.message || 'Error al procesar la transacción',
-        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR
+        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
@@ -150,50 +198,88 @@ export class TransactionsService {
   async bizumTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
-    try {
-      // Enviar el DTO al servicio externo
-      const response = await firstValueFrom(
-        this.httpService.post(`${this.externalServiceUrl}/transaction/bizum`, createTransactionDto)
-      );
-      
-      // Buscar información de la cuenta destino para notificaciones
-      if (createTransactionDto.targetAccountId) {
-        const cuenta_destino = await this.accountsRepository
-          .createQueryBuilder('account')
-          .innerJoinAndSelect('account.id_user', 'user')
-          .where('user.telf = :telf', { telf: createTransactionDto.targetAccountId })
-          .getOne();
-        
-        if (cuenta_destino) {
-          const targetUser = await this.accountsRepository
-            .createQueryBuilder('account')
-            .innerJoinAndSelect('account.id_user', 'user')  
-            .where('account.id_cuenta = :id_cuenta', { id_cuenta: cuenta_destino.id_cuenta })
-            .getOne();
-    
-          if (targetUser?.id_user?.firebaseToken) {
-            try {
-              await this.firebaseService.sendPushNotification(
-                targetUser.id_user.firebaseToken,
-                `Has recibido un Bizum`,
-                `Te han enviado ${createTransactionDto.cantidad}€ por ${createTransactionDto.descripcion || 'Bizum'}`
-              );
-              console.log("Notificación Bizum enviada:");
-            } catch (error) {
-              console.error("Error al enviar la notificación Bizum:", error);
-            }
-          }
+    const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
+  
+    const sourceAccount = await this.accountsRepository
+      .createQueryBuilder('account')
+      .innerJoinAndSelect('account.id_user', 'user')
+      .where('user.telf = :telf', { telf: accountId })
+      .getOne();
+  
+    if (!sourceAccount) throw new Error('Cuenta origen no encontrada');
+  
+    if (tipo === 'ingreso') {
+      sourceAccount.saldo += cantidad;
+    } else if (tipo === 'gasto') {
+      if (sourceAccount.saldo < cantidad) throw new Error('Fondos insuficientes');
+      sourceAccount.saldo -= cantidad;
+    } else {
+      throw new Error('Tipo de transacción inválido');
+    }
+  
+    let cuenta_destino = null;
+    if (targetAccountId) {
+      cuenta_destino = await this.accountsRepository
+        .createQueryBuilder('account')
+        .innerJoinAndSelect('account.id_user', 'user')
+        .where('user.telf = :telf', { telf: targetAccountId })
+        .getOne();
+  
+      if (!cuenta_destino) throw new Error('Cuenta destino no encontrada');
+  
+      if (tipo === 'gasto') cuenta_destino.saldo += cantidad;
+    }
+  
+    const sourceTransaction = this.transactionsRepository.create({
+      account: { id_cuenta: sourceAccount.id_cuenta },
+      cantidad,
+      tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
+      descripcion: descripcion || 'Transferencia',
+    });
+  
+    let targetTransaction = null;
+    if (cuenta_destino) {
+      targetTransaction = this.transactionsRepository.create({
+        account: { id_cuenta: cuenta_destino.id_cuenta },
+        cantidad,
+        tipo: 'ingreso',
+        descripcion: descripcion || 'Bizum recibido',
+      });
+    }
+  
+    await this.transactionsRepository.save(sourceTransaction);
+    if (targetTransaction) await this.transactionsRepository.save(targetTransaction);
+  
+    await this.accountsRepository.save(sourceAccount);
+    if (cuenta_destino) await this.accountsRepository.save(cuenta_destino);
+  
+    if (cuenta_destino) {
+
+      console.log("ID de la cuenta destino:", cuenta_destino.id_cuenta);
+      const targetUser = await this.accountsRepository
+        .createQueryBuilder('account')
+        .innerJoinAndSelect('account.id_user', 'user')  
+        .where('account.id_cuenta = :id_cuenta', { id_cuenta: cuenta_destino.id_cuenta })
+        .getOne();
+
+      console.log("Resultado de la consulta:", targetUser);
+      console.log("Firebase Token encontrado:", targetUser?.id_user?.firebaseToken);
+
+      if (targetUser?.id_user?.firebaseToken) {
+        try {
+          await this.firebaseService.sendPushNotification(
+            targetUser.id_user.firebaseToken,
+            `Has recibido un Bizum de ${sourceAccount.id_user.name}`,
+            `Te han enviado ${cantidad}€ por ${descripcion}`
+          );
+          console.log("Notificación enviada desde Bizum:");
+        } catch (error) {
+          throw new Error('Error al enviar la notificación:');
         }
       }
-      
-      return response.data || { message: 'Bizum procesado con éxito' };
-    } catch (error) {
-      console.error('Error al procesar el Bizum:', error);
-      throw new HttpException(
-        error.response?.data?.message || 'Error al procesar el Bizum',
-        error.response?.status || HttpStatus.INTERNAL_SERVER_ERROR
-      );
     }
+  
+    return { message: 'Bizum procesado con éxito' };
   }
 
   async deleteTransaction(id: number): Promise<{ message: string }> {

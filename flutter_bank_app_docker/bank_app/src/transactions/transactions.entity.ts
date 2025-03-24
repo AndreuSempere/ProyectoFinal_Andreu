@@ -18,6 +18,9 @@ export class Transaction {
   @CreateDateColumn({ type: 'timestamp' })
   created_at: Date;
 
+  @Column({ nullable: true })
+  receipt_url: string;
+
   @ManyToOne(() => Accounts, (account) => account.transactions, {
     onDelete: 'CASCADE',
   })

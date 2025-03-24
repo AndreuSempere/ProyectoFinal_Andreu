@@ -13,26 +13,23 @@ class TransactionController(http.Controller):
     @http.route('/generate/pdf', type='http', auth='public', methods=['POST'], csrf=False)
     def generate_pdf(self, **kwargs):
         try:
-            # Acceder a los datos del JSON
             data = request.httprequest.get_json()
             
-            # Extraer todos los campos del JSON
             cantidad = data.get('cantidad')
             tipo = data.get('tipo', 'Transferencia')
             descripcion = data.get('descripcion', 'Sin descripción')
             
-            # Información de cuenta origen
+            # Cuenta origen
             account_number = data.get('accountNumber', '')
             user_name = data.get('userName', '')
             user_surname = data.get('userSurname', '')
             
-            # Información de cuenta destino
+            # Cuenta destino
             target_account_number = data.get('targetAccountNumber', '')
             target_user_name = data.get('targetUserName', '')
             target_user_surname = data.get('targetUserSurname', '')
             
 
-            # Validar campos obligatorios
             if not cantidad:
                 return {'error': 'Faltan datos obligatorios en el JSON (cantidad)'}
             
@@ -42,9 +39,8 @@ class TransactionController(http.Controller):
             
             # Fuentes y estilos
             p.setFont("Helvetica-Bold", 16)
-            p.setFillColor(colors.HexColor("#00539C"))  # Color de texto principal
+            p.setFillColor(colors.HexColor("#00539C"))
 
-            # Ruta de la imagen en el módulo de Odoo
             image_path = os.path.join(os.path.dirname(__file__), '../static/src/img/icono_app.png')
             
             if os.path.exists(image_path):
@@ -81,7 +77,7 @@ class TransactionController(http.Controller):
                 p.drawString(50, 590, f"Titular: {user_name} {user_surname}")
             p.drawString(50, 570, f"Número: {account_number}")
             
-            # Información de cuenta destino (si existe)
+            # Información de cuenta destino
             if target_account_number:
                 p.setFont("Helvetica-Bold", 12)
                 p.drawString(50, 520, "CUENTA DESTINO")
@@ -90,7 +86,7 @@ class TransactionController(http.Controller):
                     p.drawString(50, 500, f"Titular: {target_user_name} {target_user_surname}")
                 p.drawString(50, 480, f"Número: {target_account_number}")
             
-            # Agregar líneas horizontales para un formato más limpio
+            # Agregar líneas horizontales
             p.setStrokeColor(colors.HexColor("#D1D3D4"))
             p.line(50, 440, 550, 440)
 
@@ -104,16 +100,11 @@ class TransactionController(http.Controller):
             p.drawString(50, 50, "Firma del remitente")
             p.drawString(400, 50, "Firma del receptor")
 
-            # Salvar y terminar
             p.save()
-            
             pdf_buffer.seek(0)
-            
-            # Usar make_response para enviar el archivo PDF de manera correcta
             headers = [('Content-Type', 'application/pdf'),
                        ('Content-Disposition', 'attachment; filename=transaction.pdf')]
             
-            # Devolver el PDF como respuesta binaria
             return request.make_response(pdf_buffer.read(), headers=headers)
         
         except Exception as e:
