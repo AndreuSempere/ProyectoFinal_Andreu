@@ -23,7 +23,7 @@ La APK de la aplicación se puede descargar desde el siguiente enlace:
 [Descargar APK de Bankify](https://drive.google.com/file/d/your-apk-link/view)
 
 El EXE de la aplicación de escritorio Datafono se puede descargar desde el siguiente enlace:
-[Descargar APK de Bankify](https://drive.google.com/file/d/your-apk-link/view)
+[Descargar EXE Datafono Bankify](https://drive.google.com/file/d/1_DVZdwuo3QrIUY2CVXRH_ZkUVNCUMEJU/view?usp=sharing)
 
 ## Manual de instalación y dependencias
 
