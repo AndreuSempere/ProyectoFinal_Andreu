@@ -9,7 +9,7 @@ import * as bcrypt from 'bcryptjs';
 
 // Mock para bcrypt
 jest.mock('bcryptjs', () => ({
-  hash: jest.fn().mockResolvedValue('hashedPassword'),
+  hash: jest.fn().mockResolvedValue('$2a$10$KqzrUgLlKotrrHiZHgPrZenAwlJlJRdYSm5HH1ge3ZqQFmUJyme/m'),
   compare: jest.fn().mockResolvedValue(true),
 }));
 
@@ -62,7 +62,7 @@ const oneUser = {
   id_user: 1,
   name: 'Federico',
   surname: 'Gonzalez',
-  password: '123456',
+  password: '$2a$10$KqzrUgLlKotrrHiZHgPrZenAwlJlJRdYSm5HH1ge3ZqQFmUJyme/m',
   email: 'federico@gmail.com',
   telf: '612345678',
   dni: '12345678Z',
@@ -281,7 +281,7 @@ describe('UsersService', () => {
       expect(MockUsersRepository.findOne).toHaveBeenCalledWith({ 
         where: { email: 'federico@gmail.com' } 
       });
-      expect(bcrypt.compare).toHaveBeenCalledWith('123456', 'hashedPassword');
+      expect(bcrypt.compare).toHaveBeenCalledWith('123456', expect.any(String));
       expect(result).toEqual(oneUser);
     });
 

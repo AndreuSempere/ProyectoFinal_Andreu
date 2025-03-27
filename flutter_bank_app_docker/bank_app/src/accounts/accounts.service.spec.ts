@@ -110,7 +110,7 @@ describe('AccountsService', () => {
     find: jest.fn(() => accountsArray),
     findOneBy: jest.fn(() => oneAccount),
     create: jest.fn(() => oneAccount),
-    findOne: jest.fn(() => oneAccount),
+    findOne: jest.fn().mockResolvedValue(oneAccount),
     delete: jest.fn().mockResolvedValue({ affected: 1 }),
     save: jest.fn(() => mergeAccount),
     merge: jest.fn(() => mergeAccount),

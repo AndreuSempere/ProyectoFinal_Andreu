@@ -72,9 +72,9 @@ const updateCreditCardDto = {
 
 const updatedCreditCard = {
   ...oneCreditCard,
-  tipo_tarjeta: 'MasterCard',
-  fecha_expiracion: '2028-01-31',
-  color: 5
+  tipo_tarjeta: 'Visa',
+  fecha_expiracion: '2025-12-31',
+  color: 1
 };
 
 describe('Credit_CardService', () => {

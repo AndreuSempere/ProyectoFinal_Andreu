@@ -102,10 +102,10 @@ describe('InvestmentsService', () => {
       amount: createInvestmentDto.amount,
       purchase_price: mockTradingEntity.price,
       current_value: mockTradingEntity.price,
-      purchase_date: expect.any(Date),
-      last_updated: expect.any(Date)
+      purchase_date: new Date(),
+      last_updated: new Date()
     })),
-    save: jest.fn(entity => entity),
+    save: jest.fn(entity => Promise.resolve(entity)),
     createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder)
   };
   
@@ -172,7 +172,10 @@ describe('InvestmentsService', () => {
     
     // Mock the private mapToResponseDto method
     jest.spyOn(investmentsService as any, 'mapToResponseDto').mockImplementation(
-      investment => {
+      (investment: Investment) => {
+        if (!investment) {
+          return null;
+        }
         if (investment.idInvestment === 1) {
           return mockInvestmentResponseDto;
         }
