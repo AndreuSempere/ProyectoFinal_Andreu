@@ -53,7 +53,7 @@ class AccionCron(models.Model):
             
             success_count = 0
             error_count = 0
-            bearer_token = "93525b78-194e-4f60-a1b2-8fe9b102c699"
+            bearer_token = "c371fe56-1a54-4652-8bb5-12989949911d"
             
             for item in transformed_data:
                 try:

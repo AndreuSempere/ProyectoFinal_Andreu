@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter_bank_app/Data/Models/transaction_model.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 abstract class TransactionsRemoteDataSource {
   Future<List<TransactionModel>> getAllTransactions(int id);
@@ -13,14 +14,27 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   final http.Client client;
   final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
   final String transactionPath = dotenv.env['API_TRANSACTION_PATH'] ?? '';
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   TransactionsRemoteDataSourceImpl(this.client);
+
+  Future<String?> getBearerToken() async {
+    return await secureStorage.read(key: 'user_token');
+  }
 
   @override
   Future<List<TransactionModel>> getAllTransactions(int id) async {
     try {
       final uri = Uri.parse('$baseUrl$transactionPath/user/$id');
-      final response = await client.get(uri);
+      final token = await getBearerToken();
+
+      final response = await client.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> transactionsJson = json.decode(response.body);
@@ -39,9 +53,14 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   Future<bool> createdTransactions(TransactionModel transaction) async {
     try {
       final uri = Uri.parse('$baseUrl$transactionPath');
+      final token = await getBearerToken();
+
       final response = await client.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(transaction.toJson()),
       );
 
@@ -60,9 +79,14 @@ class TransactionsRemoteDataSourceImpl implements TransactionsRemoteDataSource {
   Future<bool> createdTransactionsBizum(TransactionModel transaction) async {
     try {
       final uri = Uri.parse('$baseUrl$transactionPath/bizum');
+      final token = await getBearerToken();
+
       final response = await client.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: json.encode(transaction.toJson()),
       );
 

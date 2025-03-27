@@ -241,6 +241,8 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
                                           CreateTransactions(newTransaction));
 
                                       Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

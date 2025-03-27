@@ -88,25 +88,13 @@ export class TransactionsService {
         createTransactionDto.targetAccountId = targetAccount.id_cuenta;
       }
 
+      // Llamar al servicio de Spring para procesar la transacción
+      // Spring se encargará de actualizar los saldos e insertar las transacciones
       const response = await firstValueFrom(
         this.httpService.post(this.externalServiceUrl, createTransactionDto),
       );
 
-      const sourceTransaction = new Transaction();
-      sourceTransaction.account = sourceAccount;
-      sourceTransaction.cantidad = createTransactionDto.cantidad;
-      sourceTransaction.tipo = createTransactionDto.tipo === 'gasto' ? 'gasto' : 'ingreso';
-      sourceTransaction.descripcion = createTransactionDto.descripcion;
-
-      let targetTransaction = null;
-      if (targetAccount) {
-        targetTransaction = new Transaction();
-        targetTransaction.account = targetAccount;
-        targetTransaction.cantidad = createTransactionDto.cantidad;
-        targetTransaction.tipo = 'ingreso';
-        targetTransaction.descripcion = createTransactionDto.descripcion;
-      }
-
+      // Enviar notificación push si hay cuenta destino y token de Firebase
       if (targetAccount && targetAccount.id_user && targetAccount.id_user.firebaseToken) {
         if (this.firebaseService) {
           try {
@@ -122,6 +110,7 @@ export class TransactionsService {
         }
       }
       
+      // Generar PDF para la transacción
       const pdfJson = {
         cantidad: createTransactionDto.cantidad,
         tipo: "Transferencia",
@@ -146,34 +135,66 @@ export class TransactionsService {
           try {
             if (!this.firebaseService || !this.firebaseService.isInitialized()) {
               console.error("Servicio de Firebase no disponible o no inicializado");
-              await this.transactionsRepository.save(sourceTransaction);
-              if (targetTransaction) {
-                await this.transactionsRepository.save(targetTransaction);
-              }
+              // No podemos guardar la URL del PDF en las transacciones
+              // porque no tenemos acceso a Firebase Storage
             } else {
               const userId = sourceAccount?.id_user?.id_user?.toString() || 'unknown';
-              const transactionId = sourceTransaction?.id_transaction?.toString() || Date.now().toString();
+              const transactionId = Date.now().toString();
               
               if (!pdfResponse.data || !Buffer.isBuffer(Buffer.from(pdfResponse.data))) {
                 console.error("Datos de PDF inválidos");
                 throw new Error("Datos de PDF inválidos");
               }
               
+              // Subir el PDF a Firebase Storage
               const pdfUrl = await this.firebaseService.uploadPdfToStorage(
                 Buffer.from(pdfResponse.data), 
                 userId, 
                 transactionId
               );
               
-              sourceTransaction.receipt_url = pdfUrl;
-              await this.transactionsRepository.save(sourceTransaction);
+              console.log("PDF subido a Firebase Storage:", pdfUrl);
               
-              if (targetTransaction) {
-                targetTransaction.receipt_url = pdfUrl;
-                await this.transactionsRepository.save(targetTransaction);
+              // Buscar las transacciones recién creadas por Spring y actualizar el campo receipt_url
+              try {
+                // Buscar la transacción de origen por accountId y cantidad
+                const sourceTransactions = await this.transactionsRepository.find({
+                  where: {
+                    account: { id_cuenta: createTransactionDto.accountId },
+                    cantidad: createTransactionDto.cantidad
+                  },
+                  order: { id_transaction: 'DESC' },
+                  take: 1
+                });
+                
+                if (sourceTransactions && sourceTransactions.length > 0) {
+                  const sourceTransaction = sourceTransactions[0];
+                  sourceTransaction.receipt_url = pdfUrl;
+                  await this.transactionsRepository.save(sourceTransaction);
+                  console.log("URL del PDF actualizada en la transacción de origen:", sourceTransaction.id_transaction);
+                }
+                
+                // Si hay cuenta destino, buscar también la transacción de destino
+                if (targetAccount) {
+                  const targetTransactions = await this.transactionsRepository.find({
+                    where: {
+                      account: { id_cuenta: targetAccount.id_cuenta },
+                      cantidad: createTransactionDto.cantidad
+                    },
+                    order: { id_transaction: 'DESC' },
+                    take: 1
+                  });
+                  
+                  if (targetTransactions && targetTransactions.length > 0) {
+                    const targetTransaction = targetTransactions[0];
+                    targetTransaction.receipt_url = pdfUrl;
+                    await this.transactionsRepository.save(targetTransaction);
+                    console.log("URL del PDF actualizada en la transacción de destino:", targetTransaction.id_transaction);
+                  }
+                }
+              } catch (dbError) {
+                console.error("Error al actualizar las URLs de los recibos en las transacciones:", dbError);
               }
-              
-              console.log("PDF subido a Firebase Storage y guardado en ambas transacciones:", pdfUrl);
             }
           } catch (uploadError) {
             console.error("Error al subir PDF a Firebase Storage:", uploadError);

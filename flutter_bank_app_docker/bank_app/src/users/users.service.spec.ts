@@ -7,7 +7,6 @@ import { FirebaseService } from '../firebase/firebase.service';
 import { HttpException } from '@nestjs/common';
 import * as bcrypt from 'bcryptjs';
 
-// Mock para bcrypt
 jest.mock('bcryptjs', () => ({
   hash: jest.fn().mockResolvedValue('hashedPassword'),
   compare: jest.fn().mockResolvedValue(true),

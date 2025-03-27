@@ -99,14 +99,16 @@ public class TransactionService {
             targetTransaction.setDescripcion(dto.getDescripcion() != null ? dto.getDescripcion() : "Transferencia recibida");
         }
 
-        transactionRepository.save(sourceTransaction);
-        if (targetTransaction != null) {
-            transactionRepository.save(targetTransaction);
-        }
-
+        // Guardar transacciones y cuentas
         accountRepository.save(origenAccount);
+        
+        // Guardar transacción de origen después de guardar la cuenta
+        transactionRepository.save(sourceTransaction);
+        
+        // Solo si hay cuenta destino, guardar la transacción y cuenta destino
         if (targetAccount != null) {
             accountRepository.save(targetAccount);
+            transactionRepository.save(targetTransaction);
         }
 
         System.out.println("Transacción procesada con éxito");

@@ -6,14 +6,20 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_bank_app/Data/Models/user_model.dart';
 import 'package:flutter_bank_app/core/failure.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class FirebaseAuthDataSource {
   final FirebaseAuth auth;
   final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
   final String usersPath = dotenv.env['API_USERS_PATH'] ?? '';
   FirebaseFirestore database = FirebaseFirestore.instance;
+  final FlutterSecureStorage secureStorage = const FlutterSecureStorage();
 
   FirebaseAuthDataSource({required this.auth});
+
+  Future<String?> getBearerToken() async {
+    return await secureStorage.read(key: 'user_token');
+  }
 
   Future<bool> registerInBackend(String name, String surname, String email,
       String password, String dni, String fecha_nacimiento) async {
@@ -64,9 +70,39 @@ class FirebaseAuthDataSource {
   }
 
   Future<UserModel> signIn(String email, String password) async {
-    UserCredential userCredentials =
-        await auth.signInWithEmailAndPassword(email: email, password: password);
-    return UserModel.fromUserCredential(userCredentials);
+    try {
+      UserCredential userCredentials = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+
+      final response = await http.post(
+        Uri.parse('$baseUrl$usersPath/login'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = jsonDecode(response.body);
+        final token = responseData['token'];
+
+        await secureStorage.write(key: 'user_token', value: token);
+
+        return UserModel.fromUserCredential(userCredentials);
+      } else {
+        throw AuthFailure(message: 'Error al iniciar sesión: ${response.body}');
+      }
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        if (e.code == 'user-not-found') {
+          throw AuthFailure(message: 'Usuario no encontrado.');
+        } else if (e.code == 'wrong-password') {
+          throw AuthFailure(message: 'Contraseña incorrecta.');
+        }
+      }
+      throw AuthFailure(message: 'Error al iniciar sesión: ${e.toString()}');
+    }
   }
 
   Future<void> logout() async {
@@ -96,7 +132,14 @@ class FirebaseAuthDataSource {
   Future<UserModel> getUserInfo(String email) async {
     try {
       final uri = Uri.parse('$baseUrl$usersPath/user/$email');
-      final response = await http.get(uri);
+      final token = await getBearerToken();
+      final response = await http.get(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
+      );
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> userJson = json.decode(response.body);
@@ -114,9 +157,13 @@ class FirebaseAuthDataSource {
       int idUser, String name, String surname, String email, int telf) async {
     try {
       final uri = Uri.parse('$baseUrl$usersPath/$idUser');
+      final token = await getBearerToken();
       final response = await http.put(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token'
+        },
         body: '''
         {
           "name": "$name",
@@ -139,9 +186,13 @@ class FirebaseAuthDataSource {
   Future<void> updateUserToken(int idUser, String firebaseToken) async {
     try {
       final uri = Uri.parse('$baseUrl$usersPath/$idUser');
+      final token = await getBearerToken();
       final response = await http.put(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token"
+        },
         body: '''
         {
           "firebaseToken": "$firebaseToken"
