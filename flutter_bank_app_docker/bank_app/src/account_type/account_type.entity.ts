@@ -11,5 +11,4 @@ export class Accounts_type {
 
   @OneToMany(() => Accounts, (accounts) => accounts.accounts_type)
   accounts: Accounts[];
-
 }

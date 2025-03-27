@@ -9,34 +9,34 @@ const accountTypesArray = [
   {
     id_type: 1,
     description: 'Cuenta Corriente',
-    accounts: []
+    accounts: [],
   },
   {
     id_type: 2,
     description: 'Cuenta de Ahorro',
-    accounts: []
+    accounts: [],
   },
   {
     id_type: 3,
     description: 'Cuenta de Inversiones',
-    accounts: []
-  }
+    accounts: [],
+  },
 ];
 
 const oneAccountType = accountTypesArray[0];
 
 const createAccountTypeDto = {
-  description: 'Nueva Cuenta'
+  description: 'Nueva Cuenta',
 };
 
 const updateAccountTypeDto = {
   id_type: 1,
-  description: 'Cuenta Corriente Actualizada'
+  description: 'Cuenta Corriente Actualizada',
 };
 
 describe('AccountTypeService', () => {
   let accountTypeService: AccountTypeService;
-  
+
   const MockAccountTypeRepository = {
     find: jest.fn(() => accountTypesArray),
     findOne: jest.fn(({ where }) => {
@@ -48,36 +48,36 @@ describe('AccountTypeService', () => {
     create: jest.fn(() => ({
       id_type: 4,
       description: createAccountTypeDto.description,
-      accounts: []
+      accounts: [],
     })),
-    save: jest.fn(entity => entity),
+    save: jest.fn((entity) => entity),
     update: jest.fn().mockResolvedValue({ affected: 1 }),
-    delete: jest.fn(id => {
+    delete: jest.fn((id) => {
       if (id === 1) {
         return Promise.resolve({ affected: 1 });
       }
       return Promise.resolve({ affected: 0 });
-    })
+    }),
   };
-  
+
   const MockUtilsService = {
-    convertJSONtoXML: jest.fn(json => `<xml>${json}</xml>`)
+    convertJSONtoXML: jest.fn((json) => `<xml>${json}</xml>`),
   };
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AccountTypeService,
         {
           provide: getRepositoryToken(Accounts_type),
-          useValue: MockAccountTypeRepository
+          useValue: MockAccountTypeRepository,
         },
         {
           provide: UtilsService,
-          useValue: MockUtilsService
-        }
+          useValue: MockUtilsService,
+        },
       ],
     }).compile();
 
@@ -87,97 +87,108 @@ describe('AccountTypeService', () => {
   it('should be defined', () => {
     expect(accountTypeService).toBeDefined();
   });
-  
+
   describe('getAllAccountType', () => {
     it('should return all account types', async () => {
       const result = await accountTypeService.getAllAccountType();
-      
+
       expect(MockAccountTypeRepository.find).toHaveBeenCalled();
       expect(result).toEqual(accountTypesArray);
     });
-    
+
     it('should return XML when format is xml', async () => {
       const result = await accountTypeService.getAllAccountType('xml');
-      
+
       expect(MockAccountTypeRepository.find).toHaveBeenCalled();
       expect(MockUtilsService.convertJSONtoXML).toHaveBeenCalled();
       expect(typeof result).toBe('string');
     });
   });
-  
+
   describe('getAccountType', () => {
     it('should return an account type by id', async () => {
       const result = await accountTypeService.getAccountType(1);
-      
+
       expect(MockAccountTypeRepository.findOne).toHaveBeenCalledWith({
-        where: { id_type: 1 }
+        where: { id_type: 1 },
       });
       expect(result).toEqual(oneAccountType);
     });
-    
+
     it('should return XML when format is xml', async () => {
       const result = await accountTypeService.getAccountType(1, 'xml');
-      
+
       expect(MockAccountTypeRepository.findOne).toHaveBeenCalledWith({
-        where: { id_type: 1 }
+        where: { id_type: 1 },
       });
       expect(MockUtilsService.convertJSONtoXML).toHaveBeenCalled();
       expect(typeof result).toBe('string');
     });
-    
+
     it('should throw an exception when account type is not found', async () => {
       MockAccountTypeRepository.findOne.mockResolvedValueOnce(null);
-      
-      await expect(accountTypeService.getAccountType(999)).rejects.toThrow(HttpException);
+
+      await expect(accountTypeService.getAccountType(999)).rejects.toThrow(
+        HttpException,
+      );
     });
   });
-  
+
   describe('createAccountType', () => {
     it('should create a new account type', async () => {
-      const result = await accountTypeService.createAccountType(createAccountTypeDto);
-      
+      const result =
+        await accountTypeService.createAccountType(createAccountTypeDto);
+
       expect(MockAccountTypeRepository.create).toHaveBeenCalledWith({
-        description: createAccountTypeDto.description
+        description: createAccountTypeDto.description,
       });
       expect(MockAccountTypeRepository.save).toHaveBeenCalled();
-      expect(result).toEqual({ message: 'Tipo de cuenta creado satisfactoriamente' });
+      expect(result).toEqual({
+        message: 'Tipo de cuenta creado satisfactoriamente',
+      });
     });
   });
-  
+
   describe('updateAccountType', () => {
     it('should update an account type', async () => {
-      const result = await accountTypeService.updateAccountType(updateAccountTypeDto);
-      
+      await accountTypeService.updateAccountType(updateAccountTypeDto);
+
       expect(MockAccountTypeRepository.findOne).toHaveBeenCalledWith({
-        where: { id_type: updateAccountTypeDto.id_type }
+        where: { id_type: updateAccountTypeDto.id_type },
       });
       expect(MockAccountTypeRepository.update).toHaveBeenCalledWith(
         updateAccountTypeDto.id_type,
-        updateAccountTypeDto
+        updateAccountTypeDto,
       );
       expect(MockAccountTypeRepository.findOne).toHaveBeenCalledTimes(2);
     });
-    
+
     it('should throw an exception when account type is not found', async () => {
       MockAccountTypeRepository.findOne.mockResolvedValueOnce(null);
-      
-      await expect(accountTypeService.updateAccountType({
-        id_type: 999,
-        description: 'No existe'
-      })).rejects.toThrow(HttpException);
+
+      await expect(
+        accountTypeService.updateAccountType({
+          id_type: 999,
+          description: 'No existe',
+        }),
+      ).rejects.toThrow(HttpException);
     });
   });
-  
+
   describe('deleteAccountType', () => {
     it('should delete an account type successfully', async () => {
       const result = await accountTypeService.deleteAccountType(1);
-      
+
       expect(MockAccountTypeRepository.delete).toHaveBeenCalledWith(1);
-      expect(result).toEqual({ message: 'Tipo de cuenta eliminado satisfactoriamente' });
+      expect(result).toEqual({
+        message: 'Tipo de cuenta eliminado satisfactoriamente',
+      });
     });
-    
+
     it('should throw an exception when account type is not found', async () => {
-      await expect(accountTypeService.deleteAccountType(999)).rejects.toThrow(HttpException);
+      await expect(accountTypeService.deleteAccountType(999)).rejects.toThrow(
+        HttpException,
+      );
     });
   });
 });

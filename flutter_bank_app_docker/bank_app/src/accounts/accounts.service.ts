@@ -51,10 +51,10 @@ export class AccountsService {
       .innerJoinAndSelect('account.id_user', 'user')
       .where('user.id_user = :userId', { userId })
       .getMany();
-  
+
     return result;
   }
-  
+
   async createAccount(
     createAccountsDto: CreateAccoutDto,
   ): Promise<{ message: string }> {
@@ -63,7 +63,7 @@ export class AccountsService {
       accounts_type: { id_type: createAccountsDto.accounts_type },
       id_user: { id_user: createAccountsDto.id_user },
     });
- 
+
     await this.accountsRepository.save(newAccount);
     return { message: 'Account creada' };
   }
@@ -71,7 +71,7 @@ export class AccountsService {
   async updateAccount(id: number, updateAccountsDto: UpdateAccountDto) {
     const accounts = await this.accountsRepository.findOne({
       where: { id_cuenta: id },
-      relations: ['accounts_type', 'id_user']
+      relations: ['accounts_type', 'id_user'],
     });
 
     if (!accounts) {
@@ -95,5 +95,4 @@ export class AccountsService {
     }
     return { message: 'Account eliminado' };
   }
-
 }

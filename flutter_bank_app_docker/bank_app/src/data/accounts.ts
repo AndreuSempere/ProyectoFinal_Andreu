@@ -7,6 +7,5 @@ export default [
     saldo: 10,
     estado: 'Activa',
     fecha_expiracion: '2025/01/03',
-
   },
 ];

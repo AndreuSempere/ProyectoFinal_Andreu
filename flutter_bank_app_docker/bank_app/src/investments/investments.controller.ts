@@ -7,17 +7,23 @@ export class InvestmentsController {
   constructor(private readonly investmentsService: InvestmentsService) {}
 
   @Get()
-  async getAllInvestments(@Query('accountId') accountId?: number): Promise<InvestmentResponseDto[]> {
+  async getAllInvestments(
+    @Query('accountId') accountId?: number,
+  ): Promise<InvestmentResponseDto[]> {
     return this.investmentsService.getAllInvestments(accountId);
   }
 
   @Get(':id')
-  async getInvestmentById(@Param('id') id: number): Promise<InvestmentResponseDto> {
+  async getInvestmentById(
+    @Param('id') id: number,
+  ): Promise<InvestmentResponseDto> {
     return this.investmentsService.getInvestmentById(id);
   }
 
   @Post()
-  async createInvestment(@Body() createInvestmentDto: CreateInvestmentDto): Promise<InvestmentResponseDto> {
+  async createInvestment(
+    @Body() createInvestmentDto: CreateInvestmentDto,
+  ): Promise<InvestmentResponseDto> {
     return this.investmentsService.createInvestment(createInvestmentDto);
   }
 }

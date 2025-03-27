@@ -35,42 +35,42 @@ export class UsersService {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
   }
-  
+
   async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id_user: updateUserDto.id_user },
     });
-  
+
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-  
+
     const oldTelf = user.telf;
     const newTelf = updateUserDto.telf;
     const hasTelfChanged = newTelf && oldTelf !== newTelf;
     this.usersRepository.merge(user, updateUserDto);
     const updatedUser = await this.usersRepository.save(user);
-  
+
     if (hasTelfChanged && user.firebaseToken) {
       try {
         await this.firebaseService.sendPushNotification(
           user.firebaseToken,
           'Has añadido tu número de telefono',
-          `El numero añadido es ${newTelf}`
+          `El numero añadido es ${newTelf}`,
         );
-        console.log("Notificación enviada por cambio de teléfono.");
+        console.log('Notificación enviada por cambio de teléfono.');
       } catch (error) {
-        console.error("Error al enviar la notificación:", error);
+        console.error('Error al enviar la notificación:', error);
       }
     }
-  
+
     return updatedUser;
   }
-  
+
   async deleteUser(id_user: number): Promise<void> {
     await this.usersRepository.delete(id_user);
   }
-  
+
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -85,5 +85,4 @@ export class UsersService {
       .where('u.email LIKE :email', { email })
       .getOne();
   }
-  
 }

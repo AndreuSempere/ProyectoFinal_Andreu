@@ -27,7 +27,7 @@ export class CreateTradingDto {
   symbol: string;
 
   @ApiProperty({
-    example: 200.50,
+    example: 200.5,
     description: 'Precio actual del activo',
     type: Number,
   })

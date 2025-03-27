@@ -14,7 +14,7 @@ config();
 export class TransactionsService {
   private readonly externalServiceUrl = process.env.PRIVATE_KEY_SPRING;
   private readonly odooServiceUrl = process.env.PRIVATE_KEY_ODOO;
-  
+
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionsRepository: Repository<Transaction>,
@@ -27,16 +27,16 @@ export class TransactionsService {
   async getTransaction(id?: number): Promise<any> {
     const result = await this.transactionsRepository.findOneBy({
       id_transaction: id,
-        });
+    });
 
     return result;
   }
 
   async getTransactionAll(): Promise<any> {
     const result = await this.transactionsRepository.find({
-        relations: ['account'],
-      });
- 
+      relations: ['account'],
+    });
+
     return result;
   }
 
@@ -47,7 +47,7 @@ export class TransactionsService {
       .where('account.id_cuenta = :accountId', { accountId })
       .orderBy('transaction.id_transaction', 'DESC')
       .getMany();
-  
+
     return result;
   }
 
@@ -73,9 +73,9 @@ export class TransactionsService {
       if (createTransactionDto.targetAccountId) {
         targetAccount = await this.accountsRepository.findOne({
           where: [
-            { id_cuenta: createTransactionDto.targetAccountId }, 
-            { numero_cuenta: createTransactionDto.targetAccountId }
-          ],        
+            { id_cuenta: createTransactionDto.targetAccountId },
+            { numero_cuenta: createTransactionDto.targetAccountId },
+          ],
         });
         targetUser = targetAccount;
 
@@ -101,11 +101,11 @@ export class TransactionsService {
             await this.firebaseService.sendPushNotification(
               targetUser.id_user.firebaseToken,
               `Has recibido una transferencia`,
-              `Te han enviado ${createTransactionDto.cantidad}€ por ${createTransactionDto.descripcion || 'Transferencia'}`
+              `Te han enviado ${createTransactionDto.cantidad}€ por ${createTransactionDto.descripcion || 'Transferencia'}`,
             );
-            console.log("Notificación enviada desde transaction:");
+            console.log('Notificación enviada desde transaction:');
           } catch (error) {
-            console.error("Error al enviar la notificación:", error);
+            console.error('Error al enviar la notificación:', error);
           }
         }
       }
@@ -113,8 +113,8 @@ export class TransactionsService {
       // Generar PDF para la transacción
       const pdfJson = {
         cantidad: createTransactionDto.cantidad,
-        tipo: "Transferencia",
-        descripcion: createTransactionDto.descripcion || "Sin descripción",
+        tipo: 'Transferencia',
+        descripcion: createTransactionDto.descripcion || 'Sin descripción',
         accountNumber: sourceAccount.numero_cuenta,
         targetAccountNumber: targetAccount?.numero_cuenta || null,
         userName: sourceAccount?.id_user?.name || null,
@@ -122,21 +122,23 @@ export class TransactionsService {
         targetUserName: targetUser?.id_user?.name || null,
         targetUserSurname: targetUser?.id_user?.surname || null,
       };
-      
+
       try {
         const pdfResponse = await firstValueFrom(
           this.httpService.post(`${this.odooServiceUrl}`, pdfJson, {
-            responseType: 'arraybuffer'
-          })
+            responseType: 'arraybuffer',
+          }),
         );
-        console.log("Respuesta del servicio PDF recibida");
-        
-        if (pdfResponse && pdfResponse.data && pdfResponse.headers['content-type'] === 'application/pdf') {
+        console.log('Respuesta del servicio PDF recibida');
+
+        if (
+          pdfResponse &&
+          pdfResponse.data &&
+          pdfResponse.headers['content-type'] === 'application/pdf'
+        ) {
           try {
             if (!this.firebaseService || !this.firebaseService.isInitialized()) {
               console.error("Servicio de Firebase no disponible o no inicializado");
-              // No podemos guardar la URL del PDF en las transacciones
-              // porque no tenemos acceso a Firebase Storage
             } else {
               const userId = sourceAccount?.id_user?.id_user?.toString() || 'unknown';
               const transactionId = Date.now().toString();
@@ -148,16 +150,15 @@ export class TransactionsService {
               
               // Subir el PDF a Firebase Storage
               const pdfUrl = await this.firebaseService.uploadPdfToStorage(
-                Buffer.from(pdfResponse.data), 
-                userId, 
-                transactionId
+                Buffer.from(pdfResponse.data),
+                userId,
+                transactionId,
               );
               
               console.log("PDF subido a Firebase Storage:", pdfUrl);
               
               // Buscar las transacciones recién creadas por Spring y actualizar el campo receipt_url
               try {
-                // Buscar la transacción de origen por accountId y cantidad
                 const sourceTransactions = await this.transactionsRepository.find({
                   where: {
                     account: { id_cuenta: createTransactionDto.accountId },
@@ -197,15 +198,21 @@ export class TransactionsService {
               }
             }
           } catch (uploadError) {
-            console.error("Error al subir PDF a Firebase Storage:", uploadError);
+            console.error(
+              'Error al subir PDF a Firebase Storage:',
+              uploadError,
+            );
           }
         } else {
-          console.error("La respuesta no es un PDF válido:", pdfResponse.headers['content-type']);
+          console.error(
+            'La respuesta no es un PDF válido:',
+            pdfResponse.headers['content-type'],
+          );
         }
       } catch (pdfError) {
-        console.error("Error al enviar datos para PDF:", pdfError);
+        console.error('Error al enviar datos para PDF:', pdfError);
       }
-      
+
       return response.data || { message: 'Transacción procesada con éxito' };
     } catch (error) {
       console.error('Error al procesar la transacción:', error);
@@ -219,25 +226,27 @@ export class TransactionsService {
   async bizumTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
-    const { accountId, targetAccountId, cantidad, tipo, descripcion } = createTransactionDto;
-  
+    const { accountId, targetAccountId, cantidad, tipo, descripcion } =
+      createTransactionDto;
+
     const sourceAccount = await this.accountsRepository
       .createQueryBuilder('account')
       .innerJoinAndSelect('account.id_user', 'user')
       .where('user.telf = :telf', { telf: accountId })
       .getOne();
-  
+
     if (!sourceAccount) throw new Error('Cuenta origen no encontrada');
-  
+
     if (tipo === 'ingreso') {
       sourceAccount.saldo += cantidad;
     } else if (tipo === 'gasto') {
-      if (sourceAccount.saldo < cantidad) throw new Error('Fondos insuficientes');
+      if (sourceAccount.saldo < cantidad)
+        throw new Error('Fondos insuficientes');
       sourceAccount.saldo -= cantidad;
     } else {
       throw new Error('Tipo de transacción inválido');
     }
-  
+
     let cuenta_destino = null;
     if (targetAccountId) {
       cuenta_destino = await this.accountsRepository
@@ -245,19 +254,19 @@ export class TransactionsService {
         .innerJoinAndSelect('account.id_user', 'user')
         .where('user.telf = :telf', { telf: targetAccountId })
         .getOne();
-  
+
       if (!cuenta_destino) throw new Error('Cuenta destino no encontrada');
-  
+
       if (tipo === 'gasto') cuenta_destino.saldo += cantidad;
     }
-  
+
     const sourceTransaction = this.transactionsRepository.create({
       account: { id_cuenta: sourceAccount.id_cuenta },
       cantidad,
       tipo: tipo === 'ingreso' ? 'ingreso' : 'gasto',
       descripcion: descripcion || 'Transferencia',
     });
-  
+
     let targetTransaction = null;
     if (cuenta_destino) {
       targetTransaction = this.transactionsRepository.create({
@@ -267,46 +276,55 @@ export class TransactionsService {
         descripcion: descripcion || 'Bizum recibido',
       });
     }
-  
+
     await this.transactionsRepository.save(sourceTransaction);
-    if (targetTransaction) await this.transactionsRepository.save(targetTransaction);
-  
+    if (targetTransaction)
+      await this.transactionsRepository.save(targetTransaction);
+
     await this.accountsRepository.save(sourceAccount);
     if (cuenta_destino) await this.accountsRepository.save(cuenta_destino);
-  
-    if (cuenta_destino) {
 
-      console.log("ID de la cuenta destino:", cuenta_destino.id_cuenta);
+    if (cuenta_destino) {
+      console.log('ID de la cuenta destino:', cuenta_destino.id_cuenta);
       const targetUser = await this.accountsRepository
         .createQueryBuilder('account')
-        .innerJoinAndSelect('account.id_user', 'user')  
-        .where('account.id_cuenta = :id_cuenta', { id_cuenta: cuenta_destino.id_cuenta })
+        .innerJoinAndSelect('account.id_user', 'user')
+        .where('account.id_cuenta = :id_cuenta', {
+          id_cuenta: cuenta_destino.id_cuenta,
+        })
         .getOne();
 
-      console.log("Resultado de la consulta:", targetUser);
-      console.log("Firebase Token encontrado:", targetUser?.id_user?.firebaseToken);
+      console.log('Resultado de la consulta:', targetUser);
+      console.log(
+        'Firebase Token encontrado:',
+        targetUser?.id_user?.firebaseToken,
+      );
 
       if (targetUser?.id_user?.firebaseToken) {
         try {
           await this.firebaseService.sendPushNotification(
             targetUser.id_user.firebaseToken,
             `Has recibido un Bizum de ${sourceAccount.id_user.name}`,
-            `Te han enviado ${cantidad}€ por ${descripcion}`
+            `Te han enviado ${cantidad}€ por ${descripcion}`,
           );
-          console.log("Notificación enviada desde Bizum:");
+          console.log('Notificación enviada desde Bizum:');
         } catch (error) {
-          throw new Error('Error al enviar la notificación:');
+          throw new Error('Error al enviar la notificación:' + error);
         }
       }
     }
-  
+
     return { message: 'Bizum procesado con éxito' };
   }
 
   async deleteTransaction(id: number): Promise<{ message: string }> {
-      const result = await this.transactionsRepository.delete(id);
-      if (result.affected === 0) {
-        throw new HttpException('Transaction no encontrado', HttpStatus.NOT_FOUND);
+    const result = await this.transactionsRepository.delete(id);
+    if (result.affected === 0) {
+      throw new HttpException(
+        'Transaction no encontrado',
+        HttpStatus.NOT_FOUND,
+      );
     }
-      return { message: 'Transaction eliminado' };  }
+    return { message: 'Transaction eliminado' };
+  }
 }

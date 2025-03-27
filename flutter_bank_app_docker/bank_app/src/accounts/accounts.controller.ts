@@ -8,7 +8,6 @@ import {
   Post,
   Put,
   Query,
-  Res,
 } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 import { CreateAccoutDto, UpdateAccountDto } from './accounts.dto';
@@ -24,8 +23,16 @@ export class AccountsController {
 
   @Get()
   @ApiOperation({ summary: 'Get all accounts' })
-  @ApiQuery({ name: 'xml', required: false, type: String, description: 'Format the response in XML' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved all accounts' })
+  @ApiQuery({
+    name: 'xml',
+    required: false,
+    type: String,
+    description: 'Format the response in XML',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved all accounts',
+  })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   getAccountAll(@Query('xml') xml: string) {
     return this.accountsService.getAccountAll(xml);
@@ -34,7 +41,12 @@ export class AccountsController {
   @Get(':id')
   @ApiOperation({ summary: 'Get account by ID' })
   @ApiParam({ name: 'id', type: Number, description: 'Account ID' })
-  @ApiQuery({ name: 'xml', required: false, type: String, description: 'Format the response in XML' })
+  @ApiQuery({
+    name: 'xml',
+    required: false,
+    type: String,
+    description: 'Format the response in XML',
+  })
   @ApiResponse({ status: 200, description: 'Successfully retrieved account' })
   @ApiResponse({ status: 404, description: 'Account not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
@@ -53,7 +65,10 @@ export class AccountsController {
   @Get('user/:id')
   @ApiOperation({ summary: 'Get accounts by user ID' })
   @ApiParam({ name: 'id', type: Number, description: 'User ID' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved accounts by user' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved accounts by user',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   getAccountByUserId(@Param('id') id: string) {
     return this.accountsService.getAccountsByUserId(parseInt(id));

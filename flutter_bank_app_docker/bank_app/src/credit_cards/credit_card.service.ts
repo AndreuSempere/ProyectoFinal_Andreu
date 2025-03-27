@@ -12,7 +12,7 @@ export class Credit_CardService {
     private readonly utilsService: UtilsService,
     @InjectRepository(Credit_Card)
     private readonly creditCardRepository: Repository<Credit_Card>,
-    @InjectRepository(Accounts) 
+    @InjectRepository(Accounts)
     private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
@@ -41,13 +41,12 @@ export class Credit_CardService {
       where: { numero_tarjeta: num },
       relations: ['accounts'],
     });
-    
+
     if (!result) {
-      throw new Error("Tarjeta no encontrada");
+      throw new Error('Tarjeta no encontrada');
     }
-    
+
     return result;
-    
   }
 
   async getAllCreditCards(xml?: string): Promise<any> {
@@ -83,10 +82,7 @@ export class Credit_CardService {
     });
 
     if (!accountExists) {
-      throw new HttpException(
-        'La cuenta no existe',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException('La cuenta no existe', HttpStatus.BAD_REQUEST);
     }
 
     const newCreditCard = this.creditCardRepository.create({
@@ -110,7 +106,7 @@ export class Credit_CardService {
 
     if (updateCreditCardDto.numero_tarjeta) {
       const existingCard = await this.creditCardRepository.findOne({
-        where: { 
+        where: {
           numero_tarjeta: updateCreditCardDto.numero_tarjeta,
           id_tarjeta: Not(id),
         },
@@ -138,11 +134,11 @@ export class Credit_CardService {
 
   async deleteCreditCard(id: number): Promise<{ message: string }> {
     const result = await this.creditCardRepository.delete(id);
-    
+
     if (result.affected === 0) {
       throw new HttpException('Tarjeta no encontrada', HttpStatus.NOT_FOUND);
     }
-    
+
     return { message: 'Tarjeta eliminada exitosamente' };
   }
 }

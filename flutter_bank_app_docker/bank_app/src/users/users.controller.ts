@@ -25,8 +25,15 @@ export class UsersController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get user by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'User ID to fetch user data' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved user data.' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'User ID to fetch user data',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved user data.',
+  })
   @ApiResponse({ status: 400, description: 'Invalid user ID' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async getUser(@Param('id') id: string, @Query('xml') xml?: string) {
@@ -43,8 +50,15 @@ export class UsersController {
 
   @Get('user/:email')
   @ApiOperation({ summary: 'Find user by email' })
-  @ApiParam({ name: 'email', type: String, description: 'Email to find the user' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved user by email.' })
+  @ApiParam({
+    name: 'email',
+    type: String,
+    description: 'Email to find the user',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved user by email.',
+  })
   @ApiResponse({ status: 404, description: 'User not found' })
   async findUserByEmail(@Param('email') email: string) {
     if (!email) {
@@ -77,11 +91,18 @@ export class UsersController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update user data by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'User ID to update user data' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'User ID to update user data',
+  })
   @ApiResponse({ status: 200, description: 'Successfully updated user data.' })
   @ApiResponse({ status: 400, description: 'Invalid user ID' })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     const userId = parseInt(id, 10);
     if (isNaN(userId)) {
       throw new HttpException('Invalid user ID', HttpStatus.BAD_REQUEST);
@@ -104,7 +125,11 @@ export class UsersController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete user by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'User ID to delete user data' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'User ID to delete user data',
+  })
   @ApiResponse({ status: 200, description: 'Successfully deleted user.' })
   @ApiResponse({ status: 400, description: 'Invalid user ID' })
   @ApiResponse({ status: 404, description: 'User not found' })
@@ -141,28 +166,35 @@ export class UsersController {
       },
     },
   })
-  async login(@Body('email') email: string, @Body('password') password: string) {
+  async login(
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ) {
     if (!email || !password) {
-        throw new HttpException('Email and password are required', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'Email and password are required',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     try {
-        const user = await this.usersService.validateUser(email, password);
-        if (!user) {
-            throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
-        }
+      const user = await this.usersService.validateUser(email, password);
+      if (!user) {
+        throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+      }
 
-        const isAdmin = email === "admin@gmail.com";
-        const token = await this.authService.generateToken(user.id_user, isAdmin);
+      const isAdmin = email === 'admin@gmail.com';
+      const token = await this.authService.generateToken(user.id_user, isAdmin);
 
-        return { token, isAdmin };
-
+      return { token, isAdmin };
     } catch (err) {
-        throw new HttpException(
-            { status: HttpStatus.UNAUTHORIZED, error: err.message || 'Unauthorized access' },
-            HttpStatus.UNAUTHORIZED,
-        );
+      throw new HttpException(
+        {
+          status: HttpStatus.UNAUTHORIZED,
+          error: err.message || 'Unauthorized access',
+        },
+        HttpStatus.UNAUTHORIZED,
+      );
     }
-}
-
+  }
 }

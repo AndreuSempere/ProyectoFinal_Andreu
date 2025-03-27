@@ -10,10 +10,10 @@ import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Transaction, Accounts]), 
-    AccountsModule, 
+    TypeOrmModule.forFeature([Transaction, Accounts]),
+    AccountsModule,
     FirebaseModule,
-    HttpModule
+    HttpModule,
   ],
   controllers: [TransactionsController],
   providers: [TransactionsService],

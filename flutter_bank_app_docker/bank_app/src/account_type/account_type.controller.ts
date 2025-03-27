@@ -14,7 +14,10 @@ import {
 import { Response } from 'express';
 import { AccountTypeService } from './account_type.service';
 import { ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
-import { CreateAccounts_typeDto, UpdateAccounts_typeDto } from './account_type.dto';
+import {
+  CreateAccounts_typeDto,
+  UpdateAccounts_typeDto,
+} from './account_type.dto';
 
 @Controller('account_type')
 export class AccountTypeController {
@@ -22,7 +25,10 @@ export class AccountTypeController {
 
   @Get()
   @ApiOperation({ summary: 'Get all account types' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved all account types.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved all account types.',
+  })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async getAllAccountType(
     @Query('format') format?: string,
@@ -41,7 +47,10 @@ export class AccountTypeController {
   @Get(':id')
   @ApiOperation({ summary: 'Get account type by ID' })
   @ApiParam({ name: 'id', type: Number, description: 'Account type ID' })
-  @ApiResponse({ status: 200, description: 'Successfully retrieved account type.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully retrieved account type.',
+  })
   @ApiResponse({ status: 404, description: 'Account type not found' })
   @ApiResponse({ status: 500, description: 'Internal server error' })
   async getAccountType(
@@ -64,7 +73,10 @@ export class AccountTypeController {
 
   @Post()
   @ApiOperation({ summary: 'Create a new account type' })
-  @ApiResponse({ status: 201, description: 'Successfully created account type.' })
+  @ApiResponse({
+    status: 201,
+    description: 'Successfully created account type.',
+  })
   @ApiResponse({ status: 400, description: 'Failed to create account type' })
   createAccountType(@Body() createAccoutTypeDto: CreateAccounts_typeDto) {
     return this.accountTypeService.createAccountType(createAccoutTypeDto);
@@ -72,32 +84,48 @@ export class AccountTypeController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update account type by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'Account type ID to update' })
-  @ApiResponse({ status: 200, description: 'Successfully updated account type.' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Account type ID to update',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully updated account type.',
+  })
   @ApiResponse({ status: 404, description: 'Account type not found' })
   @ApiResponse({ status: 400, description: 'Failed to update account type' })
-  async updateAccountType(@Param('id') id: string, @Body() updateAccountTypeDto: UpdateAccounts_typeDto,) {
+  async updateAccountType(
+    @Param('id') id: string,
+    @Body() updateAccountTypeDto: UpdateAccounts_typeDto,
+  ) {
     try {
-    return await this.accountTypeService.updateAccountType({
-      ...updateAccountTypeDto,
-      id_type: parseInt(id),
+      return await this.accountTypeService.updateAccountType({
+        ...updateAccountTypeDto,
+        id_type: parseInt(id),
       });
     } catch (err) {
-          throw new HttpException(
-            {
-              status: HttpStatus.NOT_FOUND,
-              error: err.message || 'Account Type not found',
-            },
-            HttpStatus.NOT_FOUND,
-          );
-        }
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          error: err.message || 'Account Type not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
     }
-  
+  }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete account type by ID' })
-  @ApiParam({ name: 'id', type: Number, description: 'Account type ID to delete' })
-  @ApiResponse({ status: 200, description: 'Successfully deleted account type.' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'Account type ID to delete',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Successfully deleted account type.',
+  })
   @ApiResponse({ status: 404, description: 'Account type not found' })
   @ApiResponse({ status: 400, description: 'Failed to delete account type' })
   deleteAccountType(@Param('id') id: string) {

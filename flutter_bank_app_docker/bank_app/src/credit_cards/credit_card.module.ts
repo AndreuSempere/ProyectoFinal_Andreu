@@ -1,4 +1,4 @@
-import { forwardRef, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { Credit_CardService } from './credit_card.service';
 import { UtilsModule } from '../utils/utils.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,7 +10,7 @@ import { AccountsModule } from '../accounts/accounts.module';
   imports: [
     TypeOrmModule.forFeature([Credit_Card]),
     UtilsModule,
-    AccountsModule
+    AccountsModule,
   ],
   exports: [TypeOrmModule, Credit_CardService],
   controllers: [Credit_CardController],

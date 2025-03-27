@@ -17,7 +17,9 @@ export class InvestmentsService {
     private tradingRepository: Repository<TradingEntity>,
   ) {}
 
-  async getAllInvestments(accountId?: number): Promise<InvestmentResponseDto[]> {
+  async getAllInvestments(
+    accountId?: number,
+  ): Promise<InvestmentResponseDto[]> {
     try {
       let query = this.investmentsRepository
         .createQueryBuilder('investment')
@@ -29,7 +31,7 @@ export class InvestmentsService {
       }
 
       const investments = await query.getMany();
-      return investments.map(investment => this.mapToResponseDto(investment));
+      return investments.map((investment) => this.mapToResponseDto(investment));
     } catch (error) {
       throw new HttpException(
         `Error al obtener inversiones: ${error.message}`,
@@ -38,7 +40,9 @@ export class InvestmentsService {
     }
   }
 
-  async getInvestmentById(idInvestment: number): Promise<InvestmentResponseDto> {
+  async getInvestmentById(
+    idInvestment: number,
+  ): Promise<InvestmentResponseDto> {
     try {
       const investment = await this.investmentsRepository.findOne({
         where: { idInvestment },
@@ -46,7 +50,10 @@ export class InvestmentsService {
       });
 
       if (!investment) {
-        throw new HttpException('Inversión no encontrada', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Inversión no encontrada',
+          HttpStatus.NOT_FOUND,
+        );
       }
 
       return this.mapToResponseDto(investment);
@@ -61,56 +68,61 @@ export class InvestmentsService {
     }
   }
 
-  async createInvestment(createInvestmentDto: CreateInvestmentDto): Promise<InvestmentResponseDto> {
+  async createInvestment(
+    createInvestmentDto: CreateInvestmentDto,
+  ): Promise<InvestmentResponseDto> {
     try {
       const account = await this.accountsRepository.findOne({
         where: { id_cuenta: createInvestmentDto.account_id },
         relations: ['accounts_type'],
       });
-  
+
       if (!account) {
         throw new HttpException('Cuenta no encontrada', HttpStatus.NOT_FOUND);
       }
-  
+
       if (account.accounts_type.id_type !== 3) {
         throw new HttpException(
           'Solo las cuentas de tipo Inversiones pueden tener inversiones',
           HttpStatus.BAD_REQUEST,
         );
       }
-  
+
       const trading = await this.tradingRepository.findOne({
         where: { symbol: createInvestmentDto.symbol },
       });
-  
+
       if (!trading) {
-        throw new HttpException('Activo de trading no encontrado', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+          'Activo de trading no encontrado',
+          HttpStatus.NOT_FOUND,
+        );
       }
-  
+
       const latestTradingData = await this.tradingRepository.findOne({
         where: { symbol: trading.symbol },
-        order: { recordedAt: 'DESC' }
+        order: { recordedAt: 'DESC' },
       });
-  
+
       if (!latestTradingData) {
         throw new HttpException(
           'No se encontraron datos de precio para el activo',
           HttpStatus.BAD_REQUEST,
         );
       }
-  
+
       const currentPrice = latestTradingData.price;
-  
+
       if (account.saldo < createInvestmentDto.amount) {
         throw new HttpException(
           'Saldo insuficiente para realizar la inversión',
           HttpStatus.BAD_REQUEST,
         );
       }
-  
+
       account.saldo -= createInvestmentDto.amount;
       await this.accountsRepository.save(account);
-  
+
       const investment = this.investmentsRepository.create({
         account,
         trading,
@@ -120,14 +132,14 @@ export class InvestmentsService {
         purchase_date: new Date(),
         last_updated: new Date(),
       });
-  
+
       const savedInvestment = await this.investmentsRepository.save(investment);
-  
+
       const updatedInvestment = await this.investmentsRepository.findOne({
         where: { idInvestment: savedInvestment.idInvestment },
         relations: ['account', 'trading'],
       });
-  
+
       return this.mapToResponseDto(updatedInvestment);
     } catch (error) {
       if (error instanceof HttpException) {
@@ -139,11 +151,12 @@ export class InvestmentsService {
       );
     }
   }
-  
+
   private mapToResponseDto(investment: Investment): InvestmentResponseDto {
     const totalInvested = investment.amount * investment.purchase_price;
     const currentValue = investment.amount * investment.current_value;
-    const profitLossPercentage = ((currentValue - totalInvested) / totalInvested) * 100;
+    const profitLossPercentage =
+      ((currentValue - totalInvested) / totalInvested) * 100;
 
     return {
       id: investment.idInvestment,

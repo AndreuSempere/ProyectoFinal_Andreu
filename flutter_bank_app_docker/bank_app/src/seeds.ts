@@ -20,18 +20,8 @@ const options: DataSourceOptions & SeederOptions = {
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
 
-  entities: [
-    User,
-    Accounts,
-    Accounts_type,
-    Credit_Card
-  ],
-  seeds: [
-    UserSeeder,
-    Account_typeSeeder,
-    AccountSeeder,
-    Credit_CardSeeder,
-  ],
+  entities: [User, Accounts, Accounts_type, Credit_Card],
+  seeds: [UserSeeder, Account_typeSeeder, AccountSeeder, Credit_CardSeeder],
 };
 
 const dataSource = new DataSource(options);
