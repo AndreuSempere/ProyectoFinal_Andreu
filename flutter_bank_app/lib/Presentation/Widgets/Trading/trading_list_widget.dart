@@ -17,6 +17,28 @@ class TradingListWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (tradingState.tradings.isNotEmpty) {
           final Map<String, List<dynamic>> groupedTrades = {};
+
+          final List<Map<String, String>> materialIcons = [
+            {'name': 'Apple', 'icon': 'assets/icon_trading/apple.png'},
+            {'name': 'Tesla', 'icon': 'assets/icon_trading/tesla.png'},
+            {'name': 'Xrp', 'icon': 'assets/icon_trading/xrp.png'},
+            {'name': 'Ethereum', 'icon': 'assets/icon_trading/ethereum.png'},
+            {'name': 'Bitcoin', 'icon': 'assets/icon_trading/bitcoin.png'},
+            {'name': 'Cobre', 'icon': 'assets/icon_trading/cobre.png'},
+            {'name': 'Oro', 'icon': 'assets/icon_trading/oro.png'},
+            {'name': 'Plata', 'icon': 'assets/icon_trading/plata.png'},
+            {'name': 'Petroleo', 'icon': 'assets/icon_trading/petroleo.png'},
+            {'name': 'Nvidia', 'icon': 'assets/icon_trading/nvidia.png'},
+            {
+              'name': 'Gas_natural',
+              'icon': 'assets/icon_trading/gas_natural.png'
+            },
+            {'name': 'Google', 'icon': 'assets/icon_trading/google.png'},
+            {'name': 'Microsoft', 'icon': 'assets/icon_trading/microsoft.png'},
+            {'name': 'Solana', 'icon': 'assets/icon_trading/solana.png'},
+            {'name': 'Cardano', 'icon': 'assets/icon_trading/cardano.png'},
+          ];
+
           for (var trade in tradingState.tradings) {
             final type = trade.type ?? 'Otros';
             groupedTrades.putIfAbsent(type, () => []).add(trade);
@@ -44,6 +66,10 @@ class TradingListWidget extends StatelessWidget {
                         ),
                       ),
                       ...entry.value.map((transaction) {
+                        // Buscar el icono correspondiente al nombre de la transacción
+                        final iconData = materialIcons.firstWhere(
+                          (element) => element['name'] == transaction.name,
+                        );
                         return Card(
                           margin: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 6),
@@ -58,6 +84,8 @@ class TradingListWidget extends StatelessWidget {
                               );
                             },
                             child: ListTile(
+                              leading: Image.asset(iconData['icon'] ??
+                                  'assets/icon_trading/default.png'),
                               title: Text(
                                 transaction.name ?? 'N/A',
                                 style: const TextStyle(

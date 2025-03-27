@@ -15,7 +15,25 @@ class WorthTrading extends StatelessWidget {
   final String name;
   final int accountId;
 
-  const WorthTrading({super.key, required this.name, required this.accountId});
+  final List<Map<String, String>> materialIcons = [
+    {'name': 'Apple', 'icon': 'assets/icon_trading/apple.png'},
+    {'name': 'Tesla', 'icon': 'assets/icon_trading/tesla.png'},
+    {'name': 'Xrp', 'icon': 'assets/icon_trading/xrp.png'},
+    {'name': 'Ethereum', 'icon': 'assets/icon_trading/ethereum.png'},
+    {'name': 'Bitcoin', 'icon': 'assets/icon_trading/bitcoin.png'},
+    {'name': 'Cobre', 'icon': 'assets/icon_trading/cobre.png'},
+    {'name': 'Oro', 'icon': 'assets/icon_trading/oro.png'},
+    {'name': 'Plata', 'icon': 'assets/icon_trading/plata.png'},
+    {'name': 'Petroleo', 'icon': 'assets/icon_trading/petroleo.png'},
+    {'name': 'Nvidia', 'icon': 'assets/icon_trading/nvidia.png'},
+    {'name': 'Gas_natural', 'icon': 'assets/icon_trading/gas_natural.png'},
+    {'name': 'Google', 'icon': 'assets/icon_trading/google.png'},
+    {'name': 'Microsoft', 'icon': 'assets/icon_trading/microsoft.png'},
+    {'name': 'Solana', 'icon': 'assets/icon_trading/solana.png'},
+    {'name': 'Cardano', 'icon': 'assets/icon_trading/cardano.png'},
+  ];
+
+  WorthTrading({super.key, required this.name, required this.accountId});
 
   @override
   Widget build(BuildContext context) {
@@ -66,24 +84,39 @@ class WorthTrading extends StatelessWidget {
             final currencyFormatter = NumberFormat.currency(
                 locale: 'en_US', symbol: '\$', decimalDigits: 2);
 
+            final iconData = materialIcons.firstWhere(
+              (element) => element['name'] == name,
+            );
+
             return SingleChildScrollView(
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          name,
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: Color.fromARGB(255, 7, 11, 129),
-                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              name,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Color.fromARGB(255, 7, 11, 129),
+                              ),
+                            ),
+                            Text(
+                              'Symbol: ${tradingState.tradingRecords.last.symbol}',
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ],
                         ),
-                        Text(
-                          'Symbol: ${tradingState.tradingRecords.last.symbol}',
-                          style: const TextStyle(fontSize: 16),
+                        Image.asset(
+                          iconData['icon'] ?? 'assets/icon_trading/default.png',
+                          width: 65,
+                          height: 65,
                         ),
                       ],
                     ),
@@ -184,6 +217,7 @@ class WorthTrading extends StatelessWidget {
                                     amount: double.parse(cantidad),
                                     accountId: accountId,
                                   ));
+                              Navigator.of(context).pop();
                             }
                           },
                           child: const Text('Comprar'),

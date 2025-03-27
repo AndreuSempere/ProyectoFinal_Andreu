@@ -69,6 +69,21 @@ flutter:
     - assets/credit_card/card_back.jpg
     - assets/.env
     - data/initialData.json
+    - assets/icon_trading/apple.png
+    - assets/icon_trading/tesla.png
+    - assets/icon_trading/xrp.png
+    - assets/icon_trading/ethereum.png
+    - assets/icon_trading/bitcoin.png
+    - assets/icon_trading/cobre.png
+    - assets/icon_trading/oro.png
+    - assets/icon_trading/plata.png
+    - assets/icon_trading/petroleo.png
+    - assets/icon_trading/nvidia.png
+    - assets/icon_trading/gas_natural.png
+    - assets/icon_trading/google.png
+    - assets/icon_trading/microsoft.png
+    - assets/icon_trading/solana.png
+    - assets/icon_trading/cardano.png
 
   fonts:
     - family: Intel
