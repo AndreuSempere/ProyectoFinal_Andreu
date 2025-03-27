@@ -20,12 +20,17 @@ class ValidaciónVentana(QMainWindow):
         cantidad = int(self.ui.lcdNumber.value())
         print(num_tarjeta)
         print(cantidad)
+        bearer_token = "c371fe56-1a54-4652-8bb5-12989949911d"
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {bearer_token}"
+        }
 
         if len(num_tarjeta) == 16 and num_tarjeta.isdigit():
             print("Tarjeta válida")
           
             url = f"http://localhost:8080/credit_card/num/{num_tarjeta}"
-            response = requests.get(url)
+            response = requests.get(url, headers=headers)
             if response.status_code == 200:
                 response_json = response.json()
                 print(response_json)
@@ -39,7 +44,7 @@ class ValidaciónVentana(QMainWindow):
                 }
                 print(new_data)
                 url_post = "http://localhost:8080/transaction/"
-                post_response = requests.post(url_post, json=new_data)
+                post_response = requests.post(url_post, json=new_data, headers=headers)
                 
                 if post_response.status_code == 201:
                     post_response_json = post_response.json()
