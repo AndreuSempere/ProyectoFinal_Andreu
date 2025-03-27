@@ -1,0 +1,8 @@
+CREATE TRIGGER `after_insert_trading_data` AFTER INSERT ON `trading_data`
+ FOR EACH ROW BEGIN
+    UPDATE investments i
+    JOIN trading_data t1 ON i.trading_id = t1.idtrading
+    SET i.current_value = NEW.price,
+        i.last_updated = NOW()
+    WHERE t1.symbol = NEW.symbol;
+END
