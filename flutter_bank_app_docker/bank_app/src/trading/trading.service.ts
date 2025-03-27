@@ -12,7 +12,8 @@ export class TradingService {
   ) {}
 
   async getAllLatestTradingRecords(): Promise<any> {
-    const query = this.tradingRepository.createQueryBuilder('trading')
+    const query = this.tradingRepository
+      .createQueryBuilder('trading')
       .orderBy('trading.idtrading', 'DESC')
       .limit(15);
 
@@ -21,18 +22,24 @@ export class TradingService {
   }
 
   async getTradingRecordsByName(name: string): Promise<any> {
-    const query = this.tradingRepository.createQueryBuilder('trading')
+    const query = this.tradingRepository
+      .createQueryBuilder('trading')
       .where('trading.name LIKE :name', { name: `%${name}%` });
 
     const tradingRecords = await query.getMany();
     if (!tradingRecords.length) {
-      throw new HttpException('No se encontraron registros de trading con ese nombre', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'No se encontraron registros de trading con ese nombre',
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     return tradingRecords;
   }
 
-  async createTradingRecord(createTradingDto: CreateTradingDto): Promise<{ message: string }> {
+  async createTradingRecord(
+    createTradingDto: CreateTradingDto,
+  ): Promise<{ message: string }> {
     const newTradingRecord = this.tradingRepository.create(createTradingDto);
     await this.tradingRepository.save(newTradingRecord);
     return { message: 'Registro de trading creado satisfactoriamente' };

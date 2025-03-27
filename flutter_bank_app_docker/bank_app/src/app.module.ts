@@ -25,7 +25,6 @@ import { InvestmentsModule } from './investments/investments.module';
 import { AuthorizationMiddleware } from './authorization.middleware';
 import { AuthService } from './Autentication/auth.service';
 
-
 @Module({
   imports: [
     UsersModule,

@@ -5,7 +5,6 @@ import { Accounts } from '../../../accounts/accounts.entity';
 import { Accounts_type } from '../../../account_type/account_type.entity';
 import { User } from '../../../users/users.entity';
 
-
 export class AccountSeeder implements Seeder {
   public async run(dataSource: DataSource): Promise<void> {
     const accountRepository = dataSource.getRepository(Accounts);

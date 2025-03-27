@@ -10,7 +10,7 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
-  CreateDateColumn
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity()

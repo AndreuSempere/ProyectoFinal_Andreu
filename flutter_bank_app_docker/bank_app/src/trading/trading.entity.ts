@@ -1,4 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity('trading_data')
 export class TradingEntity {
@@ -14,7 +19,7 @@ export class TradingEntity {
   @Column()
   symbol: string;
 
-  @Column('decimal', { precision: 10, scale: 2})
+  @Column('decimal', { precision: 10, scale: 2 })
   price: number;
 
   @CreateDateColumn()

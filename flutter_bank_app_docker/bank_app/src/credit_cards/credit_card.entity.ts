@@ -12,7 +12,7 @@ export class Credit_Card {
   @PrimaryGeneratedColumn()
   id_tarjeta: number;
 
-  @Column({  type: 'bigint', unique: true })
+  @Column({ type: 'bigint', unique: true })
   numero_tarjeta: number;
 
   @Column()
@@ -30,16 +30,10 @@ export class Credit_Card {
   @Column()
   color: number;
 
-  @ManyToOne(
-    () => Accounts,
-    (accounts) => accounts.credit_card,
-    {
-      nullable: false,
-      onDelete: 'CASCADE',
-
-    },
-  )
+  @ManyToOne(() => Accounts, (accounts) => accounts.credit_card, {
+    nullable: false,
+    onDelete: 'CASCADE',
+  })
   @JoinColumn({ name: 'id_cuenta' })
   accounts: Accounts;
-
 }

@@ -1,10 +1,5 @@
 import { Accounts } from '../accounts/accounts.entity';
-import {
-  Entity,
-  Column,
-  PrimaryGeneratedColumn,
-  OneToMany,
-} from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 
 @Entity()
 export class User {
@@ -23,8 +18,8 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ unique: true, nullable: true }) 
-  telf?: string | null;  
+  @Column({ unique: true, nullable: true })
+  telf?: string | null;
 
   @Column({ unique: true, nullable: true })
   dni: string | null;
@@ -43,5 +38,4 @@ export class User {
 
   @OneToMany(() => Accounts, (accounts) => accounts.id_user)
   accounts: Accounts[];
-
 }

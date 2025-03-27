@@ -1,24 +1,16 @@
-import {
-  IsString,
-  IsOptional,
-  IsInt,
-  Min,
-  Max,
-  Length,
-} from 'class-validator';
+import { IsString, IsOptional, IsInt } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateAccounts_typeDto {
   @ApiProperty({
-    example: "Create Description",
+    example: 'Create Description',
   })
   @IsString()
   description: string;
 }
 
 export class UpdateAccounts_typeDto {
-
-  @ApiProperty({ example: 1})
+  @ApiProperty({ example: 1 })
   @IsOptional()
   @IsInt()
   id_type?: number;

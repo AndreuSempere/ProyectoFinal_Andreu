@@ -6,5 +6,5 @@ export default [
     email: 'andreusm1707@gmail.com',
     dni: '49266970G',
     age: 23,
-  }
+  },
 ];

@@ -42,11 +42,10 @@ export class Credit_CardController {
     if (isNaN(cardNumber)) {
       throw new NotFoundException('Credit card not found');
     }
-  
+
     const creditCard = await this.credit_cardService.getCreditCard(cardNumber);
-    return creditCard;  
+    return creditCard;
   }
-  
 
   @Post()
   @ApiOperation({ summary: 'Create a new credit card' })

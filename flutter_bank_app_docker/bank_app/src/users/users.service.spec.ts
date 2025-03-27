@@ -9,7 +9,11 @@ import * as bcrypt from 'bcryptjs';
 
 // Mock para bcrypt
 jest.mock('bcryptjs', () => ({
-  hash: jest.fn().mockResolvedValue('$2a$10$KqzrUgLlKotrrHiZHgPrZenAwlJlJRdYSm5HH1ge3ZqQFmUJyme/m'),
+  hash: jest
+    .fn()
+    .mockResolvedValue(
+      '$2a$10$KqzrUgLlKotrrHiZHgPrZenAwlJlJRdYSm5HH1ge3ZqQFmUJyme/m',
+    ),
   compare: jest.fn().mockResolvedValue(true),
 }));
 
@@ -26,7 +30,7 @@ const usersArray = [
     tokenExpiration: null,
     token: null,
     firebaseToken: null,
-    accounts: []
+    accounts: [],
   },
   {
     id_user: 2,
@@ -40,7 +44,7 @@ const usersArray = [
     tokenExpiration: null,
     token: null,
     firebaseToken: null,
-    accounts: []
+    accounts: [],
   },
   {
     id_user: 3,
@@ -54,7 +58,7 @@ const usersArray = [
     tokenExpiration: null,
     token: null,
     firebaseToken: null,
-    accounts: []
+    accounts: [],
   },
 ];
 
@@ -70,7 +74,7 @@ const oneUser = {
   tokenExpiration: null,
   token: null,
   firebaseToken: null,
-  accounts: []
+  accounts: [],
 };
 
 const getOneUser = {
@@ -85,22 +89,7 @@ const getOneUser = {
   tokenExpiration: null,
   token: null,
   firebaseToken: null,
-  accounts: []
-};
-
-const mergeUser = {
-  id_user: 1,
-  name: 'Manuel',
-  surname: 'Fernandez',
-  password: '123456',
-  email: 'federico@gmail.com',
-  telf: '698765432',
-  dni: '12345678Z',
-  fecha_nacimiento: '17/07/2001',
-  tokenExpiration: null,
-  token: null,
-  firebaseToken: null,
-  accounts: []
+  accounts: [],
 };
 
 const createUserDto = {
@@ -110,14 +99,14 @@ const createUserDto = {
   email: 'federico@gmail.com',
   telf: '612345678',
   dni: '12345678Z',
-  fecha_nacimiento: '17/07/2001'
+  fecha_nacimiento: '17/07/2001',
 };
 
 const updateUserDto = {
   id_user: 1,
   name: 'Manuel',
   surname: 'Fernandez',
-  telf: '698765432'
+  telf: '698765432',
 };
 
 const updatedUser = {
@@ -132,17 +121,15 @@ const updatedUser = {
   tokenExpiration: null,
   token: null,
   firebaseToken: 'firebase-token-123',
-  accounts: []
+  accounts: [],
 };
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let utilsService: UtilsService;
-  let firebaseService: FirebaseService;
 
   const mockQueryBuilder = {
     where: jest.fn().mockReturnThis(),
-    getOne: jest.fn().mockResolvedValue(oneUser)
+    getOne: jest.fn().mockResolvedValue(oneUser),
   };
 
   const MockUsersRepository = {
@@ -151,34 +138,34 @@ describe('UsersService', () => {
     create: jest.fn().mockReturnValue(oneUser),
     findOne: jest.fn().mockResolvedValue(getOneUser),
     delete: jest.fn().mockResolvedValue(undefined),
-    save: jest.fn().mockImplementation(user => Promise.resolve(user)),
+    save: jest.fn().mockImplementation((user) => Promise.resolve(user)),
     merge: jest.fn().mockImplementation((user, dto) => {
       return { ...user, ...dto };
     }),
-    createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder)
+    createQueryBuilder: jest.fn().mockReturnValue(mockQueryBuilder),
   };
 
   const MockUtilsService = {
-    convertJSONtoXML: jest.fn(json => `<xml>${json}</xml>`)
+    convertJSONtoXML: jest.fn((json) => `<xml>${json}</xml>`),
   };
 
   const MockFirebaseService = {
-    sendPushNotification: jest.fn().mockResolvedValue(undefined)
+    sendPushNotification: jest.fn().mockResolvedValue(undefined),
   };
 
   beforeEach(async () => {
     jest.clearAllMocks();
-    
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
         {
           provide: UtilsService,
-          useValue: MockUtilsService
+          useValue: MockUtilsService,
         },
         {
           provide: FirebaseService,
-          useValue: MockFirebaseService
+          useValue: MockFirebaseService,
         },
         {
           provide: getRepositoryToken(User),
@@ -188,8 +175,6 @@ describe('UsersService', () => {
     }).compile();
 
     userService = module.get<UsersService>(UsersService);
-    utilsService = module.get<UtilsService>(UtilsService);
-    firebaseService = module.get<FirebaseService>(FirebaseService);
   });
 
   it('should be defined', () => {
@@ -199,7 +184,7 @@ describe('UsersService', () => {
   describe('createUser', () => {
     it('should create a new user with hashed password', async () => {
       const result = await userService.createUser(createUserDto);
-      
+
       expect(MockUsersRepository.create).toHaveBeenCalledWith(createUserDto);
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
       expect(MockUsersRepository.save).toHaveBeenCalled();
@@ -210,22 +195,26 @@ describe('UsersService', () => {
   describe('getUser', () => {
     it('should return a user when xml is not provided', async () => {
       const result = await userService.getUser(1);
-      
-      expect(MockUsersRepository.findOneBy).toHaveBeenCalledWith({ id_user: 1 });
+
+      expect(MockUsersRepository.findOneBy).toHaveBeenCalledWith({
+        id_user: 1,
+      });
       expect(result).toEqual(oneUser);
     });
 
     it('should return an XML string when xml is set to "true"', async () => {
       const result = await userService.getUser(1, 'true');
-      
-      expect(MockUsersRepository.findOneBy).toHaveBeenCalledWith({ id_user: 1 });
+
+      expect(MockUsersRepository.findOneBy).toHaveBeenCalledWith({
+        id_user: 1,
+      });
       expect(MockUtilsService.convertJSONtoXML).toHaveBeenCalled();
       expect(typeof result).toBe('string');
     });
 
     it('should throw an exception when user is not found', async () => {
       MockUsersRepository.findOneBy.mockResolvedValueOnce(null);
-      
+
       await expect(userService.getUser(999)).rejects.toThrow(HttpException);
     });
   });
@@ -233,9 +222,9 @@ describe('UsersService', () => {
   describe('updateUser', () => {
     it('should update a user successfully', async () => {
       const result = await userService.updateUser(updateUserDto);
-      
+
       expect(MockUsersRepository.findOne).toHaveBeenCalledWith({
-        where: { id_user: updateUserDto.id_user }
+        where: { id_user: updateUserDto.id_user },
       });
       expect(MockUsersRepository.merge).toHaveBeenCalled();
       expect(MockUsersRepository.save).toHaveBeenCalled();
@@ -244,23 +233,25 @@ describe('UsersService', () => {
 
     it('should throw an error when user is not found', async () => {
       MockUsersRepository.findOne.mockResolvedValueOnce(null);
-      
-      await expect(userService.updateUser(updateUserDto)).rejects.toThrow('Usuario no encontrado');
+
+      await expect(userService.updateUser(updateUserDto)).rejects.toThrow(
+        'Usuario no encontrado',
+      );
     });
 
     it('should send push notification when telephone number is changed and firebase token exists', async () => {
       MockUsersRepository.findOne.mockResolvedValueOnce({
         ...oneUser,
-        firebaseToken: 'firebase-token-123'
+        firebaseToken: 'firebase-token-123',
       });
-      
+
       MockUsersRepository.save.mockResolvedValueOnce(updatedUser);
       const result = await userService.updateUser(updateUserDto);
-      
+
       expect(MockFirebaseService.sendPushNotification).toHaveBeenCalledWith(
         'firebase-token-123',
         'Has añadido tu número de telefono',
-        `El numero añadido es ${updateUserDto.telf}`
+        `El numero añadido es ${updateUserDto.telf}`,
       );
       expect(result).toEqual(updatedUser);
     });
@@ -269,17 +260,20 @@ describe('UsersService', () => {
   describe('deleteUser', () => {
     it('should delete a user successfully', async () => {
       await userService.deleteUser(1);
-      
+
       expect(MockUsersRepository.delete).toHaveBeenCalledWith(1);
     });
   });
 
   describe('validateUser', () => {
     it('should return user when credentials are valid', async () => {
-      const result = await userService.validateUser('federico@gmail.com', '123456');
-      
-      expect(MockUsersRepository.findOne).toHaveBeenCalledWith({ 
-        where: { email: 'federico@gmail.com' } 
+      const result = await userService.validateUser(
+        'federico@gmail.com',
+        '123456',
+      );
+
+      expect(MockUsersRepository.findOne).toHaveBeenCalledWith({
+        where: { email: 'federico@gmail.com' },
       });
       expect(bcrypt.compare).toHaveBeenCalledWith('123456', expect.any(String));
       expect(result).toEqual(oneUser);
@@ -288,17 +282,23 @@ describe('UsersService', () => {
     it('should return null when credentials are invalid', async () => {
       // Mock bcrypt.compare para devolver false
       (bcrypt.compare as jest.Mock).mockResolvedValueOnce(false);
-      
-      const result = await userService.validateUser('federico@gmail.com', 'wrongpassword');
-      
+
+      const result = await userService.validateUser(
+        'federico@gmail.com',
+        'wrongpassword',
+      );
+
       expect(result).toBeNull();
     });
 
     it('should return null when user is not found', async () => {
       MockUsersRepository.findOne.mockResolvedValueOnce(null);
-      
-      const result = await userService.validateUser('nonexistent@gmail.com', '123456');
-      
+
+      const result = await userService.validateUser(
+        'nonexistent@gmail.com',
+        '123456',
+      );
+
       expect(result).toBeNull();
     });
   });
@@ -306,10 +306,13 @@ describe('UsersService', () => {
   describe('getUserByEmail', () => {
     it('should return a user by email', async () => {
       const result = await userService.getUserByEmail('federico@gmail.com');
-      
-      expect(mockQueryBuilder.where).toHaveBeenCalledWith('u.email LIKE :email', { 
-        email: 'federico@gmail.com' 
-      });
+
+      expect(mockQueryBuilder.where).toHaveBeenCalledWith(
+        'u.email LIKE :email',
+        {
+          email: 'federico@gmail.com',
+        },
+      );
       expect(result).toEqual(oneUser);
     });
   });

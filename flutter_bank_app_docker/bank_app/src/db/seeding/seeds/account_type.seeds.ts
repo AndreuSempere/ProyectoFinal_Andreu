@@ -9,8 +9,6 @@ export class Account_typeSeeder implements Seeder {
 
     await accountTypeRepository.save(accountTypeData);
 
-    console.log(
-      'Datos de Accounts_type insertados',
-    );
+    console.log('Datos de Accounts_type insertados');
   }
 }
