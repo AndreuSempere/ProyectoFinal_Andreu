@@ -26,4 +26,5 @@ export class InvestmentResponseDto {
   profit_loss_percentage: number;
   purchase_date: Date;
   last_updated: Date;
+  name_trading: string;
 }

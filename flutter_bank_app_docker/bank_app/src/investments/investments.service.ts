@@ -131,6 +131,7 @@ export class InvestmentsService {
         current_value: currentPrice,
         purchase_date: new Date(),
         last_updated: new Date(),
+        name_trading: trading.name
       });
 
       const savedInvestment = await this.investmentsRepository.save(investment);
@@ -169,6 +170,7 @@ export class InvestmentsService {
       profit_loss_percentage: Number(profitLossPercentage.toFixed(2)),
       purchase_date: investment.purchase_date,
       last_updated: investment.last_updated,
+      name_trading: investment.name_trading
     };
   }
 }

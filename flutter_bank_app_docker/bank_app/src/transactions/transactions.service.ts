@@ -89,13 +89,16 @@ export class TransactionsService {
       }
 
       // Llamar al servicio de Spring para procesar la transacción
-      // Spring se encargará de actualizar los saldos e insertar las transacciones
       const response = await firstValueFrom(
         this.httpService.post(this.externalServiceUrl, createTransactionDto),
       );
 
       // Enviar notificación push si hay cuenta destino y token de Firebase
-      if (targetAccount && targetAccount.id_user && targetAccount.id_user.firebaseToken) {
+      if (
+        targetAccount &&
+        targetAccount.id_user &&
+        targetAccount.id_user.firebaseToken
+      ) {
         if (this.firebaseService) {
           try {
             await this.firebaseService.sendPushNotification(
@@ -109,7 +112,7 @@ export class TransactionsService {
           }
         }
       }
-      
+
       // Generar PDF para la transacción
       const pdfJson = {
         cantidad: createTransactionDto.cantidad,
@@ -137,64 +140,82 @@ export class TransactionsService {
           pdfResponse.headers['content-type'] === 'application/pdf'
         ) {
           try {
-            if (!this.firebaseService || !this.firebaseService.isInitialized()) {
-              console.error("Servicio de Firebase no disponible o no inicializado");
+            if (
+              !this.firebaseService ||
+              !this.firebaseService.isInitialized()
+            ) {
+              console.error(
+                'Servicio de Firebase no disponible o no inicializado',
+              );
             } else {
-              const userId = sourceAccount?.id_user?.id_user?.toString() || 'unknown';
+              const userId =
+                sourceAccount?.id_user?.id_user?.toString() || 'unknown';
               const transactionId = Date.now().toString();
-              
-              if (!pdfResponse.data || !Buffer.isBuffer(Buffer.from(pdfResponse.data))) {
-                console.error("Datos de PDF inválidos");
-                throw new Error("Datos de PDF inválidos");
+
+              if (
+                !pdfResponse.data ||
+                !Buffer.isBuffer(Buffer.from(pdfResponse.data))
+              ) {
+                console.error('Datos de PDF inválidos');
+                throw new Error('Datos de PDF inválidos');
               }
-              
+
               // Subir el PDF a Firebase Storage
               const pdfUrl = await this.firebaseService.uploadPdfToStorage(
                 Buffer.from(pdfResponse.data),
                 userId,
                 transactionId,
               );
-              
-              console.log("PDF subido a Firebase Storage:", pdfUrl);
-              
-              // Buscar las transacciones recién creadas por Spring y actualizar el campo receipt_url
+
+              console.log('PDF subido a Firebase Storage:', pdfUrl);
+
               try {
-                const sourceTransactions = await this.transactionsRepository.find({
-                  where: {
-                    account: { id_cuenta: createTransactionDto.accountId },
-                    cantidad: createTransactionDto.cantidad
-                  },
-                  order: { id_transaction: 'DESC' },
-                  take: 1
-                });
-                
+                const sourceTransactions =
+                  await this.transactionsRepository.find({
+                    where: {
+                      account: { id_cuenta: createTransactionDto.accountId },
+                      cantidad: createTransactionDto.cantidad,
+                    },
+                    order: { id_transaction: 'DESC' },
+                    take: 1,
+                  });
+
                 if (sourceTransactions && sourceTransactions.length > 0) {
                   const sourceTransaction = sourceTransactions[0];
                   sourceTransaction.receipt_url = pdfUrl;
                   await this.transactionsRepository.save(sourceTransaction);
-                  console.log("URL del PDF actualizada en la transacción de origen:", sourceTransaction.id_transaction);
+                  console.log(
+                    'URL del PDF actualizada en la transacción de origen:',
+                    sourceTransaction.id_transaction,
+                  );
                 }
-                
-                // Si hay cuenta destino, buscar también la transacción de destino
+
                 if (targetAccount) {
-                  const targetTransactions = await this.transactionsRepository.find({
-                    where: {
-                      account: { id_cuenta: targetAccount.id_cuenta },
-                      cantidad: createTransactionDto.cantidad
-                    },
-                    order: { id_transaction: 'DESC' },
-                    take: 1
-                  });
-                  
+                  const targetTransactions =
+                    await this.transactionsRepository.find({
+                      where: {
+                        account: { id_cuenta: targetAccount.id_cuenta },
+                        cantidad: createTransactionDto.cantidad,
+                      },
+                      order: { id_transaction: 'DESC' },
+                      take: 1,
+                    });
+
                   if (targetTransactions && targetTransactions.length > 0) {
                     const targetTransaction = targetTransactions[0];
                     targetTransaction.receipt_url = pdfUrl;
                     await this.transactionsRepository.save(targetTransaction);
-                    console.log("URL del PDF actualizada en la transacción de destino:", targetTransaction.id_transaction);
+                    console.log(
+                      'URL del PDF actualizada en la transacción de destino:',
+                      targetTransaction.id_transaction,
+                    );
                   }
                 }
               } catch (dbError) {
-                console.error("Error al actualizar las URLs de los recibos en las transacciones:", dbError);
+                console.error(
+                  'Error al actualizar las URLs de los recibos en las transacciones:',
+                  dbError,
+                );
               }
             }
           } catch (uploadError) {

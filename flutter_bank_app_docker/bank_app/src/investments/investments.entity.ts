@@ -36,4 +36,7 @@ export class Investment {
 
   @Column({ nullable: true })
   last_updated: Date;
+
+  @Column({ nullable: true })
+  name_trading: string;
 }
