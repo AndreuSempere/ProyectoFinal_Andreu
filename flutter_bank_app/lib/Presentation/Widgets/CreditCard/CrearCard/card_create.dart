@@ -43,21 +43,22 @@ class _CardCreateState extends State<CardCreate> {
     generatedCvv = _generateCvv();
     // Generate expiration date (4 years from now)
     generatedExpirationDate = _generateExpirationDate();
-    
+
     creditCard = CreditCardEntity(
       cardHolderName: 'CARDHOLDER NAME',
-      numero_tarjeta: GenerateAccountNumber.generate(),
+      numero_tarjeta: GenerateCreditCardNumber.generate(),
       fecha_expiracion: generatedExpirationDate,
       cardCvv: generatedCvv,
       cardColor: selectedColorIndex,
       tipo_tarjeta: widget.cardType,
       id_cuenta: widget.accountId,
     );
-    
+
     // Set the generated values to the controllers for display
-    expirationController.text = _formatExpirationDateForDisplay(generatedExpirationDate);
+    expirationController.text =
+        _formatExpirationDateForDisplay(generatedExpirationDate);
     cvvController.text = generatedCvv.toString().padLeft(3, '0');
-    
+
     _setupListeners();
   }
 
@@ -158,7 +159,7 @@ class _CardCreateState extends State<CardCreate> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: _isSaving ? null : _saveCard,
-                child: _isSaving 
+                child: _isSaving
                     ? const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -276,22 +277,19 @@ class _CardCreateState extends State<CardCreate> {
         // Ensure we're using the correct format for the expiration date
         String expirationDate = creditCard.fecha_expiracion!;
         creditCard = creditCard.copyWith(
-          cardHolderName: holderNameController.text,
-          fecha_expiracion: expirationDate
-        );
+            cardHolderName: holderNameController.text,
+            fecha_expiracion: expirationDate);
 
         // Dispatch the event to create the credit card
         context.read<CreditCardBloc>().add(CreateCreditCard(creditCard));
-        
+
         // Add a small delay to ensure the card is saved
         await Future.delayed(const Duration(milliseconds: 500));
-        
+
         // Navigate to the card wallet screen and trigger loading of cards
         if (mounted) {
           Navigator.pushReplacement(
-            context, 
-            MaterialPageRoute(builder: (_) => const CardWallet())
-          );
+              context, MaterialPageRoute(builder: (_) => const CardWallet()));
         }
       } catch (e) {
         if (mounted) {
@@ -306,7 +304,8 @@ class _CardCreateState extends State<CardCreate> {
 
   bool _validateInputs() {
     if (holderNameController.text.isEmpty) {
-      _showErrorDialog("Por favor, ingresa el nombre del propietario correctamente.");
+      _showErrorDialog(
+          "Por favor, ingresa el nombre del propietario correctamente.");
       return false;
     }
     return true;
