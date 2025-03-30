@@ -99,10 +99,7 @@ public class TransactionService {
             targetTransaction.setDescripcion(dto.getDescripcion() != null ? dto.getDescripcion() : "Transferencia recibida");
         }
 
-        // Guardar transacciones y cuentas
-        accountRepository.save(origenAccount);
-        
-        // Guardar transacción de origen después de guardar la cuenta
+        accountRepository.save(origenAccount);        
         transactionRepository.save(sourceTransaction);
         
         // Solo si hay cuenta destino, guardar la transacción y cuenta destino
