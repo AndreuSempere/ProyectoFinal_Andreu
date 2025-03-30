@@ -42,14 +42,21 @@ class ValidaciónVentana(QMainWindow):
                     "descripcion": "Pago con Tarjeta",
                     "accountId": account_id
                 }
+
                 print(new_data)
                 url_post = "http://localhost:8080/transaction/"
                 post_response = requests.post(url_post, json=new_data, headers=headers)
+
                 
                 if post_response.status_code == 201:
-                    post_response_json = post_response.json()
-                    print(post_response_json)
-                    self.ui.mostrar_mensaje("Transacción realizada con éxito", "green")
+                    try:
+                        post_response_json = post_response.json()
+                        print(post_response_json)
+                    except requests.exceptions.JSONDecodeError:
+                        print("La respuesta no es JSON, pero la transacción fue exitosa")
+                        print(f"Response Text: {post_response.text}")
+                        print(f"Response Code: {post_response.status_code}")
+                        self.ui.mostrar_mensaje("Transacción realizada con éxito", "green")
                 else:
                     print("Error al hacer el POST")
                     self.ui.mostrar_mensaje("Error al hacer el POST", "red")
