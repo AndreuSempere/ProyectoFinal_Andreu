@@ -9,7 +9,5 @@ import com.proyecto.spring.entity.Account;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-    Optional<Account> findByNumeroCuenta(Long numeroCuenta);
+    Optional<Account> findByNumeroCuenta(String numeroCuenta);
 }
-
-

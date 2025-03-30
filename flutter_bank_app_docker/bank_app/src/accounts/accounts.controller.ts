@@ -10,7 +10,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
-import { CreateAccoutDto, UpdateAccountDto } from './accounts.dto';
+import { CreateAccountDto, UpdateAccountDto } from './accounts.dto';
 import { ApiOperation, ApiResponse, ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('accounts')
@@ -78,7 +78,7 @@ export class AccountsController {
   @ApiOperation({ summary: 'Create a new account' })
   @ApiResponse({ status: 201, description: 'Successfully created account' })
   @ApiResponse({ status: 400, description: 'Failed to create account' })
-  createAccount(@Body() createAccoutDto: CreateAccoutDto) {
+  createAccount(@Body() createAccoutDto: CreateAccountDto) {
     return this.accountsService.createAccount(createAccoutDto);
   }
 

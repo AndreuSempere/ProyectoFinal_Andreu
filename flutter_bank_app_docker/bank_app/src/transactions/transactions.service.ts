@@ -71,12 +71,36 @@ export class TransactionsService {
       let targetUser = null;
 
       if (createTransactionDto.targetAccountId) {
-        targetAccount = await this.accountsRepository.findOne({
-          where: [
-            { id_cuenta: createTransactionDto.targetAccountId },
-            { numero_cuenta: createTransactionDto.targetAccountId },
-          ],
-        });
+        // Verificar si targetAccountId es un string (posiblemente un IBAN)
+        const isIban = typeof createTransactionDto.targetAccountId === 'string' && 
+                       createTransactionDto.targetAccountId.toString().startsWith('ES');
+        
+        if (isIban) {
+          // Si es un IBAN, buscar por numero_cuenta
+          targetAccount = await this.accountsRepository.findOne({
+            where: { numero_cuenta: createTransactionDto.targetAccountId.toString() },
+            relations: ['id_user'],
+          });
+        } else {
+          // Si no es un IBAN, buscar por id_cuenta
+          const targetId = typeof createTransactionDto.targetAccountId === 'string' 
+            ? parseInt(createTransactionDto.targetAccountId, 10) 
+            : createTransactionDto.targetAccountId;
+            
+          targetAccount = await this.accountsRepository.findOne({
+            where: { id_cuenta: targetId },
+            relations: ['id_user'],
+          });
+          
+          // Si no se encuentra por id_cuenta, intentar buscar por numero_cuenta
+          if (!targetAccount && typeof createTransactionDto.targetAccountId === 'string') {
+            targetAccount = await this.accountsRepository.findOne({
+              where: { numero_cuenta: createTransactionDto.targetAccountId },
+              relations: ['id_user'],
+            });
+          }
+        }
+        
         targetUser = targetAccount;
 
         if (!targetAccount) {
@@ -85,6 +109,8 @@ export class TransactionsService {
             HttpStatus.BAD_REQUEST,
           );
         }
+        
+        // Asegurarse de que siempre se envíe el ID numérico a Spring
         createTransactionDto.targetAccountId = targetAccount.id_cuenta;
       }
 

@@ -18,7 +18,7 @@ const transactionsArray = [
     receipt_url: 'https://example.com/receipt1.pdf',
     account: {
       id_cuenta: 1,
-      numero_cuenta: 1234567890123456,
+      numero_cuenta: 'ES1998042593664952233080',
       saldo: 1000,
       estado: 'active',
     },
@@ -33,7 +33,7 @@ const transactionsArray = [
     receipt_url: 'https://example.com/receipt2.pdf',
     account: {
       id_cuenta: 1,
-      numero_cuenta: 1234567890123456,
+      numero_cuenta: 'ES1998042593664952233080',
       saldo: 950,
       estado: 'active',
     },
@@ -48,13 +48,13 @@ const transactionsArray = [
     receipt_url: 'https://example.com/receipt3.pdf',
     account: {
       id_cuenta: 1,
-      numero_cuenta: 1234567890123456,
+      numero_cuenta: 'ES1998042593664952233080',
       saldo: 750,
       estado: 'active',
     },
     targetAccount: {
       id_cuenta: 2,
-      numero_cuenta: 2345678901234567,
+      numero_cuenta: 'ES1998042593664952233081',
       saldo: 2200,
       estado: 'active',
     },
@@ -70,7 +70,7 @@ const oneTransaction = {
   receipt_url: 'https://example.com/receipt1.pdf',
   account: {
     id_cuenta: 1,
-    numero_cuenta: 1234567890123456,
+    numero_cuenta: 'ES1998042593664952233080',
     saldo: 1000,
     estado: 'active',
     id_user: {
@@ -85,7 +85,7 @@ const oneTransaction = {
 
 const sourceAccount = {
   id_cuenta: 1,
-  numero_cuenta: 1234567890123456,
+  numero_cuenta: 'ES1998042593664952233080',
   saldo: 1000,
   estado: 'active',
   id_user: {
@@ -98,7 +98,7 @@ const sourceAccount = {
 
 const targetAccount = {
   id_cuenta: 2,
-  numero_cuenta: 2345678901234567,
+  numero_cuenta: 'ES1998042593664952233081',
   saldo: 2000,
   estado: 'active',
   id_user: {
@@ -142,13 +142,13 @@ describe('TransactionsService', () => {
       if (
         where.id_cuenta === 1 ||
         where[0]?.id_cuenta === 1 ||
-        where[0]?.numero_cuenta === 1234567890123456
+        where[0]?.numero_cuenta === 'ES1998042593664952233080'
       ) {
         return Promise.resolve(sourceAccount);
       } else if (
         where.id_cuenta === 2 ||
         where[0]?.id_cuenta === 2 ||
-        where[0]?.numero_cuenta === 2345678901234567
+        where[0]?.numero_cuenta === 'ES1998042593664952233081'
       ) {
         return Promise.resolve(targetAccount);
       }

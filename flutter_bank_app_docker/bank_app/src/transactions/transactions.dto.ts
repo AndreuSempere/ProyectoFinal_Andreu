@@ -14,10 +14,12 @@ export class CreateTransactionDto {
   @IsNotEmpty()
   accountId: number;
 
-  @ApiProperty({ example: 666666666 })
+  @ApiProperty({ 
+    example: 666666666, 
+    description: 'ID de cuenta o número de cuenta (IBAN) de destino' 
+  })
   @IsOptional()
-  @IsInt()
-  targetAccountId?: number;
+  targetAccountId?: number | string;
 
   @ApiProperty({ example: 10 })
   @IsNumber()

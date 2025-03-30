@@ -9,7 +9,7 @@ import { CreateInvestmentDto } from './investments.dto';
 
 const mockAccount = {
   id_cuenta: 1,
-  numero_cuenta: 1234567890123456,
+  numero_cuenta: 'ES1998042593664952233080',
   saldo: 5000,
   estado: 'active',
   accounts_type: {

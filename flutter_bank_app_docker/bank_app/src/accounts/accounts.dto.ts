@@ -1,15 +1,14 @@
-import { IsString, IsOptional, IsInt, Min, Max, Length } from 'class-validator';
+import { IsString, IsOptional, IsInt, Length, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateAccoutDto {
+export class CreateAccountDto {
   @ApiProperty({
-    example: 123456789,
+    example: '123456789',
     description: 'Account number (16 digits)',
   })
-  @IsInt()
-  @Min(1000000000000000)
-  @Max(9999999999999999)
-  numero_cuenta: number;
+  @IsNotEmpty()
+  @IsString()
+  numero_cuenta: string;
 
   @ApiProperty({
     example: 1000,
@@ -64,15 +63,13 @@ export class CreateAccoutDto {
 
 export class UpdateAccountDto {
   @ApiProperty({
-    example: 123456789,
+    example: '123456789',
     description: 'Account number (optional, max 16 digits)',
     required: false,
   })
   @IsOptional()
-  @IsInt()
-  @Min(1)
-  @Max(9999999999999999)
-  numero_cuenta?: number;
+  @IsString()
+  numero_cuenta?: string;
 
   @ApiProperty({
     example: 1500,

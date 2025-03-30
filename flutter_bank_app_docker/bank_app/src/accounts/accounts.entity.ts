@@ -18,8 +18,8 @@ export class Accounts {
   @PrimaryGeneratedColumn()
   id_cuenta: number;
 
-  @Column({ type: 'bigint', unique: true })
-  numero_cuenta: number;
+  @Column({ type: 'varchar', length: 34, unique: true })
+  numero_cuenta: string;
 
   @Column()
   saldo: number;

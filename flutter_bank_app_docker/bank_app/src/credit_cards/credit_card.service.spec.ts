@@ -17,7 +17,7 @@ const creditCardsArray = [
     color: 1,
     accounts: {
       id_cuenta: 1,
-      numero_cuenta: 1234567890123456,
+      numero_cuenta: 'ES1998042593664952233080',
       saldo: 1000,
     },
   },
@@ -31,7 +31,7 @@ const creditCardsArray = [
     color: 2,
     accounts: {
       id_cuenta: 2,
-      numero_cuenta: 2345678901234567,
+      numero_cuenta: 'ES1998042593664952233081',
       saldo: 2000,
     },
   },
@@ -45,7 +45,7 @@ const creditCardsArray = [
     color: 3,
     accounts: {
       id_cuenta: 1,
-      numero_cuenta: 1234567890123456,
+      numero_cuenta: 'ES1998042593664952233080',
       saldo: 1000,
     },
   },
@@ -119,7 +119,7 @@ describe('Credit_CardService', () => {
       if (where.id_cuenta === 1) {
         return Promise.resolve({
           id_cuenta: 1,
-          numero_cuenta: 1234567890123456,
+          numero_cuenta: 'ES1998042593664952233080',
           saldo: 1000,
         });
       }

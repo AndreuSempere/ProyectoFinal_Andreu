@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UtilsService } from '../utils/utils.service';
-import { CreateAccoutDto, UpdateAccountDto } from './accounts.dto';
+import { CreateAccountDto, UpdateAccountDto } from './accounts.dto';
 import { Accounts } from './accounts.entity';
 
 @Injectable()
@@ -56,7 +56,7 @@ export class AccountsService {
   }
 
   async createAccount(
-    createAccountsDto: CreateAccoutDto,
+    createAccountsDto: CreateAccountDto,
   ): Promise<{ message: string }> {
     const newAccount = this.accountsRepository.create({
       ...createAccountsDto,

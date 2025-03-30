@@ -8,7 +8,7 @@ import { HttpException } from '@nestjs/common';
 const accountsArray = [
   {
     id_cuenta: 1,
-    numero_cuenta: 1234567890123456,
+    numero_cuenta: 'ES1998042593664952233080',
     saldo: 1000,
     estado: 'active',
     description: 'Cuenta principal',
@@ -22,7 +22,7 @@ const accountsArray = [
   },
   {
     id_cuenta: 2,
-    numero_cuenta: 2345678901234567,
+    numero_cuenta: 'ES1998042593664952233081',
     saldo: 2000,
     estado: 'active',
     description: 'Cuenta secundaria',
@@ -36,7 +36,7 @@ const accountsArray = [
   },
   {
     id_cuenta: 3,
-    numero_cuenta: 3456789012345678,
+    numero_cuenta: 'ES1998042593664952233082',
     saldo: 3000,
     estado: 'inactive',
     description: 'Cuenta inactiva',
@@ -52,7 +52,7 @@ const accountsArray = [
 
 const oneAccount = {
   id_cuenta: 1,
-  numero_cuenta: 1234567890123456,
+  numero_cuenta: 'ES1998042593664952233080',
   saldo: 1000,
   estado: 'active',
   description: 'Cuenta principal',
@@ -66,7 +66,7 @@ const oneAccount = {
 };
 
 const createAccountDto = {
-  numero_cuenta: 1234567890123456,
+  numero_cuenta: 'ES1998042593664952233080',
   saldo: 1000,
   estado: 'active',
   description: 'Cuenta principal',
@@ -84,7 +84,7 @@ const updateAccountDto = {
 
 const mergeAccount = {
   id_cuenta: 1,
-  numero_cuenta: 1234567890123456,
+  numero_cuenta: 'ES1998042593664952233080',
   saldo: 1500,
   estado: 'active',
   description: 'Cuenta actualizada',

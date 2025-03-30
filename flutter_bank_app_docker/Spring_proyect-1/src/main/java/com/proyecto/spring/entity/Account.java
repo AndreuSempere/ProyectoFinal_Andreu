@@ -22,8 +22,8 @@ public class Account {
     @Column(name = "id_cuenta")
     private Long id_cuenta;
 
-    @Column(name = "numero_cuenta", unique = true, nullable = false)
-    private Long numeroCuenta;
+    @Column(name = "numero_cuenta", unique = true, nullable = false, length = 34)
+    private String numeroCuenta;
 
     @Column(nullable = false)
     private Double saldo;
@@ -61,11 +61,11 @@ public class Account {
         this.id_cuenta = id_cuenta;
     }
 
-    public Long getNumero_cuenta() {
+    public String getNumero_cuenta() {
         return numeroCuenta;
     }
 
-    public void setNumero_cuenta(Long numero_cuenta) {
+    public void setNumero_cuenta(String numero_cuenta) {
         this.numeroCuenta = numero_cuenta;
     }
 
