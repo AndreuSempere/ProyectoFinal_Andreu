@@ -45,10 +45,16 @@ class HomePage extends StatelessWidget {
                 child: Column(
                   children: [
                     SizedBox(height: 23),
-                    Text(
-                      AppLocalizations.of(context)!
-                          .titleHomeScreen(state.user!.name),
-                      style: const TextStyle(fontSize: 16),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(
+                          AppLocalizations.of(context)!
+                              .titleHomeScreen(state.user!.name),
+                          style: const TextStyle(fontSize: 16),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 30),
                     FloatingActionButton.extended(

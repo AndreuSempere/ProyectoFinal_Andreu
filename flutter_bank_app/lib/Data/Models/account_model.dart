@@ -37,7 +37,7 @@ class AccountModel {
 
     return AccountModel(
       idCuenta: json['id_cuenta'],
-      numero_cuenta: json['numero_cuenta'],
+      numero_cuenta: _formatAccountNumber(json['numero_cuenta']),
       saldo: json['saldo'],
       estado: json['estado'],
       fecCreacion: formattedDate,
@@ -73,5 +73,12 @@ class AccountModel {
       description: description,
       icon: icon,
     );
+  }
+
+  static String _formatAccountNumber(String? accountNumber) {
+    if (accountNumber == null) return '';
+    return accountNumber
+        .replaceAllMapped(RegExp(r'.{1,4}'), (match) => '${match.group(0)} ')
+        .trim();
   }
 }

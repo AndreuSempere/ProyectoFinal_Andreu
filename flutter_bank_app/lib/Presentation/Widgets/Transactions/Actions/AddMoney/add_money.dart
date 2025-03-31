@@ -6,6 +6,7 @@ import 'package:flutter_bank_app/Presentation/Widgets/NFC/nfc_service.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Transactions/Actions/AddMoney/template_add_money_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class AddMoneyPage extends StatefulWidget {
   final int accountId;
@@ -240,9 +241,7 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
                                       context.read<TransactionBloc>().add(
                                           CreateTransactions(newTransaction));
 
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
+                                      context.go('/home');
                                     }
                                   },
                                   style: ElevatedButton.styleFrom(

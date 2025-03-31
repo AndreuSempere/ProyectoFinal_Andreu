@@ -96,6 +96,9 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                             const SizedBox(height: 4),
                             Text(
                               'Nº cuenta ${account.numeroCuenta}',
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         ),
@@ -109,7 +112,7 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                                   '${account.saldo}€',
                                   style: const TextStyle(
                                       fontWeight: FontWeight.bold,
-                                      fontSize: 24),
+                                      fontSize: 20),
                                 ),
                                 Text('Fecha creada ${account.createdAt}'),
                               ],
@@ -118,12 +121,12 @@ class _AccountListWidgetState extends State<AccountListWidget> {
                         ),
                         onTap: () {
                           if (account.accountType != 3) {
-                            context.push(
+                            context.go(
                               '/transactions',
                               extra: account,
                             );
                           } else {
-                            context.push('/trading', extra: account.idCuenta);
+                            context.go('/trading', extra: account.idCuenta);
                           }
                         },
                       ),

@@ -6,6 +6,7 @@ import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_eve
 import 'package:flutter_bank_app/Presentation/Blocs/transactions/transaction_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:go_router/go_router.dart';
 
 class TransactionPage extends StatefulWidget {
   final int accountId;
@@ -67,10 +68,8 @@ class _TransactionPageState extends State<TransactionPage> {
             ),
           );
 
-          Future.delayed(const Duration(seconds: 2), () {
-            Navigator.pop(context);
-            Navigator.pop(context);
-          });
+          Future.delayed(const Duration(seconds: 2), () {});
+          context.go('/home');
         }
       },
       child: Scaffold(
@@ -164,9 +163,19 @@ class _TransactionPageState extends State<TransactionPage> {
                   items: accounts.map((account) {
                     return DropdownMenuItem<String>(
                       value: account.idCuenta.toString(),
-                      child: Text(
-                        '${tipoCuenta[account.accountType] ?? "Desconocido"} - ${account.numeroCuenta!}',
-                        style: TextStyle(fontSize: 13),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            tipoCuenta[account.accountType] ?? "Desconocido",
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
+                          Text(
+                            account.numeroCuenta!,
+                            style: TextStyle(fontSize: 15, color: Colors.grey),
+                          ),
+                        ],
                       ),
                     );
                   }).toList(),

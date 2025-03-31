@@ -9,6 +9,7 @@ import 'package:flutter_bank_app/Presentation/Widgets/HomeScreen/delete_account_
 import 'package:flutter_bank_app/Presentation/Widgets/Investments/investments_widget.dart';
 import 'package:flutter_bank_app/Presentation/Widgets/Trading/trading_list_widget.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class TradingScreen extends StatefulWidget {
   final int accountid;
@@ -63,6 +64,12 @@ class _TradingScreenState extends State<TradingScreen> {
               fontSize: 22,
             ),
           ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white),
+            onPressed: () {
+              context.go('/home');
+            },
+          ),
           centerTitle: true,
           actions: [
             IconButton(
@@ -83,7 +90,6 @@ class _TradingScreenState extends State<TradingScreen> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          // Trading tab
           TradingListWidget(accountid: widget.accountid),
           InvestmentsWidget(),
         ],
