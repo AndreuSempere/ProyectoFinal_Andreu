@@ -13,6 +13,7 @@ export class AccountsService {
     private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
+  // Obtener una cuenta por id
   async getAccount(id?: number, xml?: string): Promise<any> {
     const result = await this.accountsRepository.findOneBy({
       id_cuenta: id,
@@ -29,6 +30,7 @@ export class AccountsService {
     return result;
   }
 
+  // Obtener todas las cuentas
   async getAccountAll(xml?: string): Promise<any> {
     const result = await this.accountsRepository.find({
       relations: ['accounts_type', 'id_user'],
@@ -44,6 +46,7 @@ export class AccountsService {
     return result;
   }
 
+  // Obtener cuentas asociadas a un usuario
   async getAccountsByUserId(userId: number): Promise<any> {
     const result = await this.accountsRepository
       .createQueryBuilder('account')
@@ -55,6 +58,7 @@ export class AccountsService {
     return result;
   }
 
+  //Crear cuenta
   async createAccount(
     createAccountsDto: CreateAccountDto,
   ): Promise<{ message: string }> {
@@ -68,6 +72,7 @@ export class AccountsService {
     return { message: 'Account creada' };
   }
 
+  //Actualizar cuenta
   async updateAccount(id: number, updateAccountsDto: UpdateAccountDto) {
     const accounts = await this.accountsRepository.findOne({
       where: { id_cuenta: id },
@@ -88,6 +93,7 @@ export class AccountsService {
     return this.accountsRepository.save(accounts);
   }
 
+  //Eliminar cuenta
   async deleteAccount(id: number): Promise<{ message: string }> {
     const result = await this.accountsRepository.delete(id);
     if (result.affected === 0) {

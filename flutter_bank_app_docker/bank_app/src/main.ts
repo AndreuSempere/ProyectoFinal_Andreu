@@ -9,6 +9,7 @@ async function bootstrap() {
     credentials: true,
   });
 
+  // Swagger
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
     .setDescription('API Documentation')

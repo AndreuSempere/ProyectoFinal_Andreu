@@ -17,6 +17,7 @@ export class InvestmentsService {
     private tradingRepository: Repository<TradingEntity>,
   ) {}
 
+  // Sacar todas las inversiones asociadas a unn id_cuenta
   async getAllInvestments(
     accountId?: number,
   ): Promise<InvestmentResponseDto[]> {
@@ -40,6 +41,7 @@ export class InvestmentsService {
     }
   }
 
+  // Obtener una inversión por su id
   async getInvestmentById(
     idInvestment: number,
   ): Promise<InvestmentResponseDto> {
@@ -68,6 +70,7 @@ export class InvestmentsService {
     }
   }
 
+  // Crear una nueva inversión
   async createInvestment(
     createInvestmentDto: CreateInvestmentDto,
   ): Promise<InvestmentResponseDto> {
@@ -81,6 +84,7 @@ export class InvestmentsService {
         throw new HttpException('Cuenta no encontrada', HttpStatus.NOT_FOUND);
       }
 
+      // Verificar si la cuenta es de tipo inversiones
       if (account.accounts_type.id_type !== 3) {
         throw new HttpException(
           'Solo las cuentas de tipo Inversiones pueden tener inversiones',
@@ -88,6 +92,7 @@ export class InvestmentsService {
         );
       }
 
+      // Obtener la información del trading por el símbolo
       const trading = await this.tradingRepository.findOne({
         where: { symbol: createInvestmentDto.symbol },
       });
@@ -99,6 +104,7 @@ export class InvestmentsService {
         );
       }
 
+      // Obtener el regisdtro más reciente de trading por el símbolo
       const latestTradingData = await this.tradingRepository.findOne({
         where: { symbol: trading.symbol },
         order: { recordedAt: 'DESC' },
@@ -111,6 +117,7 @@ export class InvestmentsService {
         );
       }
 
+      // Obtener el precio actual del trading
       const currentPrice = latestTradingData.price;
 
       if (account.saldo < createInvestmentDto.amount) {
@@ -120,6 +127,7 @@ export class InvestmentsService {
         );
       }
 
+      // Actualizar el saldo de la cuenta
       account.saldo -= createInvestmentDto.amount;
       await this.accountsRepository.save(account);
 
@@ -153,6 +161,7 @@ export class InvestmentsService {
     }
   }
 
+  // Calcular el porcentaje de ganancia/pérdida de la inversión
   private mapToResponseDto(investment: Investment): InvestmentResponseDto {
     const totalInvested = investment.amount * investment.purchase_price;
     const currentValue = investment.amount * investment.current_value;

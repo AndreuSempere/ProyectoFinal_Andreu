@@ -67,6 +67,7 @@ import { AuthService } from './Autentication/auth.service';
   providers: [AuthorizationMiddleware, AuthService],
 })
 export class AppModule implements NestModule {
+  // Se protegen todas las rutas excepto las de login y el registro de usuarios
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthorizationMiddleware)

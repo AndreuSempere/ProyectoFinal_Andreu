@@ -11,6 +11,7 @@ export class TradingService {
     private readonly tradingRepository: Repository<TradingEntity>,
   ) {}
 
+  //Coger los 15 últimos registros de trading
   async getAllLatestTradingRecords(): Promise<any> {
     const query = this.tradingRepository
       .createQueryBuilder('trading')
@@ -21,6 +22,7 @@ export class TradingService {
     return tradingRecords;
   }
 
+  // Coger los registros de trading por nombre
   async getTradingRecordsByName(name: string): Promise<any> {
     const query = this.tradingRepository
       .createQueryBuilder('trading')
@@ -37,6 +39,7 @@ export class TradingService {
     return tradingRecords;
   }
 
+  // Crear un nuevos registros de trading
   async createTradingRecord(
     createTradingDto: CreateTradingDto,
   ): Promise<{ message: string }> {

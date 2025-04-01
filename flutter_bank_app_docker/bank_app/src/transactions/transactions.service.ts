@@ -24,6 +24,7 @@ export class TransactionsService {
     private readonly firebaseService: FirebaseService,
   ) {}
 
+  // Obtener una transacción por su id
   async getTransaction(id?: number): Promise<any> {
     const result = await this.transactionsRepository.findOneBy({
       id_transaction: id,
@@ -32,6 +33,7 @@ export class TransactionsService {
     return result;
   }
 
+  // Obtener todas las transacciones
   async getTransactionAll(): Promise<any> {
     const result = await this.transactionsRepository.find({
       relations: ['account'],
@@ -40,6 +42,7 @@ export class TransactionsService {
     return result;
   }
 
+  // Obtener transacciones por id de cuenta
   async getTransactionsByAccountId(accountId: number): Promise<any> {
     const result = await this.transactionsRepository
       .createQueryBuilder('transaction')
@@ -51,6 +54,7 @@ export class TransactionsService {
     return result;
   }
 
+  //Crear una transacción ya sea por traspaso(sin TargetAccountId) o por transferencia(con TargetAccountId)
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<any> {
@@ -270,6 +274,7 @@ export class TransactionsService {
     }
   }
 
+  // Crear una transacción por Bizum
   async bizumTransaction(
     createTransactionDto: CreateTransactionDto,
   ): Promise<{ message: string }> {
@@ -364,6 +369,7 @@ export class TransactionsService {
     return { message: 'Bizum procesado con éxito' };
   }
 
+  // Eliminar una transacción por su id
   async deleteTransaction(id: number): Promise<{ message: string }> {
     const result = await this.transactionsRepository.delete(id);
     if (result.affected === 0) {

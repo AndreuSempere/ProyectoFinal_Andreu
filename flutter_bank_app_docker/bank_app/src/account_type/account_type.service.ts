@@ -16,6 +16,7 @@ export class AccountTypeService {
     private readonly utilsService: UtilsService,
   ) {}
 
+  // Obtener todos los tipos de cuenta
   async getAllAccountType(format?: string): Promise<any> {
     const accountTypes = await this.accountTypeRepository.find();
 
@@ -27,6 +28,7 @@ export class AccountTypeService {
     return accountTypes;
   }
 
+  // Obtener un tipo de cuenta por id
   async getAccountType(id_type: number, format?: string): Promise<any> {
     const accountType = await this.accountTypeRepository.findOne({
       where: { id_type: id_type },
@@ -47,6 +49,7 @@ export class AccountTypeService {
     return accountType;
   }
 
+  // Crear un nuevo tipo de cuenta
   async createAccountType(
     createAccountTypeDto: CreateAccounts_typeDto,
   ): Promise<{ message: string }> {
@@ -60,6 +63,7 @@ export class AccountTypeService {
     return { message: 'Tipo de cuenta creado satisfactoriamente' };
   }
 
+  // Actualizar un tipo de cuenta existente
   async updateAccountType(
     updateAccountTypeDto: UpdateAccounts_typeDto,
   ): Promise<Accounts_type> {
@@ -83,6 +87,7 @@ export class AccountTypeService {
     });
   }
 
+  // Eliminar un tipo de cuenta
   async deleteAccountType(id_type: number): Promise<{ message: string }> {
     const result = await this.accountTypeRepository.delete(id_type);
 

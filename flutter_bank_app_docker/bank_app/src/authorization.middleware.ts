@@ -4,6 +4,7 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { AuthService } from './Autentication/auth.service';
 
 @Injectable()
+// Middleware para validar si la validación esta habilitada y si existw el token y es valido y si no es valido lanza un error
 export class AuthorizationMiddleware implements NestMiddleware {
   constructor(private readonly authService: AuthService) {}
 

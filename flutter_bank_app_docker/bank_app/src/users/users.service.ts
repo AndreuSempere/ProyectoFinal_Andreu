@@ -14,6 +14,7 @@ export class UsersService {
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
+  // Crear un nuevo usuario pero encriptando la contraseña para insertarla en la base de datos
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     const usuario = this.usersRepository.create(createUserDto);
     const passwordHash = await bcrypt.hash(createUserDto.password, 10);
@@ -21,6 +22,7 @@ export class UsersService {
     return this.usersRepository.save(usuario);
   }
 
+  // Obtener los datos de un usuario por su id
   async getUser(id_user: number, xml?: string): Promise<User | string | null> {
     const user = await this.usersRepository.findOneBy({ id_user });
 
@@ -36,6 +38,7 @@ export class UsersService {
     }
   }
 
+  // Actualizar los datos del usuario
   async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id_user: updateUserDto.id_user },
@@ -67,10 +70,12 @@ export class UsersService {
     return updatedUser;
   }
 
+  // Eliminar un usuario por su id
   async deleteUser(id_user: number): Promise<void> {
     await this.usersRepository.delete(id_user);
   }
 
+  // Validar que el email y la contraseña son correctos
   async validateUser(email: string, password: string): Promise<User | null> {
     const user = await this.usersRepository.findOne({ where: { email } });
     if (user && (await bcrypt.compare(password, user.password))) {
@@ -79,6 +84,7 @@ export class UsersService {
     return null;
   }
 
+  // Obtener un usuario por su email
   async getUserByEmail(email: string) {
     return this.usersRepository
       .createQueryBuilder('u')

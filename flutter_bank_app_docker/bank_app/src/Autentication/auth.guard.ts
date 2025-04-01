@@ -10,6 +10,7 @@ import { AuthService } from './auth.service';
 export class AuthGuard implements CanActivate {
   constructor(private authService: AuthService) {}
 
+  // Verifica si el token es válido y no ha expirado
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1];

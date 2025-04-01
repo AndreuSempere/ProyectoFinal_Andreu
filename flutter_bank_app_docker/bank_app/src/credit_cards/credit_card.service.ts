@@ -16,6 +16,7 @@ export class Credit_CardService {
     private readonly accountsRepository: Repository<Accounts>,
   ) {}
 
+  // Obtener tarjeta por su id
   async getidCreditCard(id: number, xml?: string): Promise<any> {
     const result = await this.creditCardRepository.findOne({
       where: { id_tarjeta: id },
@@ -36,6 +37,7 @@ export class Credit_CardService {
     return result;
   }
 
+  // Obtener tarjeta por su número de tarjeta
   async getCreditCard(num: number): Promise<any> {
     const result = await this.creditCardRepository.findOne({
       where: { numero_tarjeta: num },
@@ -48,7 +50,7 @@ export class Credit_CardService {
 
     return result;
   }
-
+  // Obtener todas las tarjetas de crédito
   async getAllCreditCards(xml?: string): Promise<any> {
     const result = await this.creditCardRepository.find({
       relations: ['accounts'],
@@ -64,6 +66,7 @@ export class Credit_CardService {
     return result;
   }
 
+  // Crear tarjeta de crédito asociada a una cuenta
   async createCreditCard(
     createCreditCardDto: CreateCreditCardDto,
   ): Promise<{ message: string }> {
@@ -94,6 +97,7 @@ export class Credit_CardService {
     return { message: 'Tarjeta de crédito creada exitosamente' };
   }
 
+  // Actualizar tarjeta de crédito por id
   async updateCreditCard(id: number, updateCreditCardDto: UpdateCreditCardDto) {
     const creditCard = await this.creditCardRepository.findOne({
       where: { id_tarjeta: id },
@@ -132,6 +136,7 @@ export class Credit_CardService {
     return updatedCard;
   }
 
+  // Eliminar tarjeta de crédito por id
   async deleteCreditCard(id: number): Promise<{ message: string }> {
     const result = await this.creditCardRepository.delete(id);
 
