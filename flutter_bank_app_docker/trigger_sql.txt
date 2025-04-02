@@ -1,8 +1,21 @@
-CREATE TRIGGER `after_insert_trading_data` AFTER INSERT ON `trading_data`
- FOR EACH ROW BEGIN
+DELIMITER //
+
+CREATE TRIGGER after_insert_trading_data
+AFTER INSERT ON trading_data
+FOR EACH ROW 
+BEGIN
+    -- Obtener el símbolo del trading_id en cada inversión
     UPDATE investments i
-    JOIN trading_data t1 ON i.trading_id = t1.idtrading
     SET i.current_value = NEW.price,
         i.last_updated = NOW()
-    WHERE t1.symbol = NEW.symbol;
-END
+    WHERE EXISTS (
+        SELECT 1 
+        FROM trading_data t 
+        WHERE t.idtrading = i.trading_id 
+        AND t.symbol = NEW.symbol
+    );
+END;
+
+//
+
+DELIMITER ;
