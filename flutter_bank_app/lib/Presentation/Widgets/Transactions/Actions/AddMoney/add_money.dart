@@ -240,7 +240,8 @@ class _AddMoneyPageState extends State<AddMoneyPage> {
 
                                       context.read<TransactionBloc>().add(
                                           CreateTransactions(newTransaction));
-
+                                      Future.delayed(
+                                          const Duration(seconds: 2), () {});
                                       context.go('/home');
                                     }
                                   },
