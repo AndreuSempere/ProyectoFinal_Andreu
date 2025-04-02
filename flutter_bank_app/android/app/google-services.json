@@ -16,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCvoN1xA4nhEegAFau6P5wTkJu274Eh0to"
+          "current_key": "dotenv.env['FIREBASE_API_KEY']"
         }
       ],
       "services": {

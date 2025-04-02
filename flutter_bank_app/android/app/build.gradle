@@ -31,6 +31,8 @@ android {
         release {
             // Firma de debug temporal para pruebas en release
             signingConfig = signingConfigs.debug
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -42,4 +44,15 @@ flutter {
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.9' 
     implementation 'com.github.devnied.emvnfccard:library:3.0.1' 
+
+    // ML Kit Text Recognition
+    implementation 'com.google.mlkit:text-recognition:16.0.0'
+    implementation 'com.google.mlkit:text-recognition-chinese:16.0.0'
+    implementation 'com.google.mlkit:text-recognition-devanagari:16.0.0'
+    implementation 'com.google.mlkit:text-recognition-japanese:16.0.0'
+    implementation 'com.google.mlkit:text-recognition-korean:16.0.0'
+
+    // SLF4J (para evitar el error de StaticLoggerBinder)
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    implementation 'org.slf4j:slf4j-simple:1.7.36'
 }

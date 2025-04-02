@@ -20,7 +20,7 @@ El sistema está completamente dockerizado para facilitar su despliegue y cuenta
 ## APK
 
 La APK de la aplicación se puede descargar desde el siguiente enlace:
-[Descargar APK de Bankify](https://drive.google.com/file/d/your-apk-link/view)
+[Descargar APK de Bankify](https://drive.google.com/file/d/1ctn91Ty-2tBAaC7zyAOWWnq9MLt-eook/view?usp=sharing)
 
 El EXE de la aplicación de escritorio Datafono se puede descargar desde el siguiente enlace:
 [Descargar EXE Datafono Bankify](https://drive.google.com/file/d/1fIcdnkWNnEuOIFkE4xbGrobXm3TCxyMt/view?usp=sharing)
@@ -71,7 +71,9 @@ cd flutter_bank_app
 flutter pub get
 flutter run
 ```
+
 ### Testing
+
 Si quieres probar los test de pruebas del servidor de Nest.js ejcuta:
 
 ```bash
