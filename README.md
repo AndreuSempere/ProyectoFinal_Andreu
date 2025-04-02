@@ -71,6 +71,12 @@ cd flutter_bank_app
 flutter pub get
 flutter run
 ```
+### Testing
+Si quieres probar los test de pruebas del servidor de Nest.js ejcuta:
+
+```bash
+npm run test
+```
 
 ### Dependencias principales
 
